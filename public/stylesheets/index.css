@@ -1,6 +1,7 @@
 :root {
-    --main-bg-color: "#2D3134";
-    --second-color: "#BB86FC";
+    --main-bg-color: "#121212";
+    --surface-bg-color: "#1e1e1e";
+    --primary-color: "#BB86FC";
 }
 
 .top-bar {
