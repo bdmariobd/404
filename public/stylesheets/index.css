@@ -1,0 +1,39 @@
+:root {
+    --main-bg-color: "#2D3134";
+    --second-color: "#BB86FC";
+}
+
+.top-bar {
+    border-bottom: solid black 4px;
+    background-color: #4E9C6F;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+}
+
+body {
+    margin-top: 8em;
+    background-size: 100%;
+    background-color: var(--main-bg-color);
+    font-family: Nunito;
+}
+
+a {
+    color: #00B7FF;
+}
+
+.user-div {
+    margin-left: auto;
+    margin-right: 1%;
+    display: flex;
+    margin-top: 1em;
+}
+
+.user-img {
+    border-radius: 50%;
+    border: solid black;
+    width: 5em;
+    height: 5em;
+}
