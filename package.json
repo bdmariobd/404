@@ -5,5 +5,8 @@
     "dependencies": {
         "ejs": "^3.1.6",
         "express": "~4.16.1"
+    },
+    "scripts": {
+        "start": "nodemon -e js,ejs,html,css -w . -w public -w views -w routes -w models app.js"
     }
 }

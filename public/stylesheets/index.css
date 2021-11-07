@@ -1,40 +1,85 @@
 :root {
-    --main-bg-color: "#121212";
-    --surface-bg-color: "#1e1e1e";
-    --primary-color: "#BB86FC";
-}
-
-.top-bar {
-    border-bottom: solid black 4px;
-    background-color: #4E9C6F;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    left: 0;
-    display: flex;
+    --bg-color: rgba(18, 18, 18, 1.0);
+    --primary-color: #BB86FC;
+    --primary-dark-color: #1f1a24;
+    --error-color: #cf6679;
+    --on-bg-color: rgba(255, 255, 255, 0.87);
+    --on-bg-color-medium: rgba(255, 255, 255, 0.6);
+    --on-bg-color-disabled: rgba(255, 255, 255, 0.38);
+    --on-primary-color: #000;
+    --on-error-color: #000;
+    font-size: 16px;
 }
 
 body {
-    margin-top: 8em;
-    background-size: 100%;
-    background-color: var(--main-bg-color);
-    font-family: Nunito;
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    color: var(--on-bg-color);
+    font-family: 'Nunito', sans-serif;
 }
 
-a {
-    color: #00B7FF;
+main {
+    margin-left: 5rem;
+    padding: 1rem;
 }
 
-.user-div {
-    margin-left: auto;
-    margin-right: 1%;
+h3 {
+    font-family: 'Quicksand', sans-serif;
+}
+
+.navbar {
+    width: 5rem;
+    background-color: rgba(255, 255, 255, 0.08);
+    height: 100vh;
+    position: fixed;
+    transition: width 600ms ease;
+    /*     overflow: scroll;
+ */
+}
+
+.navbar:hover {
+    width: 16rem;
+}
+
+.navbar:hover .nav-text {
+    display: inline;
+}
+
+.navbar-nav {
+    list-style: none;
     display: flex;
-    margin-top: 1em;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 0;
 }
 
-.user-img {
-    border-radius: 50%;
-    border: solid black;
-    width: 5em;
-    height: 5em;
+.nav-item {
+    width: 100%;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    height: 5rem;
+    color: var(--on-bg-color-disabled);
+    text-decoration: none;
+    transition: var(--transition-speed);
+}
+
+.navbar .nav-icon {
+    min-width: 2rem;
+    width: 2rem;
+    max-width: 4rem;
+    margin: 0 1.5rem;
+}
+
+.nav-text {
+    display: none;
+    margin-left: 1rem;
+}
+
+.nav-item:last-child {
+    margin-top: auto;
 }
