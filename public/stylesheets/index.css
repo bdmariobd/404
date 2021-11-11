@@ -1,5 +1,7 @@
 :root {
-    --bg-color: rgba(18, 18, 18, 1.0);
+    --bg-color: #121212;
+    --bg-color-2: #1f1e1e;
+    --bg-color-3: #353434;
     --primary-color: #BB86FC;
     --primary-dark-color: #1f1a24;
     --error-color: #cf6679;
@@ -28,14 +30,61 @@ h3 {
     font-family: 'Quicksand', sans-serif;
 }
 
+a {
+    color: var(--primary-color);
+}
+
+a:hover {
+    color: #9a58eb;
+}
+
 .login-container {
+    width: 100vw;
+    height: 100vh;
     display: flex;
     align-items: center;
+    justify-content: space-evenly
+}
+
+.login-logo {
+    display: flex;
+    align-items: flex-end;
+}
+
+.login-right {
+    padding: 1rem;
+    width: 50%;
+    background-color: var(--bg-color-2);
+    border-radius: .25rem;
+}
+
+.form-control {
+    background-color: var(--bg-color-3);
+    border: 0px;
+    color: var(--on-bg-color-medium);
+}
+
+.form-control:focus {
+    background-color: var(--bg-color-3);
+    color: var(--on-bg-color-medium);
+    border: 0px;
+    border-color: var(--primary-color);
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 25%)
+}
+
+.btn {
+    background-color: var(--primary-color);
+}
+
+.login-left {
+    display: flex;
+    flex-direction: column;
 }
 
 .navbar {
     width: 5rem;
-    background-color: rgba(255, 255, 255, 0.08);
+    background-color: #ffffff14;
     height: 100vh;
     position: fixed;
     transition: width 600ms ease;

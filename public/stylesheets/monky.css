@@ -1,18 +1,50 @@
-#monky {}
-
-#monky {
-    transition: visibility 1s linear;
-    background-color: aqua;
+svg {
+    min-width: 20rem;
+    width: 20rem;
+    max-width: 40rem;
+    min-height: 20rem;
+    height: 20rem;
+    max-height: 40rem;
 }
 
-#monky #normaltoKind:hover #eyesnormal {
+.normal-kind {}
+
+.normal-kind #eyeskind {
     visibility: hidden;
 }
 
-.svg #monky #normaltoKind:hover #eyeskind {
+.normal-kind:hover {
+    animation: heartbeat 1.5s ease-in-out infinite both
+}
+
+.normal-kind:hover #eyeskind {
     visibility: visible;
 }
 
-.svg #monky #normaltoKind #eyeskind {
+.normal-kind:hover #eyesnormal {
     visibility: hidden;
+}
+
+@keyframes heartbeat {
+    from {
+        transform: scale(1);
+        transform-origin: center center;
+        animation-timing-function: ease-out
+    }
+    10% {
+        transform: scale(.91);
+        animation-timing-function: ease-in
+    }
+    17% {
+        transform: scale(.98);
+        animation-timing-function: ease-out
+    }
+    33% {
+        transform: scale(.87);
+        animation-timing-function: ease-in
+    }
+    45% {
+        transform: scale(1);
+        animation-timing-function: ease-out
+    }
 }
