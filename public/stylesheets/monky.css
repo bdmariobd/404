@@ -1,0 +1,18 @@
+#monky {}
+
+#monky {
+    transition: visibility 1s linear;
+    background-color: aqua;
+}
+
+#monky #normaltoKind:hover #eyesnormal {
+    visibility: hidden;
+}
+
+.svg #monky #normaltoKind:hover #eyeskind {
+    visibility: visible;
+}
+
+.svg #monky #normaltoKind #eyeskind {
+    visibility: hidden;
+}

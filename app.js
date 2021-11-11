@@ -30,3 +30,8 @@ app.get("/", (request, response) => {
     response.status(200);
     response.render("index");
 });
+
+app.get("/login", (request, response) => {
+    response.status(200);
+    response.render("login");
+});
