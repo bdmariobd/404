@@ -14,7 +14,7 @@ svg {
 }
 
 .normal-kind:hover {
-    animation: heartbeat 1.5s ease-in-out infinite both
+    animation: heartbeat 1.5s ease-in-out both
 }
 
 .normal-kind:hover #eyeskind {
@@ -32,15 +32,15 @@ svg {
         animation-timing-function: ease-out
     }
     10% {
-        transform: scale(.91);
+        transform: scale(.90);
         animation-timing-function: ease-in
     }
-    17% {
-        transform: scale(.98);
+    15% {
+        transform: scale(1);
         animation-timing-function: ease-out
     }
-    33% {
-        transform: scale(.87);
+    30% {
+        transform: scale(.85);
         animation-timing-function: ease-in
     }
     45% {

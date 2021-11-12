@@ -58,23 +58,31 @@ a:hover {
     border-radius: .25rem;
 }
 
+.form-element {
+    margin-top: .5rem;
+    margin-bottom: .5rem;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+}
+
 .form-control {
     background-color: var(--bg-color-3);
     border: 0px;
-    color: var(--on-bg-color-medium);
+    color: var(--on-bg-color);
 }
 
 .form-control:focus {
     background-color: var(--bg-color-3);
     color: var(--on-bg-color-medium);
-    border: 0px;
-    border-color: var(--primary-color);
-    outline: 0;
-    box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 25%)
+    box-shadow: 0 0 0 0.25rem var(--primary-color)
 }
 
 .btn {
     background-color: var(--primary-color);
+    color: var(--on-primary-color)
 }
 
 .login-left {

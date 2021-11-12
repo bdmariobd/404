@@ -35,3 +35,8 @@ app.get("/login", (request, response) => {
     response.status(200);
     response.render("login");
 });
+
+app.get("/signup", (request, response) => {
+    response.status(200);
+    response.render("signup");
+});
