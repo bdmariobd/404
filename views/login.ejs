@@ -49,13 +49,13 @@
                     <h3>Inicia sesión. Tus dudas son nuestras dudas.</h3>
                     <p>¿Todavía no tienes cuenta? <a href="/signup">Crea una hoy mismo</a></p>
                 </div>
-                <form class="login-form">
+                <form class="login-form" method="POST" action="/login">
                     <div class="form-floating form-element">
-                        <input id="floatingInput" class="form-control" type="email" placeholder="Email">
+                        <input name="email" id="floatingInput" class="form-control" type="email" placeholder="Email">
                         <label for="floatingInput">Correo</label>
                     </div>
                     <div class="form-floating form-element">
-                        <input id="floatingInput" class="form-control" type="password" placeholder="Contraseña">
+                        <input name="password" id="floatingInput" class="form-control" type="password" placeholder="Contraseña">
                         <label for="floatingInput">Contraseña</label>
                     </div>
                     <input type="submit" class="btn form-element" value="Iniciar sesión">

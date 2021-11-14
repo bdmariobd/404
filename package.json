@@ -5,6 +5,9 @@
     "dependencies": {
         "ejs": "^3.1.6",
         "express": "~4.16.1",
+        "express-mysql-session": "^2.1.7",
+        "express-session": "^1.17.2",
+        "mysql": "^2.18.1",
         "nodemon": "^2.0.15"
     },
     "scripts": {
