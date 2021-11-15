@@ -1,9 +1,13 @@
 "use strict";
 
+const mysql = require("mysql");
+var bcrypt = require('bcryptjs');
 class DAOUsers {
     constructor(pool) {
         this.pool = pool;
     }
+
+
 
     isUserCorrect(email, password, callback) {
         this.pool.getConnection(function(err, connection) {
@@ -41,7 +45,7 @@ class DAOUsers {
                             callback(new Error("Error de acceso a la base de datos"));
                         } else {
                             if (rows.length === 0) {
-                                callback(null, false); //no está el usuario con el password proporcionado
+                                callback(null, false); //no está el usuario en la base de datos
                             } else {
                                 callback(null, true);
                             }
@@ -51,7 +55,32 @@ class DAOUsers {
         });
     }
 
-    create(email, password, callback) {
+    create(email, username, password, callback) {
+            this.pool.getConnection(async(err, connection) => {
+                if (err) {
+                    throw (err);
+                }
+                // TODO: HASH this que no funciona
+                // var hashedPassword;
+                // await bcrypt.hash(password, 10, function(err, hash) {
+                //     // Store hash in your password DB.
+                //     hashedPassword = hash;
+                // });
+                var today = new Date();
+                var _date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+                const sqlInsert = "INSERT into user (`date`,`email`,`pass`,`image`,`name`,`active`,`reputation`) values (?,?,?,?,?,?,?)";
+                const insert_query = mysql.format(sqlInsert, [_date, email, password, "juanito", username, 1, 0]);
+                connection.query(insert_query, (err, result) => {
+                    connection.release();
+                    if (err) {
+                        callback(err);
+                    } else {
+                        console.log(result.insertId);
+                        callback(null, result.insertId);
+                    }
+                });
+
+            });
 
         }
         /* getUserImageName(email, callback) {

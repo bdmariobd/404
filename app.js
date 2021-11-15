@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const config = require('./config');
 const session = require("express-session");
+
 const morgan = require("morgan")
 
 const mysqlSession = require("express-mysql-session");
@@ -43,6 +44,9 @@ app.use(middlewareSession);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/preguntas', questionRouter);
+
+
+
 
 
 

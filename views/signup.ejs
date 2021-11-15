@@ -51,19 +51,20 @@
                 </div>
                 <form class="login-form" method="POST" action="/signup">
                     <div class="form-floating form-element">
-                        <input name="email" id="floatingInput" class="form-control" type="email" placeholder="Email">
+                        <input name=email id="floatingInput" class="form-control" type="email" placeholder="Email">
                         <label for="floatingInput">Correo</label>
                     </div>
                     <div class="form-floating form-element">
-                        <input name="username" id="floatingInput" class="form-control" type="text" placeholder="Nombre de usuario">
+                        <input name=username id="floatingInput" class="form-control" type="text" placeholder="Nombre de usuario">
                         <label for="floatingInput">Nombre de usuario</label>
                     </div>
                     <div class="form-floating form-element">
-                        <input name="password1" id="floatingInput" class="form-control" type="password" placeholder="Contraseña">
+                        <input name=password1 id="floatingInput" class="form-control" type="password" placeholder="Contraseña">
                         <label for="floatingInput">Contraseña</label>
                     </div>
+                    <!-- TODO: HAY QUE METER UN JQUERY QUE COMPRUEBE QUE LAS PASS SON IGUALES, KEYUP function. -->
                     <div class="form-floating form-element">
-                        <input name="password2" id="floatingInput" class="form-control" type="password" placeholder="Confirmar contraseña">
+                        <input name=password2 id="floatingInput" class="form-control" type="password" placeholder="Confirmar contraseña">
                         <label for="floatingInput">Confirmar contraseña</label>
                         <p id="passwordHelpBlock" class="form-text form-element">
                             Tu contraseña debe tener entre 6 y 50 carácteres, y no debe contener ni emojis ni espacios.
