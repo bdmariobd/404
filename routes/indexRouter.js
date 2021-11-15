@@ -96,7 +96,23 @@ router.post("/signup", (request, response) => {
                 if (exists) {
                     response.render("signup", { error: "Este correo es inválido o ya está siendo utilizado" });
                 } else {
-                    //daoUser.create(request.body.email, request.body.)...
+                    daoUser.create(request.body.email, request.body.username, pass1,
+                        (err, rows) => {
+                            if (err) {
+                                response.status(500);
+                                console.log("Error creating user: " + err.message);
+                                response.render("signup", null);
+                            } else {
+                                response.status(200)
+                                if (rows === null) {
+                                    console.log("Usuario repetido");
+                                    response.render("singup", null);
+                                } else {
+                                    console.log(rows)
+                                    response.redirect("preguntas", null);
+                                }
+                            }
+                        });
                 }
             }
         });
