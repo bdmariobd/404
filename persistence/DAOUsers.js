@@ -18,15 +18,39 @@ class DAOUsers {
                             callback(new Error("Error de acceso a la base de datos"));
                         } else {
                             if (rows.length === 0) {
-                                callback(null, null); //no está el usuario con el password proporcionado
+                                callback(null, false); //no está el usuario con el password proporcionado
                             } else {
-                                callback(null, rows);
+                                callback(null, true);
                             }
                         }
                     });
             }
         });
     }
+
+    userExists(email, callback) {
+        this.pool.getConnection(function(err, connection) {
+            if (err) {
+                callback(new Error("Error de conexión a la base de datos"));
+            } else {
+                connection.query(
+                    "SELECT * FROM user WHERE email = ? ", [email],
+                    function(err, rows) {
+                        connection.release(); // devolver al pool la conexión
+                        if (err) {
+                            callback(new Error("Error de acceso a la base de datos"));
+                        } else {
+                            if (rows.length === 0) {
+                                callback(null, false); //no está el usuario con el password proporcionado
+                            } else {
+                                callback(null, true);
+                            }
+                        }
+                    });
+            }
+        });
+    }
+
     create(email, password, callback) {
 
         }

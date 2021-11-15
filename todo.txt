@@ -1,0 +1,28 @@
+4 (APTO)Es la mínima calificación para poder hacer media
+con el examen de la asignatura:
+● Creación de cuentas
+● Inicio de sesión
+● Cierre de sesión
+● Opción de menú “Preguntas”
+● Búsqueda de preguntas por texto
+● Filtrado de preguntas por etiquetas
+● Formular pregunta
+
+
+6:
+● Todas las anteriores
+● Respuestas
+● Opción de menú “Sin responder”
+
+8:
+● Todas las anteriores
+● Visitas a preguntas
+● Votación de preguntas y respuestas
+● Reputación, número de preguntas y
+respuestas de cada usuario
+● Medallas
+
+10:
+● Todas las anteriores
+● Opción de menú “Usuarios”
+● Perfil de usuario
