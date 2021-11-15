@@ -3,6 +3,8 @@
     "version": "0.0.0",
     "private": true,
     "dependencies": {
+        "bcrypt": "^5.0.1",
+        "bcryptjs": "^2.4.3",
         "ejs": "^3.1.6",
         "express": "~4.16.1",
         "express-mysql-session": "^2.1.7",

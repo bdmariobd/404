@@ -3,7 +3,7 @@ const path = require('path');
 const config = require('./config');
 const session = require("express-session");
 const mysql = require("mysql");
-
+const bycrypt = require("bcrypt")
 const mysqlSession = require("express-mysql-session");
 
 const DAOUsers = require("./persistence/DAOUsers.js")
@@ -60,6 +60,7 @@ app.get("/login", (request, response) => {
 
 
 app.post("/login", (request, response) => {
+
     daoUser.isUserCorrect(request.body.email, request.body.password,
         (err, rows) => {
             if (err) {
@@ -81,6 +82,29 @@ app.post("/login", (request, response) => {
 app.get("/signup", (request, response) => {
     response.status(200);
     response.render("signup");
+});
+
+app.post("/signup", (request, response) => {
+    //TODO: Esto hay que depurarlo un poco, pero inserta, y no deja insertar repetidos 👍🏼
+    //TODO: Jquery de comprobaciones
+    daoUser.create(request.body.email, request.body.username, request.body.pass,
+        (err, rows) => {
+            if (err) {
+                response.status(500);
+                alert("Error creating user: " + err.message);
+                response.render("signup", null);
+            } else {
+                response.status(200)
+                if (rows === null) {
+                    console.log("Usuario repetido");
+                    response.render("singup", null);
+                } else {
+                    console.log(rows)
+                    response.render("index", null);
+                }
+            }
+        });
+
 });
 
 app.get("/profile", (request, response) => {
