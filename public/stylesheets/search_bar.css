@@ -1,8 +1,20 @@
-.container {
+.container-xxl {
     margin-top: 3rem;
-    width: 50%;
+    width: 100%;
 }
 
-.btn btn-primary:hover {
-    background-color: var(--error-color)
+.row {
+    width: 100%;
+}
+
+.col-xl-8 {
+    width: 80%;
+}
+
+.col-md-4 {
+    width: 20%
+}
+
+.btn:hover {
+    background-color: #572364;
 }
