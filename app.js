@@ -83,6 +83,10 @@ app.get("/signup", (request, response) => {
     response.render("signup");
 });
 
+app.get("/profile", (request, response) => {
+    response.status(200);
+    response.render("profile");
+})
 
 
 app.listen(config.port, function(err) {

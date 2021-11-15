@@ -1,0 +1,8 @@
+.container {
+    margin-top: 3rem;
+    width: 50%;
+}
+
+.btn btn-primary:hover {
+    background-color: var(--error-color)
+}

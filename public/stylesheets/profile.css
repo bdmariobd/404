@@ -1,0 +1,47 @@
+:root {
+    --bg-color: #121212;
+    --bg-color-2: #1f1e1e;
+    --bg-color-3: #353434;
+    --primary-color: #BB86FC;
+    --primary-dark-color: #1f1a24;
+    --error-color: #cf6679;
+    --on-bg-color: rgba(255, 255, 255, 0.87);
+    --on-bg-color-medium: rgba(255, 255, 255, 0.6);
+    --on-bg-color-disabled: rgba(255, 255, 255, 0.38);
+    --on-primary-color: #000;
+    --on-error-color: #000;
+    font-size: 16px;
+}
+
+body {
+    background: var(--bg-color);
+    display: grid;
+}
+
+.card {
+    color: var(--on-bg-color);
+    margin: 1rem;
+    background-color: var(--bg-color-3);
+    border: none;
+    width: fit-content;
+    height: fit-content;
+}
+
+.card-img-top {
+    padding: 0.5rem;
+    border-radius: 1rem;
+    background-color: var(--primary-color);
+    margin: 1rem;
+    width: 100%;
+    height: 25%;
+}
+
+.img-fluid {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+}
+
+.row {
+    background-color: var(--primary-);
+}
