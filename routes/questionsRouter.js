@@ -15,19 +15,6 @@ const pool = mysql.createPool({
 });
 
 let daoUser = new DAOUsers(pool);
-
-function logged(request) {
-    if (request.session.currentUser !== undefined) return true;
-    return false;
-}
-//user logged middleware
-router.use(["/users", "/preguntas", "/profile"], (request, response, next) => {
-    if (logged(request)) { //logged
-        next();
-    } else {
-        response.redirect("login");
-    }
-});
 let daoQuestions = new DAOQuestions(pool);
 let daoAnswers = new DAOAnswers(pool);
 
