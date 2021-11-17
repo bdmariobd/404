@@ -74,6 +74,20 @@ a:hover {
     color: var(--on-bg-color);
 }
 
+#btn-file-upload {
+    width: 100%;
+    background-color: var(--primary-color);
+    color: var(--on-primary-color);
+}
+
+#file-upload {
+    margin: auto;
+    padding: .5rem;
+    opacity: 0;
+    display: hidden;
+    z-index: -1;
+}
+
 .form-control:focus {
     background-color: var(--bg-color-3);
     color: var(--on-bg-color-medium);

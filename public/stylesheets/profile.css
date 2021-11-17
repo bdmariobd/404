@@ -36,16 +36,20 @@ body {
     height: 25%;
 }
 
+#oro {
+    background-color: #eac102;
+}
+
+#plata {
+    background-color: #BEBEBE;
+}
+
+#bronce {
+    background-color: #cd7f32;
+}
+
 .img-fluid {
     width: 3rem;
     height: 3rem;
     border-radius: 50%;
-}
-
-.card-body :nth-child(2) :nth-child(1) {
-    background-color: var(--primary-color);
-}
-
-.card-body :nth-child(4) :nth-child(1) {
-    background-color: var(--primary-color);
 }
