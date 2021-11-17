@@ -68,7 +68,6 @@ router.post("/login", (request, response) => {
                     response.render("login");
                 } else {
                     request.session.currentUser = request.body.email;
-                    console.log(request)
                     response.redirect("preguntas");
                 }
             }
