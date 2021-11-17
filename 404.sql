@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 09-11-2021 a las 21:59:28
+-- Tiempo de generación: 17-11-2021 a las 14:41:28
 -- Versión del servidor: 10.4.21-MariaDB
 -- Versión de PHP: 8.0.10
 
@@ -30,16 +30,19 @@ USE `404`;
 --
 
 DROP TABLE IF EXISTS `answer`;
-CREATE TABLE `answer` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `answer` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `question_id` int(11) NOT NULL,
   `active` tinyint(1) NOT NULL DEFAULT 1,
   `date` date NOT NULL DEFAULT current_timestamp(),
   `likes` int(11) NOT NULL DEFAULT 0,
   `disikes` int(11) NOT NULL DEFAULT 0,
   `user_id` int(11) NOT NULL,
-  `body` varchar(1000) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `body` varchar(1000) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `answer_questionfk` (`question_id`),
+  KEY `answer_userfk` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Truncar tablas antes de insertar `answer`
@@ -61,10 +64,12 @@ INSERT INTO `answer` (`id`, `question_id`, `active`, `date`, `likes`, `disikes`,
 --
 
 DROP TABLE IF EXISTS `answer_vote`;
-CREATE TABLE `answer_vote` (
+CREATE TABLE IF NOT EXISTS `answer_vote` (
   `id_answer` int(11) NOT NULL,
   `id_user` int(11) NOT NULL,
-  `positive` tinyint(1) NOT NULL
+  `positive` tinyint(1) NOT NULL,
+  KEY `answervote_answerfk` (`id_answer`),
+  KEY `answervote_userfk` (`id_user`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -79,13 +84,14 @@ TRUNCATE TABLE `answer_vote`;
 --
 
 DROP TABLE IF EXISTS `medal`;
-CREATE TABLE `medal` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `medal` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL,
   `metal` enum('gold','silver','bronze') NOT NULL,
   `merit` int(11) NOT NULL,
   `type` enum('question_vote','answer_vote','question_visited') NOT NULL,
-  `active` tinyint(1) NOT NULL DEFAULT 1
+  `active` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -100,8 +106,8 @@ TRUNCATE TABLE `medal`;
 --
 
 DROP TABLE IF EXISTS `question`;
-CREATE TABLE `question` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `question` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_user` int(11) NOT NULL,
   `active` tinyint(1) NOT NULL DEFAULT 1,
   `title` varchar(100) NOT NULL,
@@ -109,8 +115,10 @@ CREATE TABLE `question` (
   `views` int(11) NOT NULL DEFAULT 0,
   `date` date NOT NULL DEFAULT current_timestamp(),
   `likes` int(11) NOT NULL DEFAULT 0,
-  `dislikes` int(11) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `dislikes` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `question_userfk` (`id_user`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Truncar tablas antes de insertar `question`
@@ -135,9 +143,11 @@ INSERT INTO `question` (`id`, `id_user`, `active`, `title`, `body`, `views`, `da
 --
 
 DROP TABLE IF EXISTS `question_tag`;
-CREATE TABLE `question_tag` (
+CREATE TABLE IF NOT EXISTS `question_tag` (
   `id_question` int(11) NOT NULL,
-  `id_tag` int(11) NOT NULL
+  `id_tag` int(11) NOT NULL,
+  KEY `questiontag_questionfk` (`id_question`),
+  KEY `questiontag_tagfk` (`id_tag`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -145,6 +155,20 @@ CREATE TABLE `question_tag` (
 --
 
 TRUNCATE TABLE `question_tag`;
+--
+-- Volcado de datos para la tabla `question_tag`
+--
+
+INSERT INTO `question_tag` (`id_question`, `id_tag`) VALUES
+(1, 1),
+(1, 2),
+(2, 1),
+(3, 3),
+(4, 4),
+(5, 5),
+(5, 6),
+(2, 7);
+
 -- --------------------------------------------------------
 
 --
@@ -152,10 +176,12 @@ TRUNCATE TABLE `question_tag`;
 --
 
 DROP TABLE IF EXISTS `question_vote`;
-CREATE TABLE `question_vote` (
+CREATE TABLE IF NOT EXISTS `question_vote` (
   `id_question` int(11) NOT NULL,
   `id_user` int(11) NOT NULL,
-  `positive` tinyint(1) NOT NULL
+  `positive` tinyint(1) NOT NULL,
+  KEY `questionvote_answerfk` (`id_question`),
+  KEY `questionvote_userfk` (`id_user`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -166,20 +192,62 @@ TRUNCATE TABLE `question_vote`;
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `sessions`
+--
+
+DROP TABLE IF EXISTS `sessions`;
+CREATE TABLE IF NOT EXISTS `sessions` (
+  `session_id` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `expires` int(11) UNSIGNED NOT NULL,
+  `data` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  PRIMARY KEY (`session_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Truncar tablas antes de insertar `sessions`
+--
+
+TRUNCATE TABLE `sessions`;
+--
+-- Volcado de datos para la tabla `sessions`
+--
+
+INSERT INTO `sessions` (`session_id`, `expires`, `data`) VALUES
+('DIYk14lgzBThYqb_VIVTE73X0wfkYcCv', 1637104644, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"currentUser\":\"nico@404.es\"}'),
+('Ljj4cqiAKSGKSMQO1TVWGDvO9S8ozD94', 1637012893, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"currentUser\":\"nico@404.es\"}');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `tag`
 --
 
 DROP TABLE IF EXISTS `tag`;
-CREATE TABLE `tag` (
-  `id` int(11) NOT NULL,
-  `name` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE IF NOT EXISTS `tag` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Truncar tablas antes de insertar `tag`
 --
 
 TRUNCATE TABLE `tag`;
+--
+-- Volcado de datos para la tabla `tag`
+--
+
+INSERT INTO `tag` (`id`, `name`) VALUES
+(1, 'css'),
+(2, 'css3'),
+(7, 'html'),
+(3, 'JavaScript'),
+(5, 'mysql'),
+(4, 'nodejs'),
+(6, 'sql');
+
 -- --------------------------------------------------------
 
 --
@@ -187,16 +255,18 @@ TRUNCATE TABLE `tag`;
 --
 
 DROP TABLE IF EXISTS `user`;
-CREATE TABLE `user` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `date` date NOT NULL DEFAULT current_timestamp(),
   `email` varchar(100) NOT NULL,
   `pass` varchar(100) NOT NULL,
   `image` varchar(100) NOT NULL,
   `name` varchar(100) NOT NULL,
   `active` tinyint(1) NOT NULL DEFAULT 1,
-  `reputation` int(11) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `reputation` int(11) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Truncar tablas antes de insertar `user`
@@ -213,7 +283,8 @@ INSERT INTO `user` (`id`, `date`, `email`, `pass`, `image`, `name`, `active`, `r
 (3, '2021-11-09', 'sfg@404.es', '1234', 'sfg.png', 'SFG', 1, 1),
 (4, '2021-11-09', 'marta@404.es', '1234', 'marta.png', 'Marta', 1, 1),
 (5, '2021-11-09', 'lucas@404.es', '1234', 'lucas.png', 'Lucas', 1, 1),
-(6, '2021-11-09', 'emy@404.es', '1234', 'emy.png', 'Emy', 1, 1);
+(6, '2021-11-09', 'emy@404.es', '1234', 'emy.png', 'Emy', 1, 1),
+(7, '2021-11-16', 'user@user.es', '666666', 'juanito', 'user', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -222,10 +293,12 @@ INSERT INTO `user` (`id`, `date`, `email`, `pass`, `image`, `name`, `active`, `r
 --
 
 DROP TABLE IF EXISTS `user_medal`;
-CREATE TABLE `user_medal` (
+CREATE TABLE IF NOT EXISTS `user_medal` (
   `id_user` int(11) NOT NULL,
   `id_medal` int(11) NOT NULL,
-  `date` date NOT NULL DEFAULT current_timestamp()
+  `date` date NOT NULL DEFAULT current_timestamp(),
+  KEY `usermedal_medalfk` (`id_medal`),
+  KEY `usermedal_userlfk` (`id_user`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -233,106 +306,6 @@ CREATE TABLE `user_medal` (
 --
 
 TRUNCATE TABLE `user_medal`;
---
--- Índices para tablas volcadas
---
-
---
--- Indices de la tabla `answer`
---
-ALTER TABLE `answer`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `answer_questionfk` (`question_id`),
-  ADD KEY `answer_userfk` (`user_id`);
-
---
--- Indices de la tabla `answer_vote`
---
-ALTER TABLE `answer_vote`
-  ADD KEY `answervote_answerfk` (`id_answer`),
-  ADD KEY `answervote_userfk` (`id_user`);
-
---
--- Indices de la tabla `medal`
---
-ALTER TABLE `medal`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `question`
---
-ALTER TABLE `question`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `question_userfk` (`id_user`);
-
---
--- Indices de la tabla `question_tag`
---
-ALTER TABLE `question_tag`
-  ADD KEY `questiontag_questionfk` (`id_question`),
-  ADD KEY `questiontag_tagfk` (`id_tag`);
-
---
--- Indices de la tabla `question_vote`
---
-ALTER TABLE `question_vote`
-  ADD KEY `questionvote_answerfk` (`id_question`),
-  ADD KEY `questionvote_userfk` (`id_user`);
-
---
--- Indices de la tabla `tag`
---
-ALTER TABLE `tag`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `user`
---
-ALTER TABLE `user`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `unique_email` (`email`);
-
---
--- Indices de la tabla `user_medal`
---
-ALTER TABLE `user_medal`
-  ADD KEY `usermedal_medalfk` (`id_medal`),
-  ADD KEY `usermedal_userlfk` (`id_user`);
-
---
--- AUTO_INCREMENT de las tablas volcadas
---
-
---
--- AUTO_INCREMENT de la tabla `answer`
---
-ALTER TABLE `answer`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT de la tabla `medal`
---
-ALTER TABLE `medal`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `question`
---
-ALTER TABLE `question`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT de la tabla `tag`
---
-ALTER TABLE `tag`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `user`
---
-ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
 --
 -- Restricciones para tablas volcadas
 --
