@@ -30,7 +30,10 @@
                             <img class="img-fluid " src="https://i.gyazo.com/bc4817163b8201e29bba01262b4fa067.png " alt="Foto de perfil ">
 
                         </div>
-                        <h3 class="col p-1 m-0 ">Monito Perrito</h3>
+                        <h3 class="col p-1 m-0 ">
+                            ¡Hola
+                            <%= _name %>!
+                        </h3>
                         <span creation-date>Miembro desde date</span>
                     </div>
                     <div class=card-body d-flex justify-content-center>
@@ -54,6 +57,13 @@
                             <div class="col-sm-3">
                                 <p class="text-center" id="oro">Oro</p>
                                 <p class="text-center">10</p>
+                                <ul>
+                                    <% medals.forEach(function(medal){ %>
+                                        <li>
+                                            <%= medal %>
+                                        </li>
+                                        <% });%>
+                                </ul>
                             </div>
                             <div class="col-sm-3">
                                 <p class="text-center" id="plata">Plata</p>

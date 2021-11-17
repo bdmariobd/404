@@ -16,38 +16,47 @@ let daoUser = new DAOUsers(pool);
 
 router.get("/:id", (req, res, next) => {
     // req.params will have the URL's username parameter
-    daoUser.userExistsbyId(req.params.id, (error, result) => {
-        if (err) {
-            response.status(500);
-        } else {
-            res.status(200);
-            res.render('profile/:id')
-        }
+
+    res.render('profile', { _name: "Nico" });
+    res.status(200);
 
 
-    });
 
-    daoUser.isUserCorrect(request.body.email, request.body.password,
-        (err, result) => {
-            if (err) {
-                response.status(500);
-            } else {
-                response.status(200)
-                if (!result) {
-                    console.log("Email/pass not valid");
-                    response.render("login");
-                } else {
-                    request.session.currentUser = request.body.email;
-                    console.log(request)
-                    response.redirect("preguntas");
-                }
-            }
-        });
-})
+});
+
+// [
+//     RowDataPacket {
+//       id: 1,
+//       date: 2021-11-08T23:00:00.000Z,
+//       email: 'nico@404.es',
+//       pass: '1234',
+//       image: 'nico.png',
+//       name: 'Nico',
+//       active: 1,
+//       reputation: 1
+//     }
+//   ]
+
 
 /* router para /preguntas/... */
 router.get('/', (req, res, next) => {
-    res.render('profile');
+    var user = daoUser.getUserbyEmail(req.session.currentUser, (err, result) => {
+        if (err) {
+            res.status(500);
+        } else {
+            res.status(200)
+            if (!result) {
+                console.log("Email/pass not valid");
+
+            } else {
+                var username = result[0].name;
+                console.log(result[0].name)
+                res.render('profile', { _name: username });
+                res.status(200);
+            }
+        }
+    });
+
 });
 
 
