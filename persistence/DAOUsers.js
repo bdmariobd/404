@@ -31,6 +31,42 @@ class DAOUsers {
         });
     }
 
+    // [
+    //     RowDataPacket {
+    //       id: 1,
+    //       date: 2021-11-08T23:00:00.000Z,
+    //       email: 'nico@404.es',
+    //       pass: '1234',
+    //       image: 'nico.png',
+    //       name: 'Nico',
+    //       active: 1,
+    //       reputation: 1
+    //     }
+    //   ]
+    getUserId(email, callback) {
+        this.pool.getConnection(function(err, connection) {
+            if (err) {
+                callback(new Error("Error de conexión a la base de datos"));
+            } else {
+                connection.query(
+                    "SELECT id FROM user WHERE email = ? ", [email],
+                    function(err, rows) {
+                        connection.release(); // devolver al pool la conexión
+                        if (err) {
+                            callback(new Error("Error de acceso a la base de datos"));
+                        } else {
+                            if (rows.length === 0) {
+                                callback(null, false); //no está el usuario en la base de datos
+                            } else {
+                                var userId = rows[0].id;
+
+                                callback(null, userId);
+                            }
+                        }
+                    });
+            }
+        });
+    }
     getUserbyEmail(email, callback) {
         this.pool.getConnection(function(err, connection) {
             if (err) {
@@ -76,25 +112,39 @@ class DAOUsers {
             }
         });
     }
+
+    // vaya bicho de código 
     getMedals(email, callback) {
+        const that = this;
         this.pool.getConnection(function(err, connection) {
             if (err) {
                 callback(new Error("Error de conexión a la base de datos"));
             } else {
-                connection.query(
-                    "SELECT * FROM user WHERE email = ? ", [email],
-                    function(err, rows) {
-                        connection.release(); // devolver al pool la conexión
-                        if (err) {
-                            callback(new Error("Error de acceso a la base de datos"));
-                        } else {
-                            if (rows.length === 0) {
-                                callback(null, false); //no está el usuario en la base de datos
+                that.getUserId(email, (err, result) => {
+                    if (err) {
+                        callback(new Error("Error de acceso a la base de datos"));
+                    } else {
+                        const sqlSearch = "SELECT u.id, u.name,m.name, m.metal, m.merit, m.type, m.active FROM user u join (medal m join user_medal um on id_medal=id) on id_user=u.id where u.id=?";
+                        const searchQuery = mysql.format(sqlSearch, [result]);
+                        connection.query(searchQuery, (err, result) => {
+                            connection.release();
+                            if (err) {
+                                // aqui va entrar si el user no tiene medallas
+                                console.log("No tiene medallas pelotudo")
+                                callback(new Error("No hay medallas"));
                             } else {
-                                callback(null, true);
+                                console.log(result)
+                                if (result.length > 0) {
+
+                                    console.log("El usuario tiene medallas")
+                                    callback(null, result);
+                                    //El usuario no tiene medallas 
+                                }
+
                             }
-                        }
-                    });
+                        })
+                    }
+                })
             }
         });
     }

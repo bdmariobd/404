@@ -40,6 +40,24 @@ router.get("/:id", (req, res, next) => {
 
 /* router para /preguntas/... */
 router.get('/', (req, res, next) => {
+
+    var medals = daoUser.getMedals(req.session.currentUser, (err, result) => {
+        if (err) {
+            res.status(500);
+        } else {
+            res.status(200)
+            if (!result) {
+                console.log("No tiene medallas");
+
+            } else {
+
+                console.log(result)
+
+                res.status(200);
+            }
+        }
+    });
+
     var user = daoUser.getUserbyEmail(req.session.currentUser, (err, result) => {
         if (err) {
             res.status(500);
@@ -51,7 +69,8 @@ router.get('/', (req, res, next) => {
             } else {
                 var username = result[0].name;
                 console.log(result[0].name)
-                res.render('profile', { _name: username });
+                var medals =
+                    res.render('profile', { _name: username, _medals: medals });
                 res.status(200);
             }
         }
