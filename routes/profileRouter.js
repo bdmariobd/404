@@ -14,15 +14,6 @@ const pool = mysql.createPool({
 
 let daoUser = new DAOUsers(pool);
 
-router.get("/:id", (req, res, next) => {
-    // req.params will have the URL's username parameter
-
-    res.render('profile', { _name: "Nico" });
-    res.status(200);
-
-
-
-});
 
 // [
 //     RowDataPacket {
@@ -37,26 +28,16 @@ router.get("/:id", (req, res, next) => {
 //     }
 //   ]
 
-
+// RowDataPacket {
+//     id: 1,
+//     name: 'medalla3',
+//     metal: 'gold',
+//     merit: 0,
+//     type: 'question_vote',
+//     active: 1
+//   }
 /* router para /preguntas/... */
 router.get('/', (req, res, next) => {
-
-    var medals = daoUser.getMedals(req.session.currentUser, (err, result) => {
-        if (err) {
-            res.status(500);
-        } else {
-            res.status(200)
-            if (!result) {
-                console.log("No tiene medallas");
-
-            } else {
-
-                console.log(result)
-
-                res.status(200);
-            }
-        }
-    });
 
     var user = daoUser.getUserbyEmail(req.session.currentUser, (err, result) => {
         if (err) {
@@ -67,11 +48,26 @@ router.get('/', (req, res, next) => {
                 console.log("Email/pass not valid");
 
             } else {
-                var username = result[0].name;
+                const user = result[0];
                 console.log(result[0].name)
-                var medals =
-                    res.render('profile', { _name: username, _medals: medals });
-                res.status(200);
+
+                daoUser.getMedals(req.session.currentUser, (err, result) => {
+                    if (err) {
+                        res.status(500);
+                    } else {
+                        res.status(200)
+                        if (!result) {
+                            console.log("No tiene medallas");
+
+                        } else {
+                            res.render('profile', { _user: user, golds: result.gold, silvers: result.silvers, bronces: result.bronces });
+                            res.status(200);
+
+                        }
+                    }
+                });
+
+
             }
         }
     });

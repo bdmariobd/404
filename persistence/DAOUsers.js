@@ -135,9 +135,27 @@ class DAOUsers {
                             } else {
                                 console.log(result)
                                 if (result.length > 0) {
-
-                                    console.log("El usuario tiene medallas")
-                                    callback(null, result);
+                                    var arrayResult = [];
+                                    var arrayGold = [];
+                                    var arraySilver = [];
+                                    var arrayBronce = [];
+                                    // uuf estoy seguro de que esto se puede hacer más elegante, quiero pensarlo ahora? no.
+                                    result.map(m => {
+                                        if (m.metal === "gold") {
+                                            arrayGold.push({ id: m.id, name: m.name, metal: m.metal, merit: m.merit, type: m.type, active: m.active });
+                                        } else if (m.metal === "silver") {
+                                            arraySilver.push({ id: m.id, name: m.name, metal: m.metal, merit: m.merit, type: m.type, active: m.active });
+                                        } else {
+                                            arrayBronce.push({ id: m.id, name: m.name, metal: m.metal, merit: m.merit, type: m.type, active: m.active });
+                                        }
+                                        arrayResult = {
+                                            gold: arrayGold,
+                                            silver: arraySilver,
+                                            bronce: arrayBronce
+                                        };
+                                    });
+                                    console.log("El usuario tiene medallas");
+                                    callback(null, arrayResult);
                                     //El usuario no tiene medallas 
                                 }
 
