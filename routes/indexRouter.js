@@ -67,6 +67,9 @@ router.post("/login", (request, response) => {
                     console.log("Email/pass not valid");
                     response.render("login");
                 } else {
+                    request.session.id = result.user.id;
+                    request.session.name = result.user.name;
+                    request.session.id = result.user.id;
                     request.session.currentUser = request.body.email;
                     response.redirect("preguntas");
                 }
@@ -107,6 +110,7 @@ router.post("/signup", (request, response) => {
                                     console.log("Usuario repetido");
                                     response.render("singup", null);
                                 } else {
+
                                     console.log(rows)
                                     response.redirect("preguntas", null);
                                 }

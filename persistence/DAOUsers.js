@@ -23,7 +23,8 @@ class DAOUsers {
                             if (rows.length === 0) {
                                 callback(null, false); //no está el usuario con el password proporcionado
                             } else {
-                                callback(null, true);
+                                // está mejor que devuelva true, y el usuario entero.
+                                callback(null, { correcto: true, user: rows[0] });
                             }
                         }
                     });

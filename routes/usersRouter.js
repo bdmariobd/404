@@ -1,17 +1,12 @@
 var express = require('express');
 var router = express.Router();
 const factoryDAO = require("../persistence/factoryDAO")
-
+const mysql = require("mysql");
+const config = require('../config');
 const daoUser = factoryDAO.getDAOUsers();
 /* router para /usuarios/... */
-router.get('/', (req, res, next) => {
-    res.send('respond with a resource');
-});
 
-router.get("/profile", (request, response) => {
-    response.status(200);
-    response.render("profile");
-})
+
 
 
 router.get('/miPerfil', (req, res, next) => {
