@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="stylesheets/index.css">
+    <link rel="stylesheet" href="/stylesheets/index.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito&family=Quicksand:wght@700&display=swap" rel="stylesheet">
@@ -19,8 +19,26 @@
 
 <body>
     <%- include ("fragments/navbar")%>
+        <main>
 
 
+
+            <div class="container title-container">
+                <h3>
+                    <%= titulo %>
+                </h3>
+            </div>
+            <div class="container subtitle-container">
+
+            </div>
+            <ul class="container questions-container">
+                <% questions.forEach(q =>{ %>
+                    <li class="container question-element">
+                        <%= q.title%>
+                    </li>
+                    <% }); %>
+            </ul>
+        </main>
 
 
 </body>
