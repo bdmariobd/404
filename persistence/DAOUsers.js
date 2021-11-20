@@ -7,6 +7,33 @@ class DAOUsers {
         this.pool = pool;
     }
 
+    getAllUsers(callback) {
+        this.pool.getConnection(function(err, connection) {
+            if (err) {
+                callback(new Error("Couldn't connect"));
+            } else {
+                connection.query(
+                    "select * from user where active=1",
+                    function(err, rows) {
+                        connection.release();
+                        if (err) {
+                            callback(new Error("Couldn't get users"));
+                        } else {
+                            if (rows.length === 0) {
+                                callback(null, false);
+                            } else {
+                                let result = [];
+                                rows.map(function(row) {
+                                    result.push({ name: row.name, email: row.email, image: row.image, date: row.date, reputation: row.reputation, active: row.active });
+                                })
+                                callback(null, result)
+                            }
+                        }
+                    }
+                )
+            }
+        })
+    }
 
     isUserCorrect(email, password, callback) {
         this.pool.getConnection(function(err, connection) {
@@ -24,7 +51,7 @@ class DAOUsers {
                                 callback(null, false); //no está el usuario con el password proporcionado
                             } else {
                                 // está mejor que devuelva true, y el usuario entero.
-                                callback(null, { correcto: true, user: rows[0] });
+                                callback(null, { correct: true, user: rows[0] });
                             }
                         }
                     });
