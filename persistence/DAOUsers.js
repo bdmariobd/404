@@ -7,6 +7,35 @@ class DAOUsers {
         this.pool = pool;
     }
 
+
+    searchUserByString(searchQuery, callback) {
+        this.pool.getConnection(function(err, connection) {
+            if (err) {
+                callback(new Error("Error de conexión a la base de datos"));
+            } else {
+                connection.query(
+                    "SELECT * FROM User WHERE name LIKE CONCAT('%',CONCAT(?,'%'));", [searchQuery],
+                    function(err, rows) {
+                        connection.release();
+                        if (err) {
+                            callback(new Error("Couldn't get users"));
+                        } else {
+                            if (rows.length === 0) {
+                                callback(null, rows);
+                            } else {
+                                let result = [];
+                                rows.map(function(row) {
+                                    result.push({ name: row.name, email: row.email, image: row.image, date: row.date, reputation: row.reputation, active: row.active });
+                                })
+                                callback(null, result)
+                            }
+                        }
+                    }
+                )
+            }
+        });
+    }
+
     getAllUsers(callback) {
         this.pool.getConnection(function(err, connection) {
             if (err) {

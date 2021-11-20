@@ -25,6 +25,25 @@ router.get('/', (req, res, next) => {
     })
 })
 
+
+router.post('/', (req, res, next) => {
+    daoUser.searchUserByString(req.body.searchQuery, (err, users) => {
+        console.log(users)
+        if (err) {
+            console.log(err.message);
+            res.status(500);
+        } else {
+            res.status(200);
+            if (!users) {
+                console.log("no usuers")
+            } else {
+                res.render('users', { _users: users });
+
+            }
+        }
+    })
+})
+
 router.get('/miPerfil', (req, res, next) => {
 
     var user = daoUser.getUserbyEmail(req.session.currentUser, (err, result) => {

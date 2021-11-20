@@ -1,13 +1,14 @@
 <div class="container-xxl d-flex justify-content-center  ">
-    <div class="row ">
-        <div class="col-xl-8">
-            <input type="search" placeholder="🔍Buscar una preguntita" class="form-control " />
+    <form name="searchQuery" method="post">
+        <div class="row ">
+            <div class="col-xl-8">
+                <input type="search" placeholder="🔍Buscar un usuario" name="searchQuery" autocomplete="on" class="form-control " />
+                <small id="searchHelp" class="form-text text-muted">Con poner algo parecido funciona</small>
+            </div>
+            <div class="col-md-4">
+                <button class="btn" type="submit" value="Buscar">Buscar</button>
+            </div>
         </div>
-        <div class="col-md-4">
-            <button type="button" class="btn">
-                <b class="text-center">Buscar</b>
-            </button>
-        </div>
-    </div>
+    </form>
 
 </div>
