@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="/stylesheets/search_bar.css">
+    <link rel="stylesheet" href="/stylesheets/index.css">
+    <link rel="stylesheet" href="/stylesheets/profile.css">
+    <link rel="stylesheet" href="/stylesheets/users.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&family=Quicksand:wght@700&display=swap" rel="stylesheet">
+    <title>404</title>
+
+</head>
+<header class="top-bar">
+
+
+</header>
+
+<body>
+    <%- include ("fragments/navbar")%>
+        <%- include ("fragments/search_bar")%>
+
+            <div class="container justify-content-center">
+                <% if(_users.length >0){ %>
+                    <h2 class="text-center">Usuarios</h2>
+                    <div class="row">
+                        <% _users.forEach(function(_user) { %>
+                            <div class="col-md-3">
+                                <div class="card">
+                                    <img class="img mx-auto" id="profilePhoto" src="https://i.gyazo.com/8db55c19643d287d33122513de799049.png" alt="Foto de perfil">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-center">
+                                            <a class="text-center" href="/users/ <%= _user.id %>">
+                                                <%=   _user.name %>
+                                            </a>
+                                        </h5>
+                                        <h6 class="card-subtitle text-center">
+                                            <%= _user.reputation %>
+                                        </h6>
+                                        <!-- TODO -->
+                                        <span>aquí hay que poner la etiqueta que
+                                        más veces aparece en las preguntas del usuario </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <% }); %>
+
+                    </div>
+                    <% }else{ %>
+                        <div class="container justify-content-center">
+                            <img class="img" src="https://images-na.ssl-images-amazon.com/images/I/31An9F-y1yL.jpg" alt="No hay usuarios con ese nombre">
+                        </div>
+                        <% } %>
+
+            </div>
+
+
+
+</body>
+
+</html>

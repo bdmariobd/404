@@ -13,15 +13,22 @@
     font-size: 16px;
 }
 
-body {
-    margin: 0;
-    padding: 0;
-    background-color: var(--bg-color);
-    color: var(--on-bg-color);
-    font-family: 'Nunito', sans-serif;
+.img {
+    padding: 0.5rem;
+    width: 10rem;
+    height: 10rem;
+    border-radius: 50%;
 }
 
-main {
-    margin-left: 5rem;
-    padding: 1rem;
+.container {
+    margin-top: 3rem;
+}
+
+.card {
+    color: var(--on-bg-color);
+    margin: 1rem;
+    background-color: var(--bg-color-3);
+    border: none;
+    width: fit-content;
+    height: fit-content;
 }

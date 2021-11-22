@@ -27,6 +27,7 @@ router.use(["/users", "/preguntas"], (request, response, next) => {
     }
 });
 
+
 //404 and 500 error handling
 router.use((request, response, next) => {
     response.status(404);
@@ -67,10 +68,11 @@ router.post("/login", (request, response) => {
                     console.log("Email/pass not valid");
                     response.render("login");
                 } else {
-                    request.session.id = result.user.id;
+                    request.session.idU = result.user.id;
                     request.session.name = result.user.name;
-                    request.session.id = result.user.id;
                     request.session.currentUser = request.body.email;
+                    console.log(request.session.idU)
+                    console.log(request.session.name)
                     response.redirect("preguntas");
                 }
             }

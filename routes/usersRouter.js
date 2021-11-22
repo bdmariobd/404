@@ -7,7 +7,42 @@ const daoUser = factoryDAO.getDAOUsers();
 /* router para /usuarios/... */
 
 
+router.get('/', (req, res, next) => {
+    daoUser.getAllUsers((err, users) => {
+        console.log(users)
+        if (err) {
+            console.log(err.message);
+            res.status(500);
+        } else {
+            res.status(200);
+            if (!users) {
+                console.log("no usuers")
+            } else {
+                res.render('users', { _users: users });
 
+            }
+        }
+    })
+})
+
+
+router.post('/', (req, res, next) => {
+    daoUser.searchUserByString(req.body.searchQuery, (err, users) => {
+        console.log(users)
+        if (err) {
+            console.log(err.message);
+            res.status(500);
+        } else {
+            res.status(200);
+            if (!users) {
+                console.log("no usuers")
+            } else {
+                res.render('users', { _users: users });
+
+            }
+        }
+    })
+})
 
 router.get('/miPerfil', (req, res, next) => {
 
@@ -56,6 +91,7 @@ router.get('/:id', (req, res, next) => {
             res.status(200)
             if (!result) {
                 console.log("Email/pass not valid");
+                res.status(500);
 
             } else {
                 const user = result[0];
