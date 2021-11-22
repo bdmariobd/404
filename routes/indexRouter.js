@@ -28,17 +28,7 @@ router.use(["/users", "/preguntas"], (request, response, next) => {
 });
 
 
-//404 and 500 error handling
-router.use((request, response, next) => {
-    response.status(404);
-    next();
-    //response.render("404");
-});
-router.use((request, response, next) => {
-    response.status(500);
-    next();
-    //response.render("500", error:... );
-});
+
 
 
 router.get("/", (request, response) => {
