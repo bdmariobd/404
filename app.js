@@ -44,6 +44,17 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/preguntas', questionRouter);
 
+//404 and 500 error handling
+app.use((request, response, next) => {
+    response.status(404);
+    response.render("404");
+});
+
+app.use((error, request, response, next) => {
+    response.status(500);
+    next();
+    //response.render("500", error:... );
+});
 app.listen(config.port, function(err) {
     if (err) {
         console.error("No se pudo inicializar el servidor: " +
