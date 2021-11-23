@@ -11,8 +11,8 @@ class DAOQuestions {
             if (err) {
                 callback(new Error("Error de conexión a la base de datos"));
             } else {
-                let query = "SELECT q.id, q.id_user, q.title, q.body, q.views, q.date, q.likes, q.dislikes, GROUP_CONCAT(DISTINCT t.name) as tags " +
-                    "FROM ((question q join question_tag qt on q.id=qt.id_question) join tag t on qt.id_tag=t.id) " +
+                let query = "SELECT q.id, q.id_user, q.title, q.body, q.views, q.date, q.likes, q.dislikes, GROUP_CONCAT(DISTINCT t.name) as tags, u.name, u.image " +
+                    "FROM (((question q join question_tag qt on q.id=qt.id_question) join tag t on qt.id_tag=t.id) join user u on q.id_user = u.id)" +
                     "WHERE q.active = 1 " +
                     " GROUP BY q.id ORDER BY q.date DESC";
                 connection.query(
@@ -42,8 +42,8 @@ class DAOQuestions {
             if (err) {
                 callback(new Error("Error de conexión a la base de datos"));
             } else {
-                let query = "SELECT q.id, q.id_user, q.title, q.body, q.views, q.date, q.likes, q.dislikes, GROUP_CONCAT(DISTINCT t.name) as tags " +
-                    "FROM ((question q join question_tag qt on q.id=qt.id_question) join tag t on qt.id_tag=t.id)" +
+                let query = "SELECT q.id, q.id_user, q.title, q.body, q.views, q.date, q.likes, q.dislikes, GROUP_CONCAT(DISTINCT t.name) as tags, u.name, u.image " +
+                    "FROM (((question q join question_tag qt on q.id=qt.id_question) join tag t on qt.id_tag=t.id) join user u on q.id_user = u.id)" +
                     "WHERE q.active = 1 AND 0 = (select count(*) FROM answer a WHERE a.question_id = q.id)" +
                     " GROUP BY q.id ORDER BY q.date DESC";
                 connection.query(
