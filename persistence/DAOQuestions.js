@@ -1,5 +1,6 @@
 "use strict"
 
+const timeUtils = require("../public/javascripts/timeUtils");
 
 class DAOQuestions {
     constructor(pool) {
@@ -26,7 +27,10 @@ class DAOQuestions {
                                 callback(null, null); //no hay preguntas
                             } else {
                                 rows.forEach(element => {
+                                    element.dateAgo = timeUtils.getTimeAgo(element.date);
                                     element.tags = element.tags.split(',');
+                                    element.shortBody = element.body.length > 150 ? element.body.substring(0, 150) + '...' : element.body;
+
                                 });
                                 callback(null, rows);
                             }
@@ -57,7 +61,9 @@ class DAOQuestions {
                                 callback(null, null); //no hay preguntas
                             } else {
                                 rows.forEach(element => {
+                                    element.dateAgo = timeUtils.getTimeAgo(element.date);
                                     element.tags = element.tags.split(',');
+                                    element.shortBody = element.body.length > 150 ? element.body.substring(0, 150) + '...' : element.body;
                                 });
                                 callback(null, rows);
                             }
