@@ -191,11 +191,11 @@ a:hover {
 }
 
 .profile-img {
-    padding: 0.5rem;
-    width: 10rem;
-    height: 10rem;
     border-radius: 50%;
     align-items: center;
+    width: 100%;
+    max-width: 10rem;
+    height: auto;
 }
 
 .tags-container {
