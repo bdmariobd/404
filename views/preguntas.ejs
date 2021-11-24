@@ -56,13 +56,16 @@
                                 <%= q.shortBody %>
                             </p>
                             <ul class="container tags-container">
-                                <% q.tags.forEach(tag => {%>
-                                    <li class="tag-element">
-                                        <a href="/tag/<%=tag.id%>">
-                                            <%=tag%>
-                                        </a>
-                                    </li>
-                                    <%}); %>
+                                <% if (q.tags) { %>
+                                    <% q.tags.forEach(tag => {%>
+                                        <li class="tag-element">
+                                            <a href="/tag/<%=tag.id%>">
+                                                <%=tag%>
+                                            </a>
+                                        </li>
+                                        <%}); %>
+                                            <% } %>
+
                             </ul>
                         </div>
 

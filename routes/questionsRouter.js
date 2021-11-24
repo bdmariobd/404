@@ -18,9 +18,9 @@ router.get('/', (req, res, next) => {
             if (rows === null || rows.lenght === 0) {
                 res.render("preguntas", { titulo: "Todas las preguntas", error: "No hay preguntas todavía" });
             } else {
-                /* rows.forEach(element => {
+                rows.forEach(element => {
                     console.log(element);
-                }); */
+                });
                 res.render("preguntas", { titulo: "Todas las preguntas", questions: rows });
             }
         }
@@ -43,5 +43,21 @@ router.get('/sinResponder', (req, res, next) => {
     })
 })
 
+router.get('/formular', (req, res, next) => {
+    res.render('formular');
+})
 
+router.post('/formular', (req, res, next) => {
+    const title = req.body.title,
+        body = req.body.body,
+        tags = req.body.tags;
+    daoQuestions.createQuestion(req.session.idU, title, body, tags, (err, rows) => {
+        if (err) {
+            res.status(500);
+        } else {
+            console.log(rows);
+            res.redirect("/preguntas");
+        }
+    })
+})
 module.exports = router;

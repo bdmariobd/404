@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 17-11-2021 a las 14:41:28
+-- Tiempo de generación: 24-11-2021 a las 23:39:08
 -- Versión del servidor: 10.4.21-MariaDB
 -- Versión de PHP: 8.0.10
 
@@ -113,12 +113,12 @@ CREATE TABLE IF NOT EXISTS `question` (
   `title` varchar(100) NOT NULL,
   `body` varchar(1000) NOT NULL,
   `views` int(11) NOT NULL DEFAULT 0,
-  `date` date NOT NULL DEFAULT current_timestamp(),
+  `date` timestamp NOT NULL DEFAULT current_timestamp(),
   `likes` int(11) NOT NULL DEFAULT 0,
   `dislikes` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `question_userfk` (`id_user`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Truncar tablas antes de insertar `question`
@@ -130,11 +130,16 @@ TRUNCATE TABLE `question`;
 --
 
 INSERT INTO `question` (`id`, `id_user`, `active`, `title`, `body`, `views`, `date`, `likes`, `dislikes`) VALUES
-(1, 1, 1, '¿Cual es la diferencia entre position: relative, position: absolute y position: fixed?', 'Sé que estas propiedades de CSS sirven para posicionar un elemento dentro de la página. Soy bobo y voy a repetir lo mismo otra vez: Sé que estas propiedades de CSS sirven para posicionar un elemento dentro de la página.', 0, '2021-11-09', 0, 0),
-(2, 2, 1, '¿Cómo funciona exactamente nth-child?', 'No acabo de comprender muy bien que hace exactamente y qué usos prácticos puede tener.', 0, '2021-11-09', 0, 0),
-(3, 3, 1, 'Diferencias entre == y === (comparaciones en JavaScript)', 'Siempre he visto que en JavaScript hay:\r\nasignaciones =\r\ncomparaciones == y ===\r\nCreo entender que == hace algo parecido a comparar el valor de la variable y el === también\r\ncompara el tipo (como un equals de java).', 0, '2021-11-09', 0, 0),
-(4, 4, 1, 'Problema con asincronismo en Node\r\n', 'Soy nueva en Node... Tengo una modulo que conecta a una BD de postgres por medio de pgnode. En eso no tengo problemas. Mi problema es que al llamar a ese modulo, desde otro\r\nmodulo, y despues querer usar los datos que salieron de la BD me dice undefined... Estoy casi\r\nseguro que es porque la conexion a la BD devuelve una promesa, y los datos no estan\r\ndisponibles al momento de usarlos', 0, '2021-11-09', 0, 0),
-(5, 5, 1, '¿Qué es la inyección SQL y cómo puedo evitarla?', 'He encontrado bastantes preguntas en StackOverflow sobre programas o formularios web que\r\nguardan información en una base de datos (especialmente en PHP y MySQL) y que contienen\r\ngraves problemas de seguridad relacionados principalmente con la inyección SQL.\r\nNormalmente dejo un comentario y/o un enlace a una referencia externa, pero un comentario\r\nno da mucho espacio para mucho y sería positivo que hubiera una referencia interna en SOes\r\nsobre el tema así que decidí escribir esta pregunta.', 0, '2021-11-09', 0, 0);
+(1, 1, 1, '¿Cual es la diferencia entre position: relative, position: absolute y position: fixed?', 'Sé que estas propiedades de CSS sirven para posicionar un elemento dentro de la página. Soy bobo y voy a repetir lo mismo otra vez: Sé que estas propiedades de CSS sirven para posicionar un elemento dentro de la página.', 0, '2021-11-08 23:00:00', 0, 0),
+(2, 2, 1, '¿Cómo funciona exactamente nth-child?', 'No acabo de comprender muy bien que hace exactamente y qué usos prácticos puede tener.', 0, '2021-11-08 23:00:00', 0, 0),
+(3, 3, 1, 'Diferencias entre == y === (comparaciones en JavaScript)', 'Siempre he visto que en JavaScript hay:\r\nasignaciones =\r\ncomparaciones == y ===\r\nCreo entender que == hace algo parecido a comparar el valor de la variable y el === también\r\ncompara el tipo (como un equals de java).', 0, '2021-11-08 23:00:00', 0, 0),
+(4, 4, 1, 'Problema con asincronismo en Node\r\n', 'Soy nueva en Node... Tengo una modulo que conecta a una BD de postgres por medio de pgnode. En eso no tengo problemas. Mi problema es que al llamar a ese modulo, desde otro\r\nmodulo, y despues querer usar los datos que salieron de la BD me dice undefined... Estoy casi\r\nseguro que es porque la conexion a la BD devuelve una promesa, y los datos no estan\r\ndisponibles al momento de usarlos', 0, '2021-11-08 23:00:00', 0, 0),
+(5, 5, 1, '¿Qué es la inyección SQL y cómo puedo evitarla?', 'He encontrado bastantes preguntas en StackOverflow sobre programas o formularios web que\r\nguardan información en una base de datos (especialmente en PHP y MySQL) y que contienen\r\ngraves problemas de seguridad relacionados principalmente con la inyección SQL.\r\nNormalmente dejo un comentario y/o un enlace a una referencia externa, pero un comentario\r\nno da mucho espacio para mucho y sería positivo que hubiera una referencia interna en SOes\r\nsobre el tema así que decidí escribir esta pregunta.', 0, '2021-11-08 23:00:00', 0, 0),
+(6, 1, 1, 'Prueba', 'dsfgsdfg', 0, '2021-11-23 23:00:00', 0, 0),
+(7, 1, 1, 'Pregunta', 'erestonto o que\r\n\r\ne', 0, '2021-11-23 23:00:00', 0, 0),
+(8, 1, 1, 'gg', 'fgsdf\r\n', 0, '2021-11-23 23:00:00', 0, 0),
+(9, 1, 1, 'Estoy probando', 'No se\r\n\r\n\r\n\r\n\r\n\r\nertetewrtwertwert', 0, '2021-11-23 23:00:00', 0, 0),
+(10, 1, 1, 'dfgsdfg', 'sdfgsdfg', 0, '2021-11-24 22:37:54', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -189,33 +194,6 @@ CREATE TABLE IF NOT EXISTS `question_vote` (
 --
 
 TRUNCATE TABLE `question_vote`;
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `sessions`
---
-
-DROP TABLE IF EXISTS `sessions`;
-CREATE TABLE IF NOT EXISTS `sessions` (
-  `session_id` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `expires` int(11) UNSIGNED NOT NULL,
-  `data` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
-  PRIMARY KEY (`session_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Truncar tablas antes de insertar `sessions`
---
-
-TRUNCATE TABLE `sessions`;
---
--- Volcado de datos para la tabla `sessions`
---
-
-INSERT INTO `sessions` (`session_id`, `expires`, `data`) VALUES
-('DIYk14lgzBThYqb_VIVTE73X0wfkYcCv', 1637104644, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"currentUser\":\"nico@404.es\"}'),
-('Ljj4cqiAKSGKSMQO1TVWGDvO9S8ozD94', 1637012893, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"currentUser\":\"nico@404.es\"}');
-
 -- --------------------------------------------------------
 
 --
