@@ -60,4 +60,25 @@ router.post('/formular', (req, res, next) => {
         }
     })
 })
+
+router.get("/:id", (req, res, next) => {
+    daoQuestions.getQuestion(req.params.id, (err, questions) => {
+        console.log('e');
+        console.log(questions);
+        if (err) {
+            res.status(500);
+        } else {
+            daoQuestions.getAnswers(req.params.id, (err, answers) => {
+                if (err) {
+                    res.status(500);
+                } else {
+                    res.status(200);
+                    res.render("unapregunta", { question: questions[0], answers: answers });
+                }
+            })
+
+        }
+
+    })
+})
 module.exports = router;
