@@ -129,7 +129,7 @@ class DAOQuestions {
             if (err) {
                 callback(new Error("Error de conexión a la base de datos"));
             } else {
-                const query = "SELECT * " +
+                const query = "SELECT *, a.date as a_date " +
                     "FROM answer a join user u on a.user_id = u.id " +
                     "WHERE a.active = 1 AND a.question_id=? " +
                     "ORDER BY a.date DESC";
@@ -141,11 +141,30 @@ class DAOQuestions {
                         callback(new Error("Error de acceso a la base de datos"));
                     } else {
                         rows.forEach(element => {
-                            element.dateAgo = timeUtils.getTimeAgo(element.date);
+                            element.dateAgo = timeUtils.getTimeAgo(element.a_date);
                         });
                         callback(null, rows);
                     }
                 })
+            }
+        })
+    }
+    createAnswer(user_id, question_id, body, callback) {
+        this.pool.getConnection((err, connection) => {
+            if (err) {
+                callback(new Error("Error de conexión a la base de datos"));
+            } else {
+                const query = "INSERT INTO `answer` (`question_id`, `user_id`, `body`) VALUES " +
+                    "(?, ?, ?)";
+                connection.query(query, [question_id, user_id, body],
+                    (err, rows) => {
+                        connection.release();
+                        if (err) {
+                            callback(new Error("Error de acceso a la base de datos"));
+                        } else {
+                            callback(null, rows);
+                        }
+                    })
             }
         })
     }

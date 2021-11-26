@@ -63,8 +63,6 @@ router.post('/formular', (req, res, next) => {
 
 router.get("/:id", (req, res, next) => {
     daoQuestions.getQuestion(req.params.id, (err, questions) => {
-        console.log('e');
-        console.log(questions);
         if (err) {
             res.status(500);
         } else {
@@ -72,11 +70,28 @@ router.get("/:id", (req, res, next) => {
                 if (err) {
                     res.status(500);
                 } else {
+                    console.log(questions);
+                    console.log(answers)
                     res.status(200);
                     res.render("unapregunta", { question: questions[0], answers: answers });
                 }
             })
 
+        }
+
+    })
+})
+
+router.post("/:id", (req, res, next) => {
+    const user = req.session.idU,
+        body = req.body.body,
+        question = req.params.id;
+    daoQuestions.createAnswer(user, question, body, (err, result) => {
+        if (err) {
+            res.status(500);
+        } else {
+            res.status(200);
+            res.redirect("/preguntas/" + req.params.id);
         }
 
     })
