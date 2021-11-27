@@ -32,46 +32,48 @@
                 </h5>
                 <a href="/preguntas/formular" class="btn">Formula tu pregunta</a>
             </div>
-            <ul class="container questions-container">
-                <% questions.forEach(q =>{ %>
-                    <li class="row question-element">
-                        <div class="col-4 question-extradata">
-                            <p>Formulada
-                                <%=q.dateAgo%>
-                                    por
-                                    <a href="/users/<%= q.id_user %> ">
-                                        <%= q.name %>
-                                    </a>
-                            </p>
+            <%- include ("fragments/search_bar_question") %>
 
-                            <img alt="Foto de perfil de <%=q .name %>" src="/images/<%= q.image %> " class="profile-img">
+                <ul class="container questions-container">
+                    <% questions.forEach(q =>{ %>
+                        <li class="row question-element">
+                            <div class="col-4 question-extradata">
+                                <p>Formulada
+                                    <%=q.dateAgo%>
+                                        por
+                                        <a href="/users/<%= q.id_user %> ">
+                                            <%= q.name %>
+                                        </a>
+                                </p>
+
+                                <img alt="Foto de perfil de <%=q .name %>" src="/images/<%= q.image %> " class="profile-img">
 
 
-                        </div>
-                        <div class="col-8 question-maindata">
-                            <a href="/preguntas/<%=q.id%>">
-                                <%= q.title%>
-                            </a>
-                            <p>
-                                <%= q.shortBody %>
-                            </p>
-                            <ul class="container tags-container">
-                                <% if (q.tags) { %>
-                                    <% q.tags.forEach(tag => {%>
-                                        <li class="tag-element">
-                                            <a href="/tag/<%=tag.id%>">
-                                                <%=tag%>
-                                            </a>
-                                        </li>
-                                        <%}); %>
-                                            <% } %>
+                            </div>
+                            <div class="col-8 question-maindata">
+                                <a href="/preguntas/<%=q.id%>">
+                                    <%= q.title%>
+                                </a>
+                                <p>
+                                    <%= q.shortBody %>
+                                </p>
+                                <ul class="container tags-container">
+                                    <% if (q.tags) { %>
+                                        <% q.tags.forEach(tag => {%>
+                                            <li class="tag-element">
+                                                <a href="/tag/<%=tag.id%>">
+                                                    <%=tag%>
+                                                </a>
+                                            </li>
+                                            <%}); %>
+                                                <% } %>
 
-                            </ul>
-                        </div>
+                                </ul>
+                            </div>
 
-                    </li>
-                    <% }); %>
-            </ul>
+                        </li>
+                        <% }); %>
+                </ul>
         </main>
 
 

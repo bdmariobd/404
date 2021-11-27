@@ -61,6 +61,23 @@ router.post('/formular', (req, res, next) => {
     })
 })
 
+
+
+router.get("/search", (req, res, next) => {
+    const text = req.query.search;
+    //console.log(text);
+    daoQuestions.searchByText(text, (err, questions) => {
+        if (err) {
+            res.status(500);
+        } else {
+            res.status(200);
+            //console.log(questions);
+            res.render("preguntas", { titulo: 'Resultados de la búsqueda "' + text + '"', questions: questions });
+        }
+    })
+
+})
+
 router.get("/:id", (req, res, next) => {
     daoQuestions.getQuestion(req.params.id, (err, questions) => {
         if (err) {

@@ -168,6 +168,32 @@ class DAOQuestions {
             }
         })
     }
+
+    searchByText(search, callback) {
+        this.pool.getConnection((err, connection) => {
+            if (err) {
+                callback(new Error("Error de conexión a la base de datos"));
+            } else {
+                const query = "SELECT q.id, q.id_user, q.title, q.body, q.views, q.date, q.likes, q.dislikes, GROUP_CONCAT(DISTINCT t.name) as tags, u.name, u.image " +
+                    "FROM (((question q left join question_tag qt on q.id=qt.id_question) left join tag t on qt.id_tag=t.id) join user u on q.id_user = u.id)" +
+                    "WHERE q.active = 1 AND (q.title LIKE CONCAT('%',CONCAT(?,'%')) OR q.body LIKE CONCAT('%',CONCAT(?,'%')))" +
+                    " GROUP BY q.id ORDER BY q.date DESC";
+                connection.query(query, [search, search], (err, rows) => {
+                    connection.release();
+                    if (err) {
+                        callback(new Error("Error de acceso a la base de datos"));
+                    } else {
+                        rows.forEach(element => {
+                            element.dateAgo = timeUtils.getTimeAgo(element.date);
+                            if (element.tags !== null) element.tags = element.tags.split(',');
+                            element.shortBody = element.body.length > 150 ? element.body.substring(0, 150) + '...' : element.body;
+                        });
+                        callback(null, rows);
+                    }
+                })
+            }
+        })
+    }
 }
 
 
