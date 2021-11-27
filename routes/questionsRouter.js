@@ -80,7 +80,7 @@ router.get("/search", (req, res, next) => {
 
 router.get("/tag/:id", (req, res, next) => {
     const tag = req.params.id;
-    //console.log(text);
+    console.log(tag);
     daoQuestions.searchByTag(tag, (err, questions) => {
         if (err) {
             res.status(500);
