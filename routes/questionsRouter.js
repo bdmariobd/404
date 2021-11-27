@@ -75,7 +75,21 @@ router.get("/search", (req, res, next) => {
             res.render("preguntas", { titulo: 'Resultados de la búsqueda "' + text + '"', questions: questions });
         }
     })
+})
 
+
+router.get("/tag/:id", (req, res, next) => {
+    const tag = req.params.id;
+    //console.log(text);
+    daoQuestions.searchByTag(tag, (err, questions) => {
+        if (err) {
+            res.status(500);
+        } else {
+            res.status(200);
+            //console.log(questions);
+            res.render("preguntas", { titulo: 'Preguntas con la etiqueta "' + tag + '"', questions: questions });
+        }
+    })
 })
 
 router.get("/:id", (req, res, next) => {
