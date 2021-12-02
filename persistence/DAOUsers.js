@@ -53,7 +53,7 @@ class DAOUsers {
                             } else {
                                 let result = [];
                                 rows.map(function(row) {
-                                    result.push({ name: row.name, email: row.email, image: row.image, date: row.date, reputation: row.reputation, active: row.active });
+                                    result.push({ id:row.id,name: row.name, email: row.email, image: row.image, date: row.date, reputation: row.reputation, active: row.active });
                                 })
                                 callback(null, result)
                             }

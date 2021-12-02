@@ -67,7 +67,7 @@ router.get('/miPerfil', (req, res, next) => {
                             console.log("No tiene medallas");
 
                         } else {
-                            res.render('profile', { _user: user, golds: result.gold, silvers: result.silvers, bronces: result.bronces });
+                            res.render('profile', { _user: user, golds: result.gold, silvers: result.silver, bronces: result.bronce });
                             res.status(200);
 
                         }
