@@ -1,30 +1,30 @@
 4 (APTO)Es la mínima calificación para poder hacer media
 con el examen de la asignatura:
-● Creación de cuentas
-● Inicio de sesión
-● Cierre de sesión
-● Opción de menú “Preguntas”
-● Búsqueda de preguntas por texto
-● Filtrado de preguntas por etiquetas
-● Formular pregunta
+● Creación de cuentas NO VA LA IMAGEN 
+● Inicio de sesión VALIDACION FORMULARIOS
+● Cierre de sesión TODO
+● Opción de menú “Preguntas” ESTILO
+● Búsqueda de preguntas por texto OK
+● Filtrado de preguntas por etiquetas TODO
+● Formular pregunta METER TAGS
 
 
 6:
 ● Todas las anteriores
-● Respuestas
-● Opción de menú “Sin responder”
+● Respuestas DONE
+● Opción de menú “Sin responder” DONE
 
 8:
 ● Todas las anteriores
-● Visitas a preguntas
-● Votación de preguntas y respuestas
+● Visitas a preguntas TODO
+● Votación de preguntas y respuestas TODO
 ● Reputación, número de preguntas y
-respuestas de cada usuario
-● Medallas
+respuestas de cada usuario TODO
+● Medallas TODO
 
 10:
 ● Todas las anteriores
-● Opción de menú “Usuarios”
-● Perfil de usuario
+● Opción de menú “Usuarios” CASI CASI ERROR ROUTER
+● Perfil de usuario CASI CASI PASAR FOTO CADA UNO
 
 
