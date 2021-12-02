@@ -202,7 +202,7 @@ class DAOQuestions {
             } else {
                 const query = "SELECT q.id, q.id_user, q.title, q.body, q.views, q.date, q.likes, q.dislikes, GROUP_CONCAT(DISTINCT t.name) as tags, u.name, u.image " +
                     "FROM (((question q left join question_tag qt on q.id=qt.id_question) left join tag t on qt.id_tag=t.id) join user u on q.id_user = u.id)" +
-                    " WHERE q.active = 1 AND q.id IN (SELECT id_question from question_tag WHERE id_tag=?) " +
+                    " WHERE q.active = 1 AND q.id IN (SELECT id_question from question_tag sqt join tag st on st.id = sqt.id_tag WHERE st.name=?) " +
                     " GROUP BY q.id ORDER BY q.date DESC";
                 connection.query(query, [tag], (err, rows) => {
                     connection.release();
