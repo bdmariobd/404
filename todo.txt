@@ -2,17 +2,17 @@
 con el examen de la asignatura:
 ● Creación de cuentas NO VA LA IMAGEN 
 ● Inicio de sesión VALIDACION FORMULARIOS
-● Cierre de sesión TODO
-● Opción de menú “Preguntas” ESTILO
-● Búsqueda de preguntas por texto OK
-● Filtrado de preguntas por etiquetas TODO
-● Formular pregunta METER TAGS
+● Cierre de sesión DONE
+● Opción de menú “Preguntas” ESTILO PERO OK
+● Búsqueda de preguntas por texto OK (APLICA ESTILO, USAN MISMO HTML)
+● Filtrado de preguntas por etiquetas DONE
+● Formular pregunta TODO METER TAGS
 
 
 6:
 ● Todas las anteriores
 ● Respuestas DONE
-● Opción de menú “Sin responder” DONE
+● Opción de menú “Sin responder” DONE(APLICA ESTILO, USAN MISMO HTML)
 
 8:
 ● Todas las anteriores
@@ -24,7 +24,7 @@ respuestas de cada usuario TODO
 
 10:
 ● Todas las anteriores
-● Opción de menú “Usuarios” CASI CASI ERROR ROUTER
-● Perfil de usuario CASI CASI PASAR FOTO CADA UNO
+● Opción de menú “Usuarios” PASAR FOTO CADA UNO Y ESTILO
+● Perfil de usuario  PASAR FOTO CADA UNO Y ESTILO
 
 
