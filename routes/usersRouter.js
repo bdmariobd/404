@@ -3,8 +3,12 @@ var router = express.Router();
 const factoryDAO = require("../persistence/factoryDAO")
 const mysql = require("mysql");
 const config = require('../config');
+const session = require('express-session');
 const daoUser = factoryDAO.getDAOUsers();
 /* router para /usuarios/... */
+
+
+
 
 
 router.get('/', (req, res, next) => {
@@ -97,7 +101,7 @@ router.get('/:id', (req, res, next) => {
                 const user = result[0];
                 console.log(result[0].name)
 
-                daoUser.getMedals(req.session.currentUser, (err, result) => {
+                daoUser.getMedals(user.email, (err, result) => {
                     if (err) {
                         res.status(500);
                     } else {
@@ -106,7 +110,7 @@ router.get('/:id', (req, res, next) => {
                             console.log("No tiene medallas");
 
                         } else {
-                            res.render('profile', { _user: user, golds: result.gold, silvers: result.silvers, bronces: result.bronces });
+                            res.render('profile', { _user: user, golds: result.gold, silvers: result.silver, bronces: result.bronce });
                             res.status(200);
 
                         }

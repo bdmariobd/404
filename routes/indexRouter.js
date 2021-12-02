@@ -27,6 +27,11 @@ router.use(["/users", "/preguntas"], (request, response, next) => {
     }
 });
 
+router.get('/logout',(req,res,next) =>{
+    req.session.destroy()
+    res.status(200)
+    res.redirect('login')
+})
 
 
 

@@ -2,6 +2,7 @@
 
 const mysql = require("mysql");
 var bcrypt = require('bcryptjs');
+const timeUtils = require("../public/javascripts/timeUtils")
 class DAOUsers {
     constructor(pool) {
         this.pool = pool;
@@ -25,7 +26,7 @@ class DAOUsers {
                             } else {
                                 let result = [];
                                 rows.map(function(row) {
-                                    result.push({ name: row.name, email: row.email, image: row.image, date: row.date, reputation: row.reputation, active: row.active });
+                                    result.push({ name: row.name, email: row.email, image: row.image, date:timeUtils.getTimeAgo( row.date), reputation: row.reputation, active: row.active });
                                 })
                                 callback(null, result)
                             }
@@ -53,7 +54,7 @@ class DAOUsers {
                             } else {
                                 let result = [];
                                 rows.map(function(row) {
-                                    result.push({ id:row.id,name: row.name, email: row.email, image: row.image, date: row.date, reputation: row.reputation, active: row.active });
+                                    result.push({ id:row.id,name: row.name, email: row.email, image: row.image, date: timeUtils.getTimeAgo(row.date), reputation: row.reputation, active: row.active });
                                 })
                                 callback(null, result)
                             }
@@ -163,8 +164,11 @@ class DAOUsers {
                             if (rows.length === 0) {
                                 callback(null, false); //no está el usuario en la base de datos
                             } else {
-                                console.log(rows)
-                                callback(null, rows);
+                                let result = [];
+                                rows.map(function(row) {
+                                    result.push({ id:row.id,name: row.name, email: row.email, image: row.image, date: timeUtils.getTimeAgo(row.date), reputation: row.reputation, active: row.active });
+                                })
+                                callback(null, result);
                             }
                         }
                     });
@@ -216,31 +220,29 @@ class DAOUsers {
                                 callback(new Error("No hay medallas"));
                             } else {
                                 console.log(result)
-                                if (result.length > 0) {
-                                    var arrayResult = [];
-                                    var arrayGold = [];
-                                    var arraySilver = [];
-                                    var arrayBronce = [];
-                                    // uuf estoy seguro de que esto se puede hacer más elegante, quiero pensarlo ahora? no.
-                                    result.map(m => {
-                                        if (m.metal === "gold") {
-                                            arrayGold.push({ id: m.id, name: m.name, metal: m.metal, merit: m.merit, type: m.type, active: m.active });
-                                        } else if (m.metal === "silver") {
-                                            arraySilver.push({ id: m.id, name: m.name, metal: m.metal, merit: m.merit, type: m.type, active: m.active });
-                                        } else {
-                                            arrayBronce.push({ id: m.id, name: m.name, metal: m.metal, merit: m.merit, type: m.type, active: m.active });
-                                        }
-                                        arrayResult = {
-                                            gold: arrayGold,
-                                            silver: arraySilver,
-                                            bronce: arrayBronce
-                                        };
-                                    });
-                                    console.log("El usuario tiene medallas");
-                                    callback(null, arrayResult);
-                                    //El usuario no tiene medallas 
-                                }
-
+                                
+                                var arrayResult = [];
+                                var arrayGold = [];
+                                var arraySilver = [];
+                                var arrayBronce = [];
+                                // uuf estoy seguro de que esto se puede hacer más elegante, quiero pensarlo ahora? no.
+                                result.map(m => {
+                                    if (m.metal === "gold") {
+                                        arrayGold.push({ id: m.id, name: m.name, metal: m.metal, merit: m.merit, type: m.type, active: m.active });
+                                    } else if (m.metal === "silver") {
+                                        arraySilver.push({ id: m.id, name: m.name, metal: m.metal, merit: m.merit, type: m.type, active: m.active });
+                                    } else {
+                                        arrayBronce.push({ id: m.id, name: m.name, metal: m.metal, merit: m.merit, type: m.type, active: m.active });
+                                    }
+                                });
+                                arrayResult = {
+                                    gold: arrayGold,
+                                    silver: arraySilver,
+                                    bronce: arrayBronce
+                                };
+                                callback(null, arrayResult);
+                                //El usuario no tiene medallas 
+                                
                             }
                         })
                     }
