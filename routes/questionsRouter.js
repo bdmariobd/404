@@ -50,7 +50,7 @@ router.get('/formular', (req, res, next) => {
 router.post('/formular', (req, res, next) => {
     const title = req.body.title,
         body = req.body.body,
-        tags = req.body.tags;
+        tags = req.body.tags.split(",");
     daoQuestions.createQuestion(req.session.idU, title, body, tags, (err, rows) => {
         if (err) {
             res.status(500);

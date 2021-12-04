@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito&family=Quicksand:wght@700&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <title>404</title>
 </head>
 
@@ -31,12 +32,47 @@
                 <h5>Etiquetas</h5>
                 <h7>Añade hasta 5 etiquetas para describir sobre qué trata tu pregunta</h7>
                 <div class="form-element">
-                    <input name="tags" class="form-control" type="text" placeholder="Por ejemplo: @node @sql @linux">
+                    <div id="tags_rendered">
+
+                    </div>
                 </div>
+                <div class="form-element">
+                    <input autocomplete="off" id="tagInput" class="form-control" type="text" placeholder="Por ejemplo: node sql linux" value=''>
+                    <input autocomplete="off" type="hidden" id="hiddenTagInput" name="tags" value=''>
+                </div>
+
                 <input type="submit" class="btn form-element" value="Manda tu pregunta">
             </form>
 
         </main>
+
+        <script>
+            $(function() {
+                let tagsArray = [];
+                $('#tagInput').keypress(function(event) {
+                    const hiddenTags = $('#hiddenTagInput');
+                    if (event.which === 32) { //spacebar
+                        const userText = $(this).val().replace(/^\s+/, '').replace(/\s+$/, '');
+                        if (userText !== '' && !tagsArray.includes(userText) && tagsArray.length < 5) {
+                            const tag = $("<span></span>").text($(this).val()).addClass("tag-element");
+                            tag.append($('<a></a>').addClass("deleteTagInput").text('🗑️').click(function() {
+                                const index = tagsArray.indexOf(userText);
+                                if (index > -1) {
+                                    tagsArray.splice(index, 1);
+                                }
+                                $(this).parent().remove();
+                                hiddenTags.val(tagsArray.join());
+                            }))
+                            tagsArray.push(userText);
+                            $('#tags_rendered').append(tag);
+                            hiddenTags.val(tagsArray.join());
+                        }
+                        $(this).val('');
+                    }
+                });
+
+            });
+        </script>
 </body>
 
 </html>

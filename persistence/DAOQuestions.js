@@ -86,6 +86,67 @@ class DAOQuestions {
                         callback(new Error("Error de acceso a la base de datos"));
                     } else {
                         //insertar las tag
+                        let idQuestion = rows.insertId;
+                        let sqlArray = tags.map(tag => "'" + tag + "'").join(',');
+                        let query = "SELECT name FROM tag where name in (" + sqlArray + ")";
+                        connection.query(query, (err, rows) => {
+                            if (err) {
+                                callback(new Error("Error de acceso a la base de datos"));
+                            } else {
+                                const newTags = tags.filter(t => !rows.includes(t));
+                                if (newTags.length === 0) {
+                                    let query = "SELECT id FROM tag where name in (" + sqlArray + ")";
+                                    connection.query(query,
+                                        (err, rows) => {
+                                            if (err) {
+                                                callback(new Error("Error de acceso a la base de datos"));
+                                            } else {
+                                                let task_tag = rows.map(row => [idQuestion, row.tagId]);
+                                                connection.query("INSERT INTO question_tag (id_question, id_tag) VALUES ?", [task_tag],
+                                                    (err, result) => {
+                                                        connection.release();
+                                                        if (err) {
+                                                            callback(new Error("Error de acceso a la base de datos"));
+                                                        } else {
+                                                            callback(null);
+                                                        }
+                                                    }
+                                                );
+                                            }
+                                        }
+                                    );
+                                } else {
+                                    connection.query("INSERT INTO tag (name) VALUES ?", [newTags],
+                                        (err, rows) => {
+                                            if (err) {
+                                                callback(new Error("Error de acceso a la base de datos"));
+                                            } else {
+                                                let query = "SELECT name FROM tag where name in (" + sqlArray + ")";
+                                                connection.query(query,
+                                                    (err, rows) => {
+                                                        if (err) {
+                                                            callback(new Error("Error de acceso a la base de datos"));
+                                                        } else {
+                                                            let task_tag = rows.map(row => [idTask, row.tagId, 1]);
+                                                            connection.query("INSERT INTO question_tag (id_question, id_tag) VALUES ?", [task_tag],
+                                                                (err, result) => {
+                                                                    connection.release();
+                                                                    if (err) {
+                                                                        callback(new Error("Error de acceso a la base de datos"));
+                                                                    } else {
+                                                                        callback(null);
+                                                                    }
+                                                                }
+                                                            );
+                                                        }
+                                                    }
+                                                );
+                                            }
+                                        }
+                                    );
+                                }
+                            }
+                        });
                         callback(null, rows);
                     }
                 });
