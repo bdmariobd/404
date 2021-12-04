@@ -1,3 +1,6 @@
+HACER LA WEB UN POCO MAS RESPONSIVE
+
+
 4 (APTO)Es la mínima calificación para poder hacer media
 con el examen de la asignatura:
 ● Creación de cuentas NO VA LA IMAGEN 
@@ -6,7 +9,7 @@ con el examen de la asignatura:
 ● Opción de menú “Preguntas” ESTILO PERO OK
 ● Búsqueda de preguntas por texto OK (APLICA ESTILO, USAN MISMO HTML)
 ● Filtrado de preguntas por etiquetas DONE
-● Formular pregunta TODO METER TAGS
+● Formular pregunta CASI (VALIDACION FORMULARIOS)
 
 
 6:

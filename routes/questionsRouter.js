@@ -50,12 +50,11 @@ router.get('/formular', (req, res, next) => {
 router.post('/formular', (req, res, next) => {
     const title = req.body.title,
         body = req.body.body,
-        tags = req.body.tags.split(",");
+        tags = req.body.tags === '' ? [] : req.body.tags.split().map(t => t.toLowerCase());
     daoQuestions.createQuestion(req.session.idU, title, body, tags, (err, rows) => {
         if (err) {
             res.status(500);
         } else {
-            console.log(rows);
             res.redirect("/preguntas");
         }
     })

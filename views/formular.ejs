@@ -38,7 +38,7 @@
                 </div>
                 <div class="form-element">
                     <input autocomplete="off" id="tagInput" class="form-control" type="text" placeholder="Por ejemplo: node sql linux" value=''>
-                    <input autocomplete="off" type="hidden" id="hiddenTagInput" name="tags" value=''>
+                    <input autocomplete="off" type="hidden" id="hiddenTagInput" name="tags">
                 </div>
 
                 <input type="submit" class="btn form-element" value="Manda tu pregunta">
@@ -67,6 +67,8 @@
                             $('#tags_rendered').append(tag);
                             hiddenTags.val(tagsArray.join());
                         }
+                        console.log(tagsArray);
+                        console.log(hiddenTags.val());
                         $(this).val('');
                     }
                 });

@@ -81,73 +81,70 @@ class DAOQuestions {
                 const query = "INSERT INTO `question` (`id_user`, `active`, `title`, `body`) VALUES " +
                     "(?,1,?,?)";
                 connection.query(query, [id, title, body], (err, rows) => {
-                    connection.release(); // devolver al pool la conexión
                     if (err) {
                         callback(new Error("Error de acceso a la base de datos"));
                     } else {
                         //insertar las tag
-                        let idQuestion = rows.insertId;
-                        let sqlArray = tags.map(tag => "'" + tag + "'").join(',');
-                        let query = "SELECT name FROM tag where name in (" + sqlArray + ")";
-                        connection.query(query, (err, rows) => {
-                            if (err) {
-                                callback(new Error("Error de acceso a la base de datos"));
-                            } else {
-                                const newTags = tags.filter(t => !rows.includes(t));
-                                if (newTags.length === 0) {
-                                    let query = "SELECT id FROM tag where name in (" + sqlArray + ")";
-                                    connection.query(query,
-                                        (err, rows) => {
-                                            if (err) {
-                                                callback(new Error("Error de acceso a la base de datos"));
-                                            } else {
-                                                let task_tag = rows.map(row => [idQuestion, row.tagId]);
-                                                connection.query("INSERT INTO question_tag (id_question, id_tag) VALUES ?", [task_tag],
-                                                    (err, result) => {
-                                                        connection.release();
-                                                        if (err) {
-                                                            callback(new Error("Error de acceso a la base de datos"));
-                                                        } else {
-                                                            callback(null);
-                                                        }
-                                                    }
-                                                );
-                                            }
-                                        }
-                                    );
+                        if (tags.length === 0) {
+                            callback(null, rows);
+                        } else {
+                            let idQuestion = rows.insertId;
+                            let sqlArray = tags.map(tag => "'" + tag + "'").join(',');
+                            let query = "SELECT id, name FROM tag where name in (" + sqlArray + ")";
+                            connection.query(query, (err, rows) => {
+                                if (err) {
+                                    callback(new Error("Error de acceso a la base de datos"));
                                 } else {
-                                    connection.query("INSERT INTO tag (name) VALUES ?", [newTags],
-                                        (err, rows) => {
-                                            if (err) {
-                                                callback(new Error("Error de acceso a la base de datos"));
-                                            } else {
-                                                let query = "SELECT name FROM tag where name in (" + sqlArray + ")";
-                                                connection.query(query,
-                                                    (err, rows) => {
-                                                        if (err) {
-                                                            callback(new Error("Error de acceso a la base de datos"));
-                                                        } else {
-                                                            let task_tag = rows.map(row => [idTask, row.tagId, 1]);
-                                                            connection.query("INSERT INTO question_tag (id_question, id_tag) VALUES ?", [task_tag],
-                                                                (err, result) => {
-                                                                    connection.release();
-                                                                    if (err) {
-                                                                        callback(new Error("Error de acceso a la base de datos"));
-                                                                    } else {
-                                                                        callback(null);
-                                                                    }
-                                                                }
-                                                            );
-                                                        }
-                                                    }
-                                                );
+                                    let parsedTags = []
+                                    rows.forEach(row => parsedTags.push(row.name));
+                                    let newTags = tags.filter(t => !parsedTags.includes(t));
+                                    if (newTags.length === 0) {
+                                        let task_tag = rows.map(row => [idQuestion, row.id]);
+                                        connection.query("INSERT INTO question_tag (id_question, id_tag) VALUES ?", [task_tag],
+                                            (err, result) => {
+                                                connection.release();
+                                                if (err) {
+                                                    callback(new Error("Error de acceso a la base de datos"));
+                                                } else {
+                                                    callback(null, rows);
+                                                }
                                             }
-                                        }
-                                    );
+                                        );
+                                    } else {
+                                        newTags = newTags.map(t => [t]);
+                                        connection.query("INSERT INTO tag (name) VALUES ?", [newTags],
+                                            (err, rows) => {
+                                                if (err) {
+                                                    callback(new Error("Error de acceso a la base de datos"));
+                                                } else {
+                                                    let query = "SELECT id,name FROM tag where name in (" + sqlArray + ")";
+                                                    connection.query(query,
+                                                        (err, rows) => {
+                                                            if (err) {
+                                                                callback(new Error("Error de acceso a la base de datos"));
+                                                            } else {
+                                                                let task_tag = rows.map(row => [idQuestion, row.id]);
+                                                                connection.query("INSERT INTO question_tag (id_question, id_tag) VALUES ?", [task_tag],
+                                                                    (err, result) => {
+                                                                        connection.release();
+                                                                        if (err) {
+                                                                            callback(new Error("Error de acceso a la base de datos"));
+                                                                        } else {
+                                                                            callback(null, rows);
+                                                                        }
+                                                                    }
+                                                                );
+                                                            }
+                                                        }
+                                                    );
+                                                }
+                                            }
+                                        );
+                                    }
                                 }
-                            }
-                        });
-                        callback(null, rows);
+                            });
+                        }
+
                     }
                 });
             }
