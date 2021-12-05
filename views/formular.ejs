@@ -22,22 +22,22 @@
                 <h5>Titulo</h5>
                 <h7>Se claro, imagina que le estás preguntando a cualquier persona.</h7>
                 <div class="form-element">
-                    <input name="title" class="form-control" type="text" placeholder="Título de la pregunta">
+                    <input name="title" class="form-control" type="text" placeholder="Título de la pregunta" required maxlength="100">
                 </div>
                 <h5>Cuerpo</h5>
                 <h7>Incluye toda la información necesaria para poder responder tu pregunta</h7>
                 <div class="form-element">
-                    <textarea name="body" class="form-control" id="exampleFormControlTextarea1" rows="10"></textarea>
+                    <textarea name="body" class="form-control" id="exampleFormControlTextarea1" rows="15" required maxlength="1000"></textarea>
                 </div>
                 <h5>Etiquetas</h5>
-                <h7>Añade hasta 5 etiquetas para describir sobre qué trata tu pregunta</h7>
+                <h7>Añade hasta 5 etiquetas, en minúsculas y seguidas por un espacio, para describir sobre qué trata tu pregunta</h7>
                 <div class="form-element">
                     <div id="tags_rendered">
 
                     </div>
                 </div>
                 <div class="form-element">
-                    <input autocomplete="off" id="tagInput" class="form-control" type="text" placeholder="Por ejemplo: node sql linux" value=''>
+                    <input autocomplete="off" id="tagInput" class="form-control" type="text" placeholder="Por ejemplo: node sql linux" value='' maxlength="20">
                     <input autocomplete="off" type="hidden" id="hiddenTagInput" name="tags">
                 </div>
 
@@ -49,10 +49,10 @@
         <script>
             $(function() {
                 let tagsArray = [];
-                $('#tagInput').keypress(function(event) {
+                $('#tagInput').keyup(function(event) {
                     const hiddenTags = $('#hiddenTagInput');
                     if (event.which === 32) { //spacebar
-                        const userText = $(this).val().replace(/^\s+/, '').replace(/\s+$/, '');
+                        const userText = $(this).val().replace(/^\s+/, '').replace(/\s+$/, '').toLowerCase();
                         if (userText !== '' && !tagsArray.includes(userText) && tagsArray.length < 5) {
                             const tag = $("<span></span>").text($(this).val()).addClass("tag-element");
                             tag.append($('<a></a>').addClass("deleteTagInput").text('🗑️').click(function() {

@@ -85,7 +85,7 @@
             <form class="login-form" method="POST" action="/preguntas/<%= question.id %>">
                 <h3>Publica tu respuesta</h3>
                 <div class="form-element">
-                    <textarea name="body" class="form-control" id="exampleFormControlTextarea1" rows="10"></textarea>
+                    <textarea name="body" class="form-control" id="exampleFormControlTextarea1" rows="10" required maxlength="1000"></textarea>
                 </div>
                 <input type="submit" class="btn form-element" value="Manda tu respuesta">
             </form>
