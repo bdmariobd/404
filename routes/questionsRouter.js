@@ -53,14 +53,20 @@ router.post('/formular', (req, res, next) => {
     const title = req.body.title.trim(),
         body = req.body.body.trim(),
         tags = req.body.tags === '' ? [] : req.body.tags.split().map(t => t.toLowerCase());
-    daoQuestions.createQuestion(req.session.idU, title, body, tags, (err, rows) => {
-        if (err) {
-            res.status(500);
-            next(err);
-        } else {
-            res.redirect("/preguntas");
-        }
-    })
+
+    if (title === "hola") {
+        res.render("formular", { formError: "no me vale ese titulo" });
+    } else {
+        daoQuestions.createQuestion(req.session.idU, title, body, tags, (err, rows) => {
+            if (err) {
+                res.status(500);
+                next(err);
+            } else {
+                res.redirect("/preguntas");
+            }
+        })
+    }
+
 })
 
 
