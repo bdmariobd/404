@@ -27,7 +27,7 @@ router.use(["/users", "/preguntas"], (request, response, next) => {
     }
 });
 
-router.get('/logout',(req,res,next) =>{
+router.get('/logout', (req, res, next) => {
     req.session.destroy()
     res.status(200)
     res.redirect('login')
@@ -36,7 +36,7 @@ router.get('/logout',(req,res,next) =>{
 
 
 
-router.get("/", (request, response) => {
+router.get("/", (request, response, next) => {
     response.status(200);
     if (logged(request)) {
         response.redirect("preguntas");
@@ -45,18 +45,19 @@ router.get("/", (request, response) => {
     }
 });
 
-router.get("/login", (request, response) => {
+router.get("/login", (request, response, next) => {
     response.status(200);
     response.render("login");
 });
 
 
-router.post("/login", (request, response) => {
+router.post("/login", (request, response, next) => {
     //todo meter esto en un controller
     daoUser.isUserCorrect(request.body.email, request.body.password,
         (err, result) => {
             if (err) {
                 response.status(500);
+                next(err);
             } else {
                 response.status(200)
                 if (!result) {
@@ -75,12 +76,12 @@ router.post("/login", (request, response) => {
 
 });
 
-router.get("/signup", (request, response) => {
+router.get("/signup", (request, response, next) => {
     response.status(200);
     response.render("signup");
 });
 
-router.post("/signup", (request, response) => {
+router.post("/signup", (request, response, next) => {
     //todo meter esto en un controller
 
     let pass1 = request.body.password1;
@@ -91,6 +92,7 @@ router.post("/signup", (request, response) => {
         daoUser.userExists(request.body.email, (err, exists) => {
             if (err) {
                 response.status(500);
+                next(err);
             } else {
                 if (exists) {
                     response.render("signup", { error: "Este correo es inválido o ya está siendo utilizado" });
@@ -107,7 +109,6 @@ router.post("/signup", (request, response) => {
                                     console.log("Usuario repetido");
                                     response.render("singup", null);
                                 } else {
-
                                     console.log(rows)
                                     response.redirect("preguntas", null);
                                 }

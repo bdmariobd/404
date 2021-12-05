@@ -50,10 +50,9 @@ app.use((request, response, next) => {
     response.render("404");
 });
 
-app.use((error, request, response, next) => {
+app.use((err, request, response, next) => {
     response.status(500);
-    next();
-    //response.render("500", error:... );
+    response.render("500", { status: err.message });
 });
 app.listen(config.port, function(err) {
     if (err) {

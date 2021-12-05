@@ -17,6 +17,7 @@ router.get('/', (req, res, next) => {
         if (err) {
             console.log(err.message);
             res.status(500);
+            next(err);
         } else {
             res.status(200);
             if (!users) {
@@ -34,8 +35,8 @@ router.post('/', (req, res, next) => {
     daoUser.searchUserByString(req.body.searchQuery, (err, users) => {
         console.log(users)
         if (err) {
-            console.log(err.message);
             res.status(500);
+            next(err);
         } else {
             res.status(200);
             if (!users) {
@@ -53,6 +54,7 @@ router.get('/miPerfil', (req, res, next) => {
     var user = daoUser.getUserbyEmail(req.session.currentUser, (err, result) => {
         if (err) {
             res.status(500);
+            next(err);
         } else {
             res.status(200)
             if (!result) {
@@ -65,6 +67,7 @@ router.get('/miPerfil', (req, res, next) => {
                 daoUser.getMedals(req.session.currentUser, (err, result) => {
                     if (err) {
                         res.status(500);
+                        next(err);
                     } else {
                         res.status(200)
                         if (!result) {
@@ -91,6 +94,7 @@ router.get('/:id', (req, res, next) => {
     let user = daoUser.getUserbyId(req.params.id, (err, result) => {
         if (err) {
             res.status(500);
+            next(err);
         } else {
             res.status(200)
             if (!result) {

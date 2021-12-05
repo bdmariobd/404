@@ -13,6 +13,7 @@ router.get('/', (req, res, next) => {
     daoQuestions.getAllQuestions((error, rows) => {
         if (error) {
             res.status(500);
+            next(err);
         } else {
             res.status(200);
             if (rows === null || rows.lenght === 0) {
@@ -31,6 +32,7 @@ router.get('/sinResponder', (req, res, next) => {
     daoQuestions.getAllUnansweredQuestions((error, rows) => {
         if (error) {
             res.status(500);
+            next(err);
         } else {
             res.status(200);
             if (rows === null || rows.lenght === 0) {
@@ -48,12 +50,13 @@ router.get('/formular', (req, res, next) => {
 })
 
 router.post('/formular', (req, res, next) => {
-    const title = req.body.title,
-        body = req.body.body,
+    const title = req.body.title.trim(),
+        body = req.body.body.trim(),
         tags = req.body.tags === '' ? [] : req.body.tags.split().map(t => t.toLowerCase());
     daoQuestions.createQuestion(req.session.idU, title, body, tags, (err, rows) => {
         if (err) {
             res.status(500);
+            next(err);
         } else {
             res.redirect("/preguntas");
         }
@@ -68,6 +71,7 @@ router.get("/search", (req, res, next) => {
     daoQuestions.searchByText(text, (err, questions) => {
         if (err) {
             res.status(500);
+            next(err);
         } else {
             res.status(200);
             //console.log(questions);
@@ -83,6 +87,7 @@ router.get("/tag/:id", (req, res, next) => {
     daoQuestions.searchByTag(tag, (err, questions) => {
         if (err) {
             res.status(500);
+            next(err);
         } else {
             res.status(200);
             //console.log(questions);
@@ -95,10 +100,12 @@ router.get("/:id", (req, res, next) => {
     daoQuestions.getQuestion(req.params.id, (err, questions) => {
         if (err) {
             res.status(500);
+            next(err);
         } else {
             daoQuestions.getAnswers(req.params.id, (err, answers) => {
                 if (err) {
                     res.status(500);
+                    next(err);
                 } else {
                     console.log(questions);
                     console.log(answers)
@@ -119,6 +126,7 @@ router.post("/:id", (req, res, next) => {
     daoQuestions.createAnswer(user, question, body, (err, result) => {
         if (err) {
             res.status(500);
+            next(err);
         } else {
             res.status(200);
             res.redirect("/preguntas/" + req.params.id);

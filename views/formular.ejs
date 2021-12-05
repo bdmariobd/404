@@ -52,7 +52,7 @@
                 $('#tagInput').keyup(function(event) {
                     const hiddenTags = $('#hiddenTagInput');
                     if (event.which === 32) { //spacebar
-                        const userText = $(this).val().replace(/^\s+/, '').replace(/\s+$/, '').toLowerCase();
+                        const userText = $(this).val().trim().toLowerCase();
                         if (userText !== '' && !tagsArray.includes(userText) && tagsArray.length < 5) {
                             const tag = $("<span></span>").text($(this).val()).addClass("tag-element");
                             tag.append($('<a></a>').addClass("deleteTagInput").text('🗑️').click(function() {
