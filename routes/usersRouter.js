@@ -30,6 +30,24 @@ router.get('/', (req, res, next) => {
     })
 })
 
+router.get('/imagen/:id', function(request, response) {
+
+    let n = Number(request.params.id);
+    if (isNaN(n)) {
+        response.status(400);
+        response.end("Petición incorrecta");
+    } else {
+        daoUser.obtenerImagen(n, function(err, imagen) {
+            if (imagen) {
+                response.end(imagen);
+            } else {
+                response.status(404);
+                response.end("Not found");
+            }
+        });
+    }
+
+});
 
 router.post('/', (req, res, next) => {
     daoUser.searchUserByString(req.body.searchQuery, (err, users) => {
@@ -50,8 +68,8 @@ router.post('/', (req, res, next) => {
 })
 
 router.get('/miPerfil', (req, res, next) => {
-
-    var user = daoUser.getUserbyEmail(req.session.currentUser, (err, result) => {
+    console.log(req.session.idU)
+    var user = daoUser.getUserbyId(req.session.idU, (err, result) => {
         if (err) {
             res.status(500);
             next(err);

@@ -3,7 +3,7 @@ HACER LA WEB UN POCO MAS RESPONSIVE
 
 4 (APTO)Es la mínima calificación para poder hacer media
 con el examen de la asignatura:
-● Creación de cuentas NO VA LA IMAGEN 
+● Creación de cuentas NO VA LA IMAGEN - 06/12 ya funciona 🆗
 ● Inicio de sesión VALIDACION FORMULARIOS
 ● Cierre de sesión DONE
 ● Opción de menú “Preguntas” ESTILO PERO OK

@@ -15,6 +15,7 @@ router.get('/', (req, res, next) => {
             res.status(500);
             next(err);
         } else {
+            console.log(req.app.locals);
             res.status(200);
             if (rows === null || rows.lenght === 0) {
                 res.render("preguntas", { titulo: "Todas las preguntas", error: "No hay preguntas todavía" });

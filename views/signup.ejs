@@ -49,7 +49,7 @@
                     <h3>Crea tu cuenta. Tus dudas son nuestras dudas.</h3>
                     <p>¿Ya tienes cuenta? <a href="/login">Inicia sesión</a></p>
                 </div>
-                <form class="login-form" method="POST" action="/signup">
+                <form class="login-form" method="POST" enctype="multipart/form-data" action="/signup">
                     <div class="form-floating form-element">
                         <input name=email id="floatingInput" class="form-control" type="email" placeholder="Email">
                         <label for="floatingInput">Correo</label>
@@ -72,12 +72,8 @@
                     </div>
                     <!--TODO: Un script que muestra la img que has subido-->
                     <div class="form-floating form-element">
-                        <label id="btn-file-upload" for="file-upload" class="btn btn-primary">
-                             Sube tu foto de perfil
-                        </label>
-                        <input id="file-upload" accept="image/gif, image/jpeg, image/png" type="file" />
+                        <input class="btn form-element" type="file" name="pp" />
                     </div>
-
                     <input type="submit" class="btn form-element" value="Crear cuenta">
                 </form>
             </div>

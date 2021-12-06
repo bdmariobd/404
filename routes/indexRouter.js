@@ -3,6 +3,12 @@ var router = express.Router();
 const mysql = require("mysql");
 const config = require('../config');
 const DAOUsers = require("../persistence/DAOUsers")
+const multer = require('multer')
+
+
+
+const multerFactory = multer({ storage: multer.memoryStorage() });
+
 
 
 const pool = mysql.createPool({
@@ -11,6 +17,10 @@ const pool = mysql.createPool({
     password: config.mysqlConfig.password,
     database: config.mysqlConfig.database,
 });
+
+
+
+
 
 let daoUser = new DAOUsers(pool);
 
@@ -32,9 +42,6 @@ router.get('/logout', (req, res, next) => {
     res.status(200)
     res.redirect('login')
 })
-
-
-
 
 router.get("/", (request, response, next) => {
     response.status(200);
@@ -67,6 +74,9 @@ router.post("/login", (request, response, next) => {
                     request.session.idU = result.user.id;
                     request.session.name = result.user.name;
                     request.session.currentUser = request.body.email;
+                    request.app.locals.idU = result.user.id;
+                    request.app.locals.name = result.user.name;
+                    request.app.locals.currentUser = request.body.email;
                     console.log(request.session.idU)
                     console.log(request.session.name)
                     response.redirect("preguntas");
@@ -76,28 +86,37 @@ router.post("/login", (request, response, next) => {
 
 });
 
+
+
 router.get("/signup", (request, response, next) => {
     response.status(200);
     response.render("signup");
 });
 
-router.post("/signup", (request, response, next) => {
+router.post("/signup", multerFactory.single('pp'), (request, response, next) => {
     //todo meter esto en un controller
-
-    let pass1 = request.body.password1;
-    let pass2 = request.body.password2;
+    const email = request.body.email;
+    const username = request.body.username;
+    let foto = null;
+    if (request.file) {
+        foto = request.file.buffer;
+    }
+    const pass1 = request.body.password1;
+    const pass2 = request.body.password2;
+    const pp = foto;
     if (pass1 !== pass2) {
         response.render("signup", { error: "Las contraseñas no coinciden" });
     } else {
-        daoUser.userExists(request.body.email, (err, exists) => {
+        daoUser.userExists(email, (err, exists) => {
             if (err) {
+                console.log("ya existe");
                 response.status(500);
                 next(err);
             } else {
                 if (exists) {
                     response.render("signup", { error: "Este correo es inválido o ya está siendo utilizado" });
                 } else {
-                    daoUser.create(request.body.email, request.body.username, pass1,
+                    daoUser.create(email, username, pp, pass1,
                         (err, rows) => {
                             if (err) {
                                 response.status(500);
@@ -106,20 +125,22 @@ router.post("/signup", (request, response, next) => {
                             } else {
                                 response.status(200)
                                 if (rows === null) {
-                                    console.log("Usuario repetido");
+                                    console.log("error");
                                     response.render("singup", null);
                                 } else {
                                     console.log(rows)
-                                    response.redirect("preguntas", null);
+                                    response.redirect("/");
                                 }
                             }
                         });
                 }
             }
         });
+
     }
-    response.status(200);
-    response.render("signup");
+
+
+
 });
 
 module.exports = router;
