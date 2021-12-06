@@ -31,6 +31,7 @@ function logged(request) {
 //user logged middleware
 router.use(["/users", "/preguntas"], (request, response, next) => {
     if (logged(request)) { //logged
+        response.locals.user = { idU: request.session.idU, name: request.session.name, currentUser: request.session.currentUser };
         next();
     } else {
         response.redirect("login");
@@ -74,9 +75,6 @@ router.post("/login", (request, response, next) => {
                     request.session.idU = result.user.id;
                     request.session.name = result.user.name;
                     request.session.currentUser = request.body.email;
-                    request.app.locals.idU = result.user.id;
-                    request.app.locals.name = result.user.name;
-                    request.app.locals.currentUser = request.body.email;
                     console.log(request.session.idU)
                     console.log(request.session.name)
                     response.redirect("preguntas");

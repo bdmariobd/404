@@ -29,26 +29,6 @@ router.get('/', (req, res, next) => {
         }
     })
 })
-
-router.get('/imagen/:id', function(request, response) {
-
-    let n = Number(request.params.id);
-    if (isNaN(n)) {
-        response.status(400);
-        response.end("Petición incorrecta");
-    } else {
-        daoUser.obtenerImagen(n, function(err, imagen) {
-            if (imagen) {
-                response.end(imagen);
-            } else {
-                response.status(404);
-                response.end("Not found");
-            }
-        });
-    }
-
-});
-
 router.post('/', (req, res, next) => {
     daoUser.searchUserByString(req.body.searchQuery, (err, users) => {
         console.log(users)
@@ -105,6 +85,29 @@ router.get('/miPerfil', (req, res, next) => {
     });
 
 });
+
+router.get('/imagen/:id', function(request, response) {
+
+    let n = Number(request.params.id);
+    if (isNaN(n)) {
+        response.status(400);
+        response.end("Petición incorrecta");
+    } else {
+        daoUser.obtenerImagen(n, function(err, imagen) {
+            if (imagen) {
+                response.end(imagen);
+            } else {
+                response.status(404);
+                response.end("Not found");
+            }
+        });
+    }
+
+});
+
+
+
+
 
 
 router.get('/:id', (req, res, next) => {

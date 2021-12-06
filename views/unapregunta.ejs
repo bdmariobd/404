@@ -42,7 +42,7 @@
                         <%= question.name %>
                     </a>
             </p>
-            <img alt="Foto de perfil de <%=question.name %>" src="/images/<%= question.image %> " class="profile-img">
+            <img alt="Foto de perfil de <%=question.name %>" src="/users/imagen/<%= question.id_user %>" class="profile-img">
             <h5>
                 <%= question.body %>
             </h5>
@@ -71,7 +71,7 @@
                                     </a>
                             </p>
 
-                            <img alt="Foto de perfil de <%=a.name %>" src="/images/<%= a.image %> " class="profile-img">
+                            <img alt="Foto de perfil de <%=a.name %>" src="/users/imagen/<%= a.user_id %> " class="profile-img">
                         </div>
                         <div class="col-8 question-data">
                             <p>

@@ -280,8 +280,8 @@ class DAOUsers {
 
                 var today = new Date();
                 var _date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-                const sqlInsert = "INSERT into user (`date`,`email`,`pass`,`image`,`name`,`active`,`reputation`) values (?,?,?,?,?,?,?)";
-                const insert_query = mysql.format(sqlInsert, [_date, email, password, foto, username, 1, 0]);
+                const sqlInsert = "INSERT into user (`date`,`email`,`pass`,`image`,`name`,`active`) values (?,?,?,?,?,?)";
+                const insert_query = mysql.format(sqlInsert, [_date, email, password, foto, username, 1]);
                 connection.query(insert_query, (err, result) => {
                     connection.release();
                     if (err) {
