@@ -3,31 +3,31 @@ HACER LA WEB UN POCO MAS RESPONSIVE
 
 4 (APTO)Es la mínima calificación para poder hacer media
 con el examen de la asignatura:
-● Creación de cuentas NO VA LA IMAGEN - 06/12 ya funciona 🆗
-● Inicio de sesión VALIDACION FORMULARIOS
-● Cierre de sesión DONE
-● Opción de menú “Preguntas” ESTILO PERO OK
-● Búsqueda de preguntas por texto OK (APLICA ESTILO, USAN MISMO HTML)
-● Filtrado de preguntas por etiquetas DONE
-● Formular pregunta CASI (VALIDACION FORMULARIOS)
+● Creación de cuentas 🆗 ⚠️ ❌ (VALIDACION FORMULARIOS client-side y server-side con express-validator)
+● Inicio de sesión ❌ (VALIDACION FORMULARIOS client-side y server-side con express-validator)
+● Cierre de sesión 🆗
+● Opción de menú “Preguntas” 🆗 ⚠️ (ESTILO)
+● Búsqueda de preguntas por texto 🆗 
+● Filtrado de preguntas por etiquetas 🆗
+● Formular pregunta CASI ❌ (VALIDACION FORMULARIOS server-side con express-validator)
 
 
 6:
 ● Todas las anteriores
-● Respuestas DONE
-● Opción de menú “Sin responder” DONE(APLICA ESTILO, USAN MISMO HTML)
+● Respuestas 🆗 ⚠️ (ESTILO)
+● Opción de menú “Sin responder” 🆗
 
 8:
 ● Todas las anteriores
-● Visitas a preguntas TODO
-● Votación de preguntas y respuestas TODO
+● Visitas a preguntas ❌
+● Votación de preguntas y respuestas ❌
 ● Reputación, número de preguntas y
-respuestas de cada usuario TODO
-● Medallas TODO
+respuestas de cada usuario ❌
+● Medallas ❌
 
 10:
 ● Todas las anteriores
-● Opción de menú “Usuarios” PASAR FOTO CADA UNO Y ESTILO
-● Perfil de usuario  PASAR FOTO CADA UNO Y ESTILO
+● Opción de menú “Usuarios” 🆗 ⚠️ (ESTILO)
+● Perfil de usuario 🆗 ⚠️ (ESTILO)
 
 
