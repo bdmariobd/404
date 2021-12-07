@@ -4,7 +4,7 @@ const mysql = require("mysql");
 const config = require('../config');
 const DAOUsers = require("../persistence/DAOUsers")
 const multer = require('multer')
-
+const { body, validationResult } = require("express-validator");
 
 
 const multerFactory = multer({ storage: multer.memoryStorage() });
@@ -38,6 +38,7 @@ router.use(["/users", "/preguntas"], (request, response, next) => {
     }
 });
 
+
 router.get('/logout', (req, res, next) => {
     req.session.destroy()
     res.status(200)
@@ -59,30 +60,36 @@ router.get("/login", (request, response, next) => {
 });
 
 
-router.post("/login", (request, response, next) => {
-    //todo meter esto en un controller
-    daoUser.isUserCorrect(request.body.email, request.body.password,
-        (err, result) => {
-            if (err) {
-                response.status(500);
-                next(err);
-            } else {
-                response.status(200)
-                if (!result) {
-                    console.log("Email/pass not valid");
-                    response.render("login");
+router.post("/login",
+    body("email").isEmail(),
+    body("password").isLength({ min: 2 }),
+    (request, response, next) => {
+        //todo meter esto en un controller
+        daoUser.isUserCorrect(request.body.email, request.body.password,
+            (err, result) => {
+                const errors = validationResult(request);
+                if (!errors.isEmpty()) {
+                    console.log(errors);
+                } else if (err) {
+                    response.status(500);
+                    next(err);
                 } else {
-                    request.session.idU = result.user.id;
-                    request.session.name = result.user.name;
-                    request.session.currentUser = request.body.email;
-                    console.log(request.session.idU)
-                    console.log(request.session.name)
-                    response.redirect("preguntas");
+                    response.status(200)
+                    if (!result) {
+                        console.log("Email/pass not valid");
+                        response.render("login");
+                    } else {
+                        request.session.idU = result.user.id;
+                        request.session.name = result.user.name;
+                        request.session.currentUser = request.body.email;
+                        console.log(request.session.idU)
+                        console.log(request.session.name)
+                        response.redirect("preguntas");
+                    }
                 }
-            }
-        });
+            });
 
-});
+    });
 
 
 
