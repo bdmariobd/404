@@ -97,7 +97,6 @@ router.get('/imagen/:id', function(request, response) {
             if (imagen) {
                 response.end(imagen);
             } else {
-                response.status(404);
                 response.end("Not found");
             }
         });

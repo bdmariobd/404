@@ -50,6 +50,7 @@
 
 
                             </div>
+
                             <div class="col-8 question-maindata">
                                 <a href="/preguntas/<%=q.id%>">
                                     <%= q.title%>
@@ -57,6 +58,7 @@
                                 <p>
                                     <%= q.shortBody %>
                                 </p>
+
                                 <ul class="container tags-container">
                                     <% if (q.tags) { %>
                                         <% q.tags.forEach(tag => {%>
@@ -74,6 +76,7 @@
                         </li>
                         <% }); %>
                 </ul>
+
         </main>
 
 

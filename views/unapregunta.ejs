@@ -46,7 +46,15 @@
             <h5>
                 <%= question.body %>
             </h5>
+            <div class="container vote-container">
+                <form class="login-form" method="POST" action="/preguntas/<%=question.id%>/like">
+                    <input type="submit" class="btn form-element" name="action" value="👍🏼 Like">
+                </form>
+                <form class="login-form" method="POST" action="/preguntas/<%=question.id%>/like">
+                    <input type="submit" class="btn form-element" name="action" value="👎🏼 Dislike">
+                </form>
 
+            </div>
             <ul class="container tags-container">
                 <% if (question.tags) { %>
                     <% question.tags.forEach(tag => {%>

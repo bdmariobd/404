@@ -19,8 +19,8 @@ con el examen de la asignatura:
 
 8:
 ● Todas las anteriores
-● Visitas a preguntas ❌
-● Votación de preguntas y respuestas ❌
+● Visitas a preguntas 🆗 (ESTILO)
+● Votación de preguntas y respuestas 🆗 ⚠️ ⚠️⚠️⚠️⚠️
 ● Reputación, número de preguntas y
 respuestas de cada usuario ❌
 ● Medallas ❌

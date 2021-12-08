@@ -67,17 +67,46 @@ router.post("/login",
         //todo meter esto en un controller
         daoUser.isUserCorrect(request.body.email, request.body.password,
             (err, result) => {
-                const errors = validationResult(request);
-                if (!errors.isEmpty()) {
-                    console.log(errors);
-                } else if (err) {
+                if (err) {
                     response.status(500);
                     next(err);
                 } else {
                     response.status(200)
+                    let rs = [];
+                    let errors = validationResult(request).errors;
+                    // Result {
+                    //     formatter: [Function: formatter],
+                    //     errors: [
+                    //       {
+                    //         value: 'nico@404es',
+                    //         msg: 'Invalid value',
+                    //         param: 'email',
+                    //         location: 'body'
+                    //       },
+                    //       {
+                    //         value: '1',
+                    //         msg: 'Invalid value',
+                    //         param: 'password',
+                    //         location: 'body'
+                    //       }
+                    //     ]
+                    //   }
+                    if (errors.length > 0) {
+                        console.log(errors);
+                        errors.forEach(x => {
+                            if (x.param === 'email') {
+                                rs.push("El email " + x.value + " es invalido");
+                            } else {
+                                rs.push("La password no cumple el formato");
+                            }
+                        });
+
+                    }
                     if (!result) {
-                        console.log("Email/pass not valid");
-                        response.render("login");
+                        rs.push("Las credenciales son incorrectas")
+                    }
+                    if (rs.length > 0) {
+                        response.render("login", { errors: rs });
                     } else {
                         request.session.idU = result.user.id;
                         request.session.name = result.user.name;
@@ -88,7 +117,6 @@ router.post("/login",
                     }
                 }
             });
-
     });
 
 

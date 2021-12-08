@@ -13,8 +13,12 @@ svg {
     visibility: hidden;
 }
 
+.normal-kind #eyesangry {
+    visibility: hidden;
+}
+
 .normal-kind:hover {
-    animation: heartbeat 1.5s ease-in-out both
+    animation: heartbeat 2.5s ease-in-out both
 }
 
 .normal-kind:hover #eyeskind {
@@ -24,6 +28,22 @@ svg {
 .normal-kind:hover #eyesnormal {
     visibility: hidden;
 }
+
+.angry {}
+
+.angry #eyesangry {
+    visibility: visible;
+}
+
+.angry #eyesnormal {
+    visibility: hidden;
+}
+
+.angry #eyeskind {
+    visibility: hidden;
+}
+
+.angry {}
 
 @keyframes heartbeat {
     from {

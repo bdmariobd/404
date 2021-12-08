@@ -114,9 +114,8 @@ router.get("/:id", (req, res, next) => {
                     res.status(500);
                     next(err);
                 } else {
-                    console.log(questions);
-                    console.log(answers)
-                    res.status(200);
+                    // console.log(questions);
+                    // console.log(answers)
                     res.render("unapregunta", { question: questions[0], answers: answers });
                 }
             })
@@ -141,4 +140,38 @@ router.post("/:id", (req, res, next) => {
 
     })
 })
+
+
+router.post("/:id/like", (req, res) => {
+    const user = req.session.idU,
+        question = req.params.id;
+    positive = req.body.action === "👍🏼 Like" ? 1 : 0;
+    daoQuestions.addVoteQuestion(user, question, positive, (err, result) => {
+        if (err) {
+            res.status(500);
+            next(err);
+        } else {
+            res.status(200);
+            res.redirect("/preguntas/" + req.params.id);
+        }
+    })
+
+})
+
+router.post("/:id/answer/:id/like", (req, res) => {
+    const user = req.session.idU,
+        question = req.params.id;
+    positive = req.body.action === "👍🏼 Like" ? 1 : 0;
+    daoQuestions.addVoteAnswer(user, question, positive, (err, result) => {
+        if (err) {
+            res.status(500);
+            next(err);
+        } else {
+            res.status(200);
+            res.redirect("/preguntas/" + req.params.id);
+        }
+    })
+
+})
+
 module.exports = router;

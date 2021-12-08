@@ -150,32 +150,44 @@ class DAOQuestions {
             }
         });
     }
-
-    getQuestion(id, callback) {
+    getQuestion(id, id_user, callback) {
         this.pool.getConnection((err, connection) => {
             if (err) {
                 callback(new Error("Error de conexión a la base de datos"));
             } else {
-                const query = "SELECT q.id, q.id_user, q.title, q.body, q.views, q.date, q.likes, q.dislikes, GROUP_CONCAT(DISTINCT t.name) as tags, u.name, u.image " +
-                    "FROM (((question q left join question_tag qt on q.id=qt.id_question) left join tag t on qt.id_tag=t.id) join user u on q.id_user = u.id)" +
+                // tabla = question_vote, 1 like, 0 dislike, -1 nada
+                const query = "SELECT q.id, q.id_user, q.title, q.body, q.views, q.date, q.likes, q.dislikes, GROUP_CONCAT(DISTINCT t.name) as tags, u.name, u.image," +
+                    "(SELECT COUNT (*) FROM question_vote WHERE id_question=q.id AND positive=1) AS likes, (SELECT COUNT (*) FROM question_vote WHERE id_question=q.id AND positive=0) as dislikes, " +
+                    //"(SELECT NVL(positive,-1) FROM question_vote WHERE id_question=q.id and id_user = ?) AS my_vote" +
+                    "FROM (((question q left join question_tag qt on q.id=qt.id_question) left join tag t on qt.id_tag=t.id) join user u on q.id_user = u.id) left " +
+                    "join question_vote qv on q.id =qv.id_question " +
                     "WHERE q.active = 1 AND q.id=? " +
                     " GROUP BY q.id ORDER BY q.date DESC";
-                connection.query(query, [id], (err, rows) => {
-                    connection.release(); // devolver al pool la conexión
+                connection.query(query, [id, id_user], (err, rows) => {
+                    // connection.release(); // devolver al pool la conexión
                     if (err) {
                         callback(new Error("Error de acceso a la base de datos"));
                     } else {
                         if (rows.length === 0) {
                             callback(null, null); //no hay preguntas
                         } else {
+                            const visitQuery = "update question q set q.views= q.views + 1 where q.id=?";
                             rows.forEach(element => {
                                 element.dateAgo = timeUtils.getTimeAgo(element.date);
                                 if (element.tags !== null) element.tags = element.tags.split(',');
                                 element.shortBody = element.body.length > 150 ? element.body.substring(0, 150) + '...' : element.body;
                             });
-                            connection.query()
-                            callback(null, rows);
+                            connection.query(visitQuery, id, (err, rs) => {
+                                connection.release();
+                                if (err) {
+                                    callback(new Error("Error de acceso a la visita"));
+                                } else {
+                                    // console.log(rs)
+                                    callback(null, rows)
+                                }
+                            })
                         }
+
                     }
                 });
             }
@@ -191,10 +203,9 @@ class DAOQuestions {
                     "FROM answer a join user u on a.user_id = u.id " +
                     "WHERE a.active = 1 AND a.question_id=? " +
                     "ORDER BY a.date DESC";
-
                 connection.query(query, [id], (err, rows) => {
                     connection.release();
-                    console.log(rows);
+                    // console.log(rows);
                     if (err) {
                         callback(new Error("Error de acceso a la base de datos"));
                     } else {
@@ -277,6 +288,47 @@ class DAOQuestions {
                 })
             }
         })
+    }
+
+    addVoteQuestion(user_id, question_id, positive, callback) {
+        this.pool.getConnection((err, connection) => {
+            if (err) {
+                callback(new Error("Error de conexión a la base de datos"));
+            } else {
+                const query = "INSERT INTO question_vote (id_question, id_user, positive) VALUES (?,?,?)";
+                connection.query(query, [question_id, user_id, positive], (err, rows) => {
+                    connection.release();
+                    if (err) {
+                        callback(new Error("Error de acceso a la base de datos"))
+                    } else {
+                        callback(null);
+                    }
+                })
+            }
+
+
+
+
+        })
+
+    }
+    addVoteAnswer(user_id, answer_id, positive, callback) {
+        this.pool.getConnection((err, connection) => {
+            if (err) {
+                callback(new Error("Error de conexión a la base de datos"));
+            } else {
+                const query = "INSERT INTO answer (id_answer, id_user, positive) VALUES (?,?,?)";
+                connection.query(query, [answer_id, user_id, positive], (err, rows) => {
+                    connection.release();
+                    if (err) {
+                        callback(new Error("Error de acceso a la base de datos"))
+                    } else {
+                        callback(null);
+                    }
+                })
+            }
+        })
+
     }
 }
 
