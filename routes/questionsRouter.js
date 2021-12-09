@@ -104,7 +104,7 @@ router.get("/tag/:id", (req, res, next) => {
 })
 
 router.get("/:id", (req, res, next) => {
-    daoQuestions.getQuestion(req.params.id, (err, questions) => {
+    daoQuestions.getQuestion(req.params.id, req.session.idU, (err, questions) => {
         if (err) {
             res.status(500);
             next(err);
@@ -151,6 +151,7 @@ router.post("/:id/like", (req, res) => {
             res.status(500);
             next(err);
         } else {
+            console.log(result)
             res.status(200);
             res.redirect("/preguntas/" + req.params.id);
         }

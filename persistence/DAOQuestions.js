@@ -157,7 +157,7 @@ class DAOQuestions {
             } else {
                 // tabla = question_vote, 1 like, 0 dislike, -1 nada
                 const query = "SELECT q.id, q.id_user, q.title, q.body, q.views, q.date, q.likes, q.dislikes, GROUP_CONCAT(DISTINCT t.name) as tags, u.name, u.image," +
-                    "(SELECT COUNT (*) FROM question_vote WHERE id_question=q.id AND positive=1) AS likes, (SELECT COUNT (*) FROM question_vote WHERE id_question=q.id AND positive=0) as dislikes, " +
+                    "(SELECT COUNT (*) FROM question_vote WHERE id_question=q.id AND positive=1) AS likes, (SELECT COUNT (*) FROM question_vote WHERE id_question=q.id AND positive=0) as dislikes " +
                     //"(SELECT NVL(positive,-1) FROM question_vote WHERE id_question=q.id and id_user = ?) AS my_vote" +
                     "FROM (((question q left join question_tag qt on q.id=qt.id_question) left join tag t on qt.id_tag=t.id) join user u on q.id_user = u.id) left " +
                     "join question_vote qv on q.id =qv.id_question " +
@@ -295,15 +295,35 @@ class DAOQuestions {
             if (err) {
                 callback(new Error("Error de conexión a la base de datos"));
             } else {
-                const query = "INSERT INTO question_vote (id_question, id_user, positive) VALUES (?,?,?)";
-                connection.query(query, [question_id, user_id, positive], (err, rows) => {
-                    connection.release();
+                const query = "SELECT * FROM question_vote WHERE id_question = ? AND id_user= ? ";
+                connection.query(query, [question_id, user_id], (err, rows) => {
                     if (err) {
-                        callback(new Error("Error de acceso a la base de datos"))
+                        callback(new Error("Error de acceso a la base de datos"));
                     } else {
-                        callback(null);
+                        if (rows.length === 0) {
+                            const query = "INSERT INTO question_vote (id_question, id_user, positive) VALUES (?,?,?)";
+                            connection.query(query, [question_id, user_id, positive], (err, rows) => {
+                                connection.release();
+                                if (err) {
+                                    callback(new Error("Error de acceso a la base de datos"))
+                                } else {
+                                    callback(null, "Nuevo voto");
+                                }
+                            })
+                        } else {
+                            const query = "UPDATE question_vote SET positive=? WHERE id_question=? AND id_user=?";
+                            connection.query(query, [positive, question_id, user_id], (err, rows) => {
+                                connection.release();
+                                if (err) {
+                                    callback(new Error("Error de acceso a la base de datos"))
+                                } else {
+                                    callback(null, "Voto modificado");
+                                }
+                            })
+                        }
                     }
                 })
+
             }
 
 
@@ -317,18 +337,41 @@ class DAOQuestions {
             if (err) {
                 callback(new Error("Error de conexión a la base de datos"));
             } else {
-                const query = "INSERT INTO answer (id_answer, id_user, positive) VALUES (?,?,?)";
-                connection.query(query, [answer_id, user_id, positive], (err, rows) => {
-                    connection.release();
+                const query = "SELECT * FROM answer_vote WHERE id_answer = ? AND id_user= ? ";
+                connection.query(query, [question_id, user_id], (err, rows) => {
                     if (err) {
-                        callback(new Error("Error de acceso a la base de datos"))
+                        callback(new Error("Error de acceso a la base de datos"));
                     } else {
-                        callback(null);
+                        if (rows.length === 0) {
+                            const query = "INSERT INTO answer_vote (id_answer, id_user, positive) VALUES (?,?,?)";
+                            connection.query(query, [question_id, user_id, positive], (err, rows) => {
+                                connection.release();
+                                if (err) {
+                                    callback(new Error("Error de acceso a la base de datos"))
+                                } else {
+                                    callback(null, "Nuevo voto");
+                                }
+                            })
+                        } else {
+                            const query = "UPDATE answer_vote SET positive=? WHERE id_answer=? AND id_user=?";
+                            connection.query(query, [positive, question_id, user_id], (err, rows) => {
+                                connection.release();
+                                if (err) {
+                                    callback(new Error("Error de acceso a la base de datos"))
+                                } else {
+                                    callback(null, "Voto modificado");
+                                }
+                            })
+                        }
                     }
                 })
-            }
-        })
 
+            }
+
+
+
+
+        })
     }
 }
 
