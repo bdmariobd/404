@@ -57,6 +57,26 @@ a:hover {
     align-items: flex-end;
 }
 
+.login-error {
+    background-color: var(--error-color);
+    color: var(--on-error-color);
+}
+
+.login-error:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border: 35px solid transparent;
+    border-bottom-color: var(--error-color);
+    border-top: 0;
+    border-left: 0;
+    margin-left: -17.5px;
+    margin-top: -35px;
+}
+
 .login-right {
     padding: 1rem;
     width: 50%;
