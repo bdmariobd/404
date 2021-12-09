@@ -4,7 +4,7 @@ HACER LA WEB UN POCO MAS RESPONSIVE
 4 (APTO)Es la mínima calificación para poder hacer media
 con el examen de la asignatura:
 ● Creación de cuentas 🆗 ⚠️ ❌ (VALIDACION FORMULARIOS client-side y server-side con express-validator)
-● Inicio de sesión ❌ (VALIDACION FORMULARIOS client-side y server-side con express-validator)
+● Inicio de sesión 🆗 (VALIDACION FORMULARIOS client-side y server-side con express-validator)
 ● Cierre de sesión 🆗
 ● Opción de menú “Preguntas” 🆗 ⚠️ (ESTILO)
 ● Búsqueda de preguntas por texto 🆗 
@@ -20,7 +20,7 @@ con el examen de la asignatura:
 8:
 ● Todas las anteriores
 ● Visitas a preguntas 🆗 (ESTILO)
-● Votación de preguntas y respuestas 🆗 ⚠️ ⚠️⚠️⚠️⚠️
+● Votación de preguntas y respuestas 🆗 (ESTILO)
 ● Reputación, número de preguntas y
 respuestas de cada usuario ❌
 ● Medallas ❌

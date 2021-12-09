@@ -109,7 +109,10 @@ router.get("/:id", (req, res, next) => {
             res.status(500);
             next(err);
         } else {
-            daoQuestions.getAnswers(req.params.id, (err, answers) => {
+            /* if (questions[0].my_vote === null) {
+                questions[0].my_vote = -1;
+            } */
+            daoQuestions.getAnswers(req.params.id, req.session.idU, (err, answers) => {
                 if (err) {
                     res.status(500);
                     next(err);
@@ -159,15 +162,16 @@ router.post("/:id/like", (req, res) => {
 
 })
 
-router.post("/:id/answer/:id/like", (req, res) => {
+router.post("/:id/answer/:idAnswer/like", (req, res) => {
     const user = req.session.idU,
-        question = req.params.id;
+        answer = req.params.idAnswer;
     positive = req.body.action === "👍🏼 Like" ? 1 : 0;
-    daoQuestions.addVoteAnswer(user, question, positive, (err, result) => {
+    daoQuestions.addVoteAnswer(user, answer, positive, (err, result) => {
         if (err) {
             res.status(500);
             next(err);
         } else {
+            console.log(result)
             res.status(200);
             res.redirect("/preguntas/" + req.params.id);
         }

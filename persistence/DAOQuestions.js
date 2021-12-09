@@ -157,8 +157,8 @@ class DAOQuestions {
             } else {
                 // tabla = question_vote, 1 like, 0 dislike, -1 nada
                 const query = "SELECT q.id, q.id_user, q.title, q.body, q.views, q.date, q.likes, q.dislikes, GROUP_CONCAT(DISTINCT t.name) as tags, u.name, u.image," +
-                    "(SELECT COUNT (*) FROM question_vote WHERE id_question=q.id AND positive=1) AS likes, (SELECT COUNT (*) FROM question_vote WHERE id_question=q.id AND positive=0) as dislikes " +
-                    //"(SELECT NVL(positive,-1) FROM question_vote WHERE id_question=q.id and id_user = ?) AS my_vote" +
+                    "(SELECT COUNT (*) FROM question_vote WHERE id_question=q.id AND positive=1) AS likes, (SELECT COUNT (*) FROM question_vote WHERE id_question=q.id AND positive=0) as dislikes, " +
+                    "(SELECT positive FROM question_vote WHERE id_question=q.id and id_user = ?) AS my_vote " +
                     "FROM (((question q left join question_tag qt on q.id=qt.id_question) left join tag t on qt.id_tag=t.id) join user u on q.id_user = u.id) left " +
                     "join question_vote qv on q.id =qv.id_question " +
                     "WHERE q.active = 1 AND q.id=? " +
@@ -194,16 +194,18 @@ class DAOQuestions {
         });
     }
 
-    getAnswers(id, callback) {
+    getAnswers(id, id_user, callback) {
         this.pool.getConnection((err, connection) => {
             if (err) {
                 callback(new Error("Error de conexión a la base de datos"));
             } else {
-                const query = "SELECT *, a.date as a_date " +
+                const query = "SELECT a.body,a.active,a.id,a.user_id,u.name, a.date as a_date, " +
+                    "(SELECT COUNT (*) FROM answer_vote WHERE id_answer=a.id AND positive=1) AS likes, (SELECT COUNT (*) FROM answer_vote WHERE id_answer=a.id AND positive=0) as dislikes, " +
+                    "(SELECT positive FROM answer_vote WHERE id_answer=a.id and id_user = ?) AS my_vote " +
                     "FROM answer a join user u on a.user_id = u.id " +
                     "WHERE a.active = 1 AND a.question_id=? " +
                     "ORDER BY a.date DESC";
-                connection.query(query, [id], (err, rows) => {
+                connection.query(query, [id, id_user], (err, rows) => {
                     connection.release();
                     // console.log(rows);
                     if (err) {
@@ -338,13 +340,13 @@ class DAOQuestions {
                 callback(new Error("Error de conexión a la base de datos"));
             } else {
                 const query = "SELECT * FROM answer_vote WHERE id_answer = ? AND id_user= ? ";
-                connection.query(query, [question_id, user_id], (err, rows) => {
+                connection.query(query, [answer_id, user_id], (err, rows) => {
                     if (err) {
                         callback(new Error("Error de acceso a la base de datos"));
                     } else {
                         if (rows.length === 0) {
                             const query = "INSERT INTO answer_vote (id_answer, id_user, positive) VALUES (?,?,?)";
-                            connection.query(query, [question_id, user_id, positive], (err, rows) => {
+                            connection.query(query, [answer_id, user_id, positive], (err, rows) => {
                                 connection.release();
                                 if (err) {
                                     callback(new Error("Error de acceso a la base de datos"))
@@ -354,7 +356,7 @@ class DAOQuestions {
                             })
                         } else {
                             const query = "UPDATE answer_vote SET positive=? WHERE id_answer=? AND id_user=?";
-                            connection.query(query, [positive, question_id, user_id], (err, rows) => {
+                            connection.query(query, [positive, answer_id, user_id], (err, rows) => {
                                 connection.release();
                                 if (err) {
                                     callback(new Error("Error de acceso a la base de datos"))

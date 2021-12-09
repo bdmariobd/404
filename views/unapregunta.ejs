@@ -32,7 +32,8 @@
                 <%= question.views %> veces
             </h7>
             <h7>
-                <%= question.likes-question.dislikes %> votos
+                <%= question.likes%> 👍
+                    <%= question.dislikes %> 👎
             </h7>
 
             <p>Formulada
@@ -47,11 +48,14 @@
                 <%= question.body %>
             </h5>
             <div class="container vote-container">
+
                 <form class="login-form" method="POST" action="/preguntas/<%=question.id%>/like">
-                    <input type="submit" class="btn form-element" name="action" value="👍🏼 Like">
+                    <input <% if (question.my_vote===1) { %> disabled
+                    <% } %>type="submit" class="btn form-element" name="action" value="👍🏼 Like">
                 </form>
                 <form class="login-form" method="POST" action="/preguntas/<%=question.id%>/like">
-                    <input type="submit" class="btn form-element" name="action" value="👎🏼 Dislike">
+                    <input <% if (question.my_vote===0) { %> disabled
+                    <% } %>type="submit" class="btn form-element" name="action" value="👎🏼 Dislike">
                 </form>
 
             </div>
@@ -85,6 +89,21 @@
                             <p>
                                 <%= a.body %>
                             </p>
+                            <div class="container vote-container">
+                                <form class="login-form" method="POST" action="/preguntas/<%=question.id%>/answer/<%= a.id %>/like">
+                                    <input <% if (a.my_vote===1) { %> disabled
+                                    <% } %>type="submit" class="btn form-element" name="action" value="👍🏼 Like">
+                                </form>
+                                <form class="login-form" method="POST" action="/preguntas/<%=question.id%>/answer/<%= a.id %>/like">
+                                    <input <% if (a.my_vote===0) { %> disabled
+                                    <% } %>type="submit" class="btn form-element" name="action" value="👎🏼 Dislike">
+                                </form>
+
+                            </div>
+                            <h7>
+                                <%= a.likes%> 👍
+                                    <%= a.dislikes %> 👎
+                            </h7>
                         </div>
                     </li>
                     <% }); %>
