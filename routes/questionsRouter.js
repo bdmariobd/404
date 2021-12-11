@@ -145,7 +145,7 @@ router.post("/:id", (req, res, next) => {
 })
 
 
-router.post("/:id/like", (req, res) => {
+router.post("/:id/like", (req, res, next) => {
     const user = req.session.idU,
         question = req.params.id;
     positive = req.body.action === "👍🏼 Like" ? 1 : 0;
@@ -162,7 +162,7 @@ router.post("/:id/like", (req, res) => {
 
 })
 
-router.post("/:id/answer/:idAnswer/like", (req, res) => {
+router.post("/:id/answer/:idAnswer/like", (req, res, next) => {
     const user = req.session.idU,
         answer = req.params.idAnswer;
     positive = req.body.action === "👍🏼 Like" ? 1 : 0;
