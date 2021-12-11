@@ -62,7 +62,11 @@
                                 <p class="text-center">
                                     <% if ( golds) { %>
                                         <p class="text-center">
-                                            <%= golds.length%>
+                                            <% let total=0 %>
+                                                <% for( let index = 0; index < golds.length; index++ ) { %>
+                                                    <% total = total + golds[index].quantity %>
+                                                        <% } %>
+                                                            <%= total %>
                                         </p>
                                         <% }else{ %>
                                             <p class="text-center">0</p>
@@ -72,8 +76,10 @@
                                 <% if (golds && golds.length) { %>
                                     <ul>
                                         <% golds.forEach((item) => { %>
-                                            <li>
-                                                <%= item.name %>
+                                            <li> 🥇
+                                                <%= item.name %> x
+                                                    <%=item.quantity %>
+
                                             </li>
                                             <% }) %>
                                     </ul>
@@ -84,7 +90,11 @@
                                 <p class="text-center">
                                     <% if ( silvers) { %>
                                         <p class="text-center">
-                                            <%= silvers.length%>
+                                            <% let total=0 %>
+                                                <% for( let index = 0; index < silvers.length; index++ ) { %>
+                                                    <% total = total + silvers[index].quantity %>
+                                                        <% } %>
+                                                            <%= total %>
                                         </p>
                                         <p class="text-center"></p>
 
@@ -98,8 +108,9 @@
                                 <% if (silvers && silvers.length) { %>
                                     <ul>
                                         <% silvers.forEach((item) => { %>
-                                            <li>
-                                                <%= item.name %>
+                                            <li> 🥈
+                                                <%= item.name %> x
+                                                    <%=item.quantity %>
                                             </li>
                                             <% }) %>
                                     </ul>
@@ -111,7 +122,11 @@
                                 <p class="text-center">
                                     <% if ( bronces) { %>
                                         <p class="text-center">
-                                            <%= bronces.length%>
+                                            <% let total=0 %>
+                                                <% for( let index = 0; index < bronces.length; index++ ) { %>
+                                                    <% total = total + bronces[index].quantity %>
+                                                        <% } %>
+                                                            <%= total %>
                                         </p>
                                         <p class="text-center"></p>
 
@@ -122,8 +137,9 @@
                                 <% if (bronces && bronces.length) { %>
                                     <ul>
                                         <% bronces.forEach((item) => { %>
-                                            <li>
-                                                <%= item.name %>
+                                            <li> 🥉
+                                                <%= item.name %> x
+                                                    <%=item.quantity %>
                                             </li>
                                             <% }) %>
                                     </ul>

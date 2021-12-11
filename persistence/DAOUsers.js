@@ -237,8 +237,6 @@ class DAOUsers {
                         connection.query(searchQuery, (err, result) => {
                             connection.release();
                             if (err) {
-                                // aqui va entrar si el user no tiene medallas
-                                console.log("No tiene medallas pelotudo")
                                 callback(new Error("No hay medallas"));
                             } else {
                                 console.log(result)
@@ -250,11 +248,29 @@ class DAOUsers {
                                 // uuf estoy seguro de que esto se puede hacer más elegante, quiero pensarlo ahora? no.
                                 result.map(m => {
                                     if (m.metal === "gold") {
-                                        arrayGold.push({ id: m.id, name: m.name, metal: m.metal, merit: m.merit, type: m.type, active: m.active });
+                                        if (arrayGold.length > 0 && arrayGold.some(f => f.name === m.name && f.type === m.type)) {
+                                            arrayGold.forEach(element => {
+                                                if (element.name === m.name && element.type === m.type) {
+                                                    element.quantity = element.quantity + 1;
+                                                }
+                                            })
+                                        } else arrayGold.push({ id: m.id, name: m.name, metal: m.metal, merit: m.merit, type: m.type, active: m.active, quantity: 1 });
                                     } else if (m.metal === "silver") {
-                                        arraySilver.push({ id: m.id, name: m.name, metal: m.metal, merit: m.merit, type: m.type, active: m.active });
+                                        if (arraySilver.length > 0 && arraySilver.some(f => f.name === m.name && f.type === m.type)) {
+                                            arraySilver.forEach(element => {
+                                                if (element.name === m.name && element.type === m.type) {
+                                                    element.quantity = element.quantity + 1;
+                                                }
+                                            })
+                                        } else arraySilver.push({ id: m.id, name: m.name, metal: m.metal, merit: m.merit, type: m.type, active: m.active, quantity: 1 });
                                     } else {
-                                        arrayBronce.push({ id: m.id, name: m.name, metal: m.metal, merit: m.merit, type: m.type, active: m.active });
+                                        if (arrayBronce.length > 0 && arrayBronce.some(f => f.name === m.name && f.type === m.type)) {
+                                            arrayBronce.forEach(element => {
+                                                if (element.name === m.name && element.type === m.type) {
+                                                    element.quantity = element.quantity + 1;
+                                                }
+                                            })
+                                        } else arrayBronce.push({ id: m.id, name: m.name, metal: m.metal, merit: m.merit, type: m.type, active: m.active, quantity: 1 });
                                     }
                                 });
                                 arrayResult = {
