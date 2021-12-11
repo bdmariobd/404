@@ -163,7 +163,7 @@ class DAOQuestions {
                     "join question_vote qv on q.id =qv.id_question " +
                     "WHERE q.active = 1 AND q.id=? " +
                     " GROUP BY q.id ORDER BY q.date DESC";
-                connection.query(query, [id, id_user], (err, rows) => {
+                connection.query(query, [id_user, id], (err, rows) => {
                     // connection.release(); // devolver al pool la conexión
                     if (err) {
                         callback(new Error("Error de acceso a la base de datos"));
@@ -205,7 +205,7 @@ class DAOQuestions {
                     "FROM answer a join user u on a.user_id = u.id " +
                     "WHERE a.active = 1 AND a.question_id=? " +
                     "ORDER BY a.date DESC";
-                connection.query(query, [id, id_user], (err, rows) => {
+                connection.query(query, [id_user, id], (err, rows) => {
                     connection.release();
                     // console.log(rows);
                     if (err) {
