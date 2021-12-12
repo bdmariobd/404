@@ -4,7 +4,7 @@ const factoryDAO = require("../persistence/factoryDAO")
 const multer = require('multer')
 const fs = require('fs')
 const maxSize = 126400000; // 15.9 MB
-const { body, validationResult } = require("express-validator");
+const { body, validationResult, check } = require("express-validator");
 
 
 const multerFactory = multer({
@@ -52,7 +52,7 @@ router.get("/login", (request, response, next) => {
 
 router.post("/login",
     body("email").isEmail().withMessage("El email no es válido"),
-    body("password").isLength({ min: 4 }).withMessage("La contraseña no cumple el formato - Debe ser de 4 a 50 carácteres alfanuméricos con o sin símbolos")
+    body("password").isLength({ min: 4, max: 50 }).withMessage("La contraseña no cumple el formato - Debe ser de 4 a 50 carácteres alfanuméricos con o sin símbolos")
     .isAscii().withMessage("La contraseña no cumple el formato - Debe ser de 4 a 50 carácteres alfanuméricos con o sin símbolos)"),
     (request, response, next) => {
         response.status(200)
@@ -90,19 +90,22 @@ router.get("/signup", (request, response, next) => {
 
 router.post("/signup",
     multerFactory.single('pp'),
-    body('username').isAlphanumeric().withMessage("El nombre de usuario debe contener caracteres solo alfanuméricos"),
+    body('username').isAlphanumeric().withMessage("El nombre de usuario debe contener caracteres solo alfanuméricos").isLength({ min: 3, max: 50 }).withMessage("El nombre de usuario debe ser de 2 a 50 carácteres"),
     body("email").isEmail().withMessage("El email no es válido"),
-    body("password1").isLength({ min: 4 }).withMessage("La contraseña no cumple el formato - Debe ser de 4 a 50 carácteres alfanuméricos con o sin símbolos")
+    body("password1").isLength({ min: 4, max: 50 }).withMessage("La contraseña no cumple el formato - Debe ser de 4 a 50 carácteres alfanuméricos con o sin símbolos")
     .isAscii().withMessage("La contraseña no cumple el formato - Debe ser de 4 a 50 carácteres alfanuméricos con o sin símbolos)"),
     body('password2').custom((value, { req }) => {
-        if (value !== req.body.password1) {
-            throw new Error('Las contraseñas no coinciden');
-        }
+        if (value !== req.body.password1) return false;
         return true;
-    }),
+    }).withMessage('Las contraseñas no coinciden'),
+    check('pp').custom((value, { req }) => {
+        if (!req.file || req.file.mimetype === 'image/png' || req.file.mimetype === 'image/jpg' || req.file.mimetype === 'image/jpeg') return true;
+        return false
+    }).withMessage('Los formatos soportados de imagen son png, jpg y jpeg'),
     (request, response, next) => {
         let errors = validationResult(request).errors;
         if (errors.length > 0) {
+            response.status(200)
             response.render("signup", { errors: errors }).end();
         }
         let pp = null;
@@ -129,6 +132,7 @@ router.post("/signup",
                     next(err);
                 } else {
                     if (exists) {
+                        response.status(200)
                         response.render("signup", {
                             errors: [{ msg: "Este correo ya está siendo utilizado" }]
                         })

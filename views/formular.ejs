@@ -32,7 +32,7 @@
                     <textarea name="body" class="form-control" id="exampleFormControlTextarea1" rows="15" required maxlength="1000"></textarea>
                 </div>
                 <h5>Etiquetas</h5>
-                <h7>Añade hasta 5 etiquetas, en minúsculas y seguidas por un espacio, para describir sobre qué trata tu pregunta</h7>
+                <h7>Añade hasta 5 etiquetas, en minúsculas y seguidas por un <b>espacio</b>, para describir sobre qué trata tu pregunta.</h7>
                 <div class="form-element">
                     <div id="tags_rendered">
 
@@ -45,12 +45,19 @@
 
                 <input type="submit" class="btn form-element" value="Manda tu pregunta">
             </form>
-            <% if (locals.formError) { %>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <p>⚠️<strong>Oh no!</strong>
-                        <%= locals.formError %>
-                    </p>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <% if (locals.errors) { %>
+                <div class="alert alert-dismissible error-information fade show" role="alert">
+                    <h3>Cuidado, chimp </h3>
+                    <h3> *sonidos de angry monky🦧*</h3>
+                    <ul>
+                        <% errors.forEach(err => { %>
+                            <li>
+                                <%= err.msg %>
+                            </li>
+                            <% }) %>
+                    </ul>
+                    <button type="button" id="close-alert" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </button>
                 </div>
                 <% } %>
         </main>

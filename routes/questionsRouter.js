@@ -17,14 +17,10 @@ router.get('/', (req, res, next) => {
             res.status(500);
             next(err);
         } else {
-            console.log(req.app.locals);
             res.status(200);
             if (rows === null || rows.lenght === 0) {
                 res.render("preguntas", { titulo: "Todas las preguntas", error: "No hay preguntas todavía" });
             } else {
-                rows.forEach(element => {
-                    console.log(element);
-                });
                 res.render("preguntas", { titulo: "Todas las preguntas", questions: rows });
             }
         }
@@ -52,14 +48,38 @@ router.get('/formular', (req, res, next) => {
     res.render('formular');
 })
 
-router.post('/formular', (req, res, next) => {
-    const title = req.body.title.trim(),
-        body = req.body.body.trim(),
-        tags = req.body.tags === '' ? [] : req.body.tags.split(',').map(t => t.toLowerCase());
-
-    if (title === "hola") {
-        res.render("formular", { formError: "no me vale ese titulo" });
-    } else {
+router.post('/formular',
+    body('title').isLength({ min: 5, max: 100 }).withMessage('El titulo de tu pregunta debe tener de 5 a 100 carácteres'),
+    body('body').isLength({ min: 10, max: 1000 }).withMessage('El cuerpo de tu pregunta no debe superar 1000 carácteres, y como mínimo deben ser 10'),
+    body('tags').custom((value, { req }) => {
+        //NO FUNCIONA
+        let tags = value === '' ? [] : value.split(',').map(t => t.toLowerCase());
+        if (tags.lenght > 0) {
+            tags.forEach(t => {
+                if (t.lenght >= 20) return false;
+            });
+        }
+        return true
+    }).withMessage('No puedes usar tags de mas de 20 carácteres'),
+    body('tags').custom((value, { req }) => {
+        //NO FUNCIONA
+        let tags = value === '' ? [] : value.split(',').map(t => t.toLowerCase());
+        if (tags.lenght > 0) {
+            tags.forEach(t => {
+                if (!t.match(/^[0-9a-z]+$/)) return false;
+            });
+        }
+        return true
+    }).withMessage('Las tags solo deben contener caracteres alfanuméricos'),
+    (req, res, next) => {
+        let errors = validationResult(req).errors;
+        if (errors.length > 0) {
+            res.status(200)
+            res.render("formular", { errors: errors }).end();
+        }
+        const title = req.body.title.trim(),
+            body = req.body.body.trim(),
+            tags = req.body.tags === '' ? [] : req.body.tags.split(',').map(t => t.toLowerCase());
         daoQuestions.createQuestion(req.session.idU, title, body, tags, (err, rows) => {
             if (err) {
                 res.status(500);
@@ -68,19 +88,17 @@ router.post('/formular', (req, res, next) => {
                 res.redirect("/preguntas");
             }
         })
-    }
-})
+
+    })
 
 router.get("/search", (req, res, next) => {
     const text = req.query.search;
-    //console.log(text);
     daoQuestions.searchByText(text, (err, questions) => {
         if (err) {
             res.status(500);
             next(err);
         } else {
             res.status(200);
-            //console.log(questions);
             res.render("preguntas", { titulo: 'Resultados de la búsqueda "' + text + '"', questions: questions });
         }
     })
@@ -89,14 +107,12 @@ router.get("/search", (req, res, next) => {
 
 router.get("/tag/:id", (req, res, next) => {
     const tag = req.params.id;
-    console.log(tag);
     daoQuestions.searchByTag(tag, (err, questions) => {
         if (err) {
             res.status(500);
             next(err);
         } else {
             res.status(200);
-            //console.log(questions);
             res.render("preguntas", { titulo: 'Preguntas con la etiqueta "' + tag + '"', questions: questions });
         }
     })
@@ -116,8 +132,6 @@ router.get("/:id", (req, res, next) => {
                     res.status(500);
                     next(err);
                 } else {
-                    // console.log(questions);
-                    // console.log(answers)
                     res.render("unapregunta", { question: questions[0], answers: answers });
                 }
             })
@@ -127,21 +141,28 @@ router.get("/:id", (req, res, next) => {
     })
 })
 
-router.post("/:id", (req, res, next) => {
-    const user = req.session.idU,
-        body = req.body.body,
-        question = req.params.id;
-    daoQuestions.createAnswer(user, question, body, (err, result) => {
-        if (err) {
-            res.status(500);
-            next(err);
-        } else {
-            res.status(200);
-            res.redirect("/preguntas/" + req.params.id);
+router.post("/:id",
+    body("body").isLength({ min: 5, max: 1000 }).withMessage("Procura que tu respuesta tenga entre 5 y 1000 carácteres"),
+    (req, res, next) => {
+        let errors = validationResult(req).errors;
+        if (errors.length > 0) {
+            res.status(200)
+            res.render("formular", { errors: errors }).end();
         }
+        const user = req.session.idU,
+            body = req.body.body,
+            question = req.params.id;
+        daoQuestions.createAnswer(user, question, body, (err, result) => {
+            if (err) {
+                res.status(500);
+                next(err);
+            } else {
+                res.status(200);
+                res.redirect("/preguntas/" + req.params.id);
+            }
 
+        })
     })
-})
 
 
 router.post("/:id/like", (req, res, next) => {
@@ -153,7 +174,6 @@ router.post("/:id/like", (req, res, next) => {
             res.status(500);
             next(err);
         } else {
-            console.log(result)
             res.status(200);
             res.redirect("/preguntas/" + req.params.id);
         }
@@ -170,7 +190,6 @@ router.post("/:id/answer/:idAnswer/like", (req, res, next) => {
             res.status(500);
             next(err);
         } else {
-            console.log(result)
             res.status(200);
             res.redirect("/preguntas/" + req.params.id);
         }

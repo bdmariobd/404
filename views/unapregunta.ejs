@@ -117,6 +117,21 @@
                 </div>
                 <input type="submit" class="btn form-element" value="Manda tu respuesta">
             </form>
+            <% if (locals.errors) { %>
+                <div class="alert alert-dismissible error-information fade show" role="alert">
+                    <h3>Cuidado, chimp </h3>
+                    <h3> *sonidos de angry monky🦧*</h3>
+                    <ul>
+                        <% errors.forEach(err => { %>
+                            <li>
+                                <%= err.msg %>
+                            </li>
+                            <% }) %>
+                    </ul>
+                    <button type="button" id="close-alert" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </button>
+                </div>
+                <% } %>
         </main>
 
 
