@@ -23,7 +23,7 @@ con el examen de la asignatura:
 ● Votación de preguntas y respuestas 🆗 (ESTILO)
 ● Reputación, número de preguntas y
 respuestas de cada usuario 🆗
-● Medallas ⚠️ revisar fechas
+● Medallas 🆗
 
 10:
 ● Todas las anteriores
