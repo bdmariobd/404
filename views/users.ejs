@@ -23,41 +23,47 @@
 
 <body>
     <%- include ("fragments/navbar")%>
-        <%- include ("fragments/search_bar")%>
+        <%- include ("fragments/search_bar_question") %>
 
-            <div class="container justify-content-center">
-                <% if(_users.length >0){ %>
-                    <h2 class="text-center">Usuarios</h2>
-                    <div class="row">
-                        <% _users.forEach(function(_user) { %>
-                            <div class="col-md-3">
-                                <div class="card">
-                                    <img class="img mx-auto" id="profilePhoto" src="/users/imagen/<%= _user.id %> " alt="Foto de perfil">
-                                    <div class="card-body">
-                                        <h5 class="card-title text-center">
-                                            <a class="text-center" href="/users/<%= _user.id %>">
-                                                <%=   _user.name %>
-                                            </a>
-                                        </h5>
-                                        <h6 class="card-subtitle text-center">
-                                            <%= _user.reputation %>
-                                        </h6>
-                                        <!-- TODO -->
-                                        <span>aquí hay que poner la etiqueta que
-                                        más veces aparece en las preguntas del usuario </span>
+            <%- include ("fragments/search_bar")%>
+
+                <div class="container justify-content-center">
+                    <% if(_users.length >0){ %>
+                        <h2 class="text-center">Usuarios</h2>
+                        <div class="row">
+                            <% _users.forEach(function(_user) { %>
+                                <div class="col-md-3">
+                                    <div class="card">
+                                        <img class="img mx-auto" id="profilePhoto" src="/users/imagen/<%= _user.id %> " alt="Foto de perfil">
+                                        <div class="card-body">
+                                            <h5 class="card-title text-center">
+                                                <a class="text-center" href="/users/<%= _user.id %>">
+                                                    <%=   _user.name %>
+                                                </a>
+                                            </h5>
+                                            <h6 class="card-subtitle text-center">
+                                                <%= _user.reputation %>
+                                            </h6>
+                                            <!-- TODO -->
+                                            <div class="tag-element">
+                                                <a href="/preguntas/tag/<%=_user.tag_name%>">
+                                                    <%=_user.tag_name%>
+                                                </a>
+                                            </div>
+                                            <strong>x<%= _user.times %> </strong>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <% }); %>
+                                <% }); %>
 
-                    </div>
-                    <% }else{ %>
-                        <div class="container justify-content-center">
-                            <img class="img" src="https://images-na.ssl-images-amazon.com/images/I/31An9F-y1yL.jpg" alt="No hay usuarios con ese nombre">
                         </div>
-                        <% } %>
+                        <% }else{ %>
+                            <div class="container justify-content-center">
+                                <img class="img" src="https://images-na.ssl-images-amazon.com/images/I/31An9F-y1yL.jpg" alt="No hay usuarios con ese nombre">
+                            </div>
+                            <% } %>
 
-            </div>
+                </div>
 
 
 

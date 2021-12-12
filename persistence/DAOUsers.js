@@ -46,7 +46,12 @@ class DAOUsers {
                 callback(new Error("Couldn't connect"));
             } else {
                 connection.query(
-                    "select * from user where active=1",
+                    "select * ," +
+                    "(select qt.id_tag from question q JOIN question_tag qt on q.id = qt.id_question join tag t on qt.id_tag = t.id where q.id_user = u.id group by qt.id_tag order by count( * ) DESC limit 1) as tag_id, " +
+                    "(select count( * ) from question q JOIN question_tag qt on q.id = qt.id_question join tag t on qt.id_tag = t.id where q.id_user = u.id group by qt.id_tag order by count( * ) DESC limit 1) as times," +
+                    "(select t.name from tag t where t.id = tag_id) as tag_name " +
+                    "from user u where u.active = 1 ",
+
                     function(err, rows) {
                         connection.release();
                         if (err) {
@@ -57,7 +62,7 @@ class DAOUsers {
                             } else {
                                 let result = [];
                                 rows.map(function(row) {
-                                    result.push({ id: row.id, name: row.name, email: row.email, image: row.image, date: timeUtils.getTimeAgo(row.date), reputation: row.reputation, active: row.active });
+                                    result.push({ times: row.times, tag_id: row.tag_id, tag_name: row.tag_name, id: row.id, name: row.name, email: row.email, image: row.image, date: timeUtils.getTimeAgo(row.date), reputation: row.reputation, active: row.active });
                                 })
                                 callback(null, result)
                             }
@@ -178,7 +183,7 @@ class DAOUsers {
                 callback(new Error("Error de conexión a la base de datos"));
             } else {
                 connection.query(
-                    "SELECT * FROM user WHERE id = ? ", [id],
+                    "SELECT *, (SELECT COUNT(id) FROM question where id_user=?) as questions,(SELECT COUNT(id) FROM answer where user_id=?) as answers FROM user WHERE id = ? ", [id, id, id],
                     function(err, rows) {
                         connection.release(); // devolver al pool la conexión
                         if (err) {
@@ -189,7 +194,7 @@ class DAOUsers {
                             } else {
                                 let result = [];
                                 rows.map(function(row) {
-                                    result.push({ id: row.id, name: row.name, email: row.email, image: row.image, date: timeUtils.getTimeAgo(row.date), reputation: row.reputation, active: row.active });
+                                    result.push({ questions: row.questions, answers: row.answers, id: row.id, name: row.name, email: row.email, image: row.image, date: timeUtils.getTimeAgo(row.date), reputation: row.reputation, active: row.active });
                                 })
                                 callback(null, result);
                             }

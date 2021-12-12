@@ -22,7 +22,7 @@
 
 <body>
     <%- include ("fragments/navbar") %>
-        <%- include ("fragments/search_bar") %>
+        <%- include ("fragments/search_bar_question") %>
             <div class="container d-flex justify-content-center">
                 <div class="card flex-row flex-wrap">
                     <div class="card-img-top d-inline-flex align-items-center " alt="Foto de perfil ">
@@ -42,7 +42,9 @@
                         <div class="row justify-content-center">
                             <div class="col-sm-3">
                                 <p class="text-center">Preguntas</p>
-                                <p class="text-center">10</p>
+                                <p class="text-center">
+                                    <%= _user.questions %>
+                                </p>
                             </div>
                             <div class="col-sm-3">
                                 <p class="text-center">Reputación</p>
@@ -52,7 +54,9 @@
                             </div>
                             <div class="col-sm-3">
                                 <p class="text-center">Respuestas</p>
-                                <p class="text-center">10</p>
+                                <p class="text-center">
+                                    <%= _user.answers %>
+                                </p>
                             </div>
                         </div>
                         <h3 class="text-center">Medallas</h3>

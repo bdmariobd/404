@@ -22,12 +22,12 @@ con el examen de la asignatura:
 ● Visitas a preguntas 🆗 (ESTILO)
 ● Votación de preguntas y respuestas 🆗 (ESTILO)
 ● Reputación, número de preguntas y
-respuestas de cada usuario ❌
+respuestas de cada usuario 🆗
 ● Medallas ⚠️ revisar fechas
 
 10:
 ● Todas las anteriores
 ● Opción de menú “Usuarios” 🆗 ⚠️ (ESTILO)
-● Perfil de usuario 🆗 ⚠️  NUMEROP DE PREGUNTAS Y REPUTACION (ESTILO)
+● Perfil de usuario 🆗 ⚠️  (ESTILO)
 
 

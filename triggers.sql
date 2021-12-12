@@ -82,10 +82,14 @@ set medal_winner = (select q.id_user from question q where NEW.id_question=q.id)
 
 
 IF NEW.positive=1 THEN 
+    if (SELECT reputation from `user` where id=medal_winner) = 1 then 
+        UPDATE `user` set reputation=reputation +10 where id=medal_winner;
+    else 
         UPDATE `user` set reputation=reputation +12 where id=medal_winner;
+        end if;
     ELSE
         IF (SELECT reputation from `user` where id=medal_winner) - 12 < 1 THEN
-                    UPDATE `user` set reputation=1 where id=medal_winner;
+                UPDATE `user` set reputation=1 where id=medal_winner;
         else
         UPDATE `user` set reputation=reputation -12 where id=medal_winner;
         end if;
@@ -175,7 +179,11 @@ DECLARE likes INT;
 set medal_winner = (select q.user_id from answer q where NEW.id_answer=q.id);
 
 IF NEW.positive=1 THEN 
+        if (SELECT reputation from `user` where id=medal_winner) = 1 then 
+        UPDATE `user` set reputation=reputation +10 where id=medal_winner;
+    else 
         UPDATE `user` set reputation=reputation +12 where id=medal_winner;
+        end if;
     ELSE
         IF (SELECT reputation from `user` where id=medal_winner) - 12 < 1 THEN
                     UPDATE `user` set reputation=1 where id=medal_winner;
