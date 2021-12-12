@@ -28,6 +28,6 @@ respuestas de cada usuario ❌
 10:
 ● Todas las anteriores
 ● Opción de menú “Usuarios” 🆗 ⚠️ (ESTILO)
-● Perfil de usuario 🆗 ⚠️ (ESTILO)
+● Perfil de usuario 🆗 ⚠️  NUMEROP DE PREGUNTAS Y REPUTACION (ESTILO)
 
 
