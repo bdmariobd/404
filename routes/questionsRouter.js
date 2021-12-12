@@ -147,7 +147,7 @@ router.post("/:id",
         let errors = validationResult(req).errors;
         if (errors.length > 0) {
             res.status(200)
-            res.render("formular", { errors: errors }).end();
+            res.render("unapregunta", { errors: errors }).end();
         }
         const user = req.session.idU,
             body = req.body.body,
