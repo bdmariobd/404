@@ -12,7 +12,7 @@ class DAOQuestions {
             if (err) {
                 callback(new Error("Error de conexión a la base de datos"));
             } else {
-                let query = "SELECT q.id, q.id_user, q.title, q.body, q.views, q.date, q.likes, q.dislikes, GROUP_CONCAT(DISTINCT t.name) as tags, u.name, u.image " +
+                let query = "SELECT q.id, q.id_user, q.title, q.body, q.views, q.date, GROUP_CONCAT(DISTINCT t.name) as tags, u.name, u.image " +
                     "FROM (((question q left join question_tag qt on q.id=qt.id_question) left join tag t on qt.id_tag=t.id) join user u on q.id_user = u.id)" +
                     "WHERE q.active = 1 " +
                     " GROUP BY q.id ORDER BY q.date DESC";
@@ -46,7 +46,7 @@ class DAOQuestions {
             if (err) {
                 callback(new Error("Error de conexión a la base de datos"));
             } else {
-                let query = "SELECT q.id, q.id_user, q.title, q.body, q.views, q.date, q.likes, q.dislikes, GROUP_CONCAT(DISTINCT t.name) as tags, u.name, u.image " +
+                let query = "SELECT q.id, q.id_user, q.title, q.body, q.views, q.date, GROUP_CONCAT(DISTINCT t.name) as tags, u.name, u.image " +
                     "FROM (((question q left join question_tag qt on q.id=qt.id_question) left join tag t on qt.id_tag=t.id) join user u on q.id_user = u.id)" +
                     "WHERE q.active = 1 AND 0 = (select count(*) FROM answer a WHERE a.question_id = q.id)" +
                     " GROUP BY q.id ORDER BY q.date DESC";
@@ -156,7 +156,7 @@ class DAOQuestions {
                 callback(new Error("Error de conexión a la base de datos"));
             } else {
                 // tabla = question_vote, 1 like, 0 dislike, -1 nada
-                const query = "SELECT q.id, q.id_user, q.title, q.body, q.views, q.date, q.likes, q.dislikes, GROUP_CONCAT(DISTINCT t.name) as tags, u.name, u.image," +
+                const query = "SELECT q.id, q.id_user, q.title, q.body, q.views, q.date, GROUP_CONCAT(DISTINCT t.name) as tags, u.name, u.image," +
                     "(SELECT COUNT (*) FROM question_vote WHERE id_question=q.id AND positive=1) AS likes, (SELECT COUNT (*) FROM question_vote WHERE id_question=q.id AND positive=0) as dislikes, " +
                     "(SELECT positive FROM question_vote WHERE id_question=q.id and id_user = ?) AS my_vote " +
                     "FROM (((question q left join question_tag qt on q.id=qt.id_question) left join tag t on qt.id_tag=t.id) join user u on q.id_user = u.id) left " +
@@ -245,7 +245,7 @@ class DAOQuestions {
             if (err) {
                 callback(new Error("Error de conexión a la base de datos"));
             } else {
-                const query = "SELECT q.id, q.id_user, q.title, q.body, q.views, q.date, q.likes, q.dislikes, GROUP_CONCAT(DISTINCT t.name) as tags, u.name, u.image " +
+                const query = "SELECT q.id, q.id_user, q.title, q.body, q.views, q.date, GROUP_CONCAT(DISTINCT t.name) as tags, u.name, u.image " +
                     "FROM (((question q left join question_tag qt on q.id=qt.id_question) left join tag t on qt.id_tag=t.id) join user u on q.id_user = u.id)" +
                     "WHERE q.active = 1 AND (q.title LIKE CONCAT('%',CONCAT(?,'%')) OR q.body LIKE CONCAT('%',CONCAT(?,'%')))" +
                     " GROUP BY q.id ORDER BY q.date DESC";
@@ -271,7 +271,7 @@ class DAOQuestions {
             if (err) {
                 callback(new Error("Error de conexión a la base de datos"));
             } else {
-                const query = "SELECT q.id, q.id_user, q.title, q.body, q.views, q.date, q.likes, q.dislikes, GROUP_CONCAT(DISTINCT t.name) as tags, u.name, u.image " +
+                const query = "SELECT q.id, q.id_user, q.title, q.body, q.views, q.date, GROUP_CONCAT(DISTINCT t.name) as tags, u.name, u.image " +
                     "FROM (((question q left join question_tag qt on q.id=qt.id_question) left join tag t on qt.id_tag=t.id) join user u on q.id_user = u.id)" +
                     " WHERE q.active = 1 AND q.id IN (SELECT id_question from question_tag sqt join tag st on st.id = sqt.id_tag WHERE st.name=?) " +
                     " GROUP BY q.id ORDER BY q.date DESC";

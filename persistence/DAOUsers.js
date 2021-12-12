@@ -232,7 +232,7 @@ class DAOUsers {
                     if (err) {
                         callback(new Error("Error de acceso a la base de datos"));
                     } else {
-                        const sqlSearch = "SELECT u.id, u.name,m.name, m.metal, m.merit, m.type, m.active FROM user u join (medal m join user_medal um on id_medal=id) on id_user=u.id where u.id=?";
+                        const sqlSearch = "SELECT u.id, u.name,m.name, m.metal, m.merit, m.type, m.active FROM user u join (medal m join user_medal um on id_medal=m.id) on id_user=u.id where u.id=?";
                         const searchQuery = mysql.format(sqlSearch, [result]);
                         connection.query(searchQuery, (err, result) => {
                             connection.release();

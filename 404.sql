@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 11-12-2021 a las 21:55:59
+-- Tiempo de generación: 12-12-2021 a las 10:37:52
 -- Versión del servidor: 5.7.36
 -- Versión de PHP: 7.4.26
 
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `answer` (
   PRIMARY KEY (`id`),
   KEY `answer_questionfk` (`question_id`),
   KEY `answer_userfk` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `answer`
@@ -68,6 +68,81 @@ CREATE TABLE IF NOT EXISTS `answer_vote` (
   KEY `answervote_answerfk` (`id_answer`),
   KEY `answervote_userfk` (`id_user`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Disparadores `answer_vote`
+--
+DROP TRIGGER IF EXISTS `on_answer_vote_insert`;
+DELIMITER $$
+CREATE TRIGGER `on_answer_vote_insert` AFTER INSERT ON `answer_vote` FOR EACH ROW BEGIN
+DECLARE likes INT;
+    DECLARE dislikes INT;
+    DECLARE votes INT;
+    DECLARE had_medal int;
+    DECLARE obtained_medal int;
+
+    DECLARE medal_winner int;
+
+    set likes = (SELECT COUNT(*) FROM answer_vote WHERE id_answer=NEW.id_answer AND positive=1);
+    set dislikes = (SELECT COUNT(*) FROM answer_vote WHERE id_answer=NEW.id_answer AND positive=0);
+    set votes = likes - dislikes;
+    set had_medal = (select EXISTS(SELECT um.id FROM user_medal um join medal m on um.id_medal = m.id WHERE id_answer=NEW.id_answer and type = 'answer_vote'));
+    set medal_winner = (select q.user_id from answer q where NEW.id_answer=q.id);
+
+    if had_medal = 0 THEN 
+        if votes = 2 then
+            INSERT INTO user_medal (id_user,id_medal,id_answer) values (medal_winner,8,NEW.id_answer);
+        end if;
+    ELSE 
+        set obtained_medal = (SELECT um.id from user_medal um join medal m on um.id_medal = m.id where id_answer = NEW.id_answer and type = 'answer_vote');
+        if votes < 2 THEN 
+            DELETE from user_medal where id= obtained_medal;
+        elseif votes >= 2 AND votes <=3 THEN 
+            UPDATE user_medal set id_medal= 8, date = CURRENT_TIMESTAMP() where id= obtained_medal;
+        elseif votes >= 4 AND votes<=5 THEN 
+            UPDATE user_medal set id_medal= 9, date = CURRENT_TIMESTAMP() where id= obtained_medal;
+        elseif votes = 6 AND NEW.positive=1 THEN 
+            UPDATE user_medal set id_medal= 10, date = CURRENT_TIMESTAMP() where id= obtained_medal;
+        END IF;
+    END IF;
+END
+$$
+DELIMITER ;
+DROP TRIGGER IF EXISTS `on_answer_vote_update`;
+DELIMITER $$
+CREATE TRIGGER `on_answer_vote_update` AFTER UPDATE ON `answer_vote` FOR EACH ROW BEGIN
+DECLARE likes INT;
+    DECLARE dislikes INT;
+    DECLARE votes INT;
+    DECLARE had_medal int;
+    DECLARE obtained_medal int;
+        DECLARE medal_winner int;
+
+
+    set likes = (SELECT COUNT(*) FROM answer_vote WHERE id_answer=NEW.id_answer AND positive=1);
+    set dislikes = (SELECT COUNT(*) FROM answer_vote WHERE id_answer=NEW.id_answer AND positive=0);
+    set votes = likes - dislikes;
+    set had_medal = (select EXISTS(SELECT um.id FROM user_medal um join medal m on um.id_medal = m.id WHERE id_answer=NEW.id_answer and type = 'answer_vote'));
+set medal_winner = (select q.user_id from answer q where NEW.id_answer=q.id);
+    if had_medal = 0 THEN 
+        if votes >= 2 AND votes <=3 THEN 
+            INSERT INTO user_medal (id_user,id_medal,id_answer) values (medal_winner,8,NEW.id_answer);
+        end if;
+    ELSE 
+        set obtained_medal = (SELECT um.id from user_medal um join medal m on um.id_medal = m.id where id_answer = NEW.id_answer and type = 'answer_vote');
+        if votes < 2 THEN 
+            DELETE from user_medal where id= obtained_medal;
+        elseif votes >= 2 AND votes <=3 THEN 
+            UPDATE user_medal set id_medal= 8, date = CURRENT_TIMESTAMP() where id= obtained_medal;
+        elseif votes >= 4 AND votes<=5 THEN 
+            UPDATE user_medal set id_medal= 9, date = CURRENT_TIMESTAMP() where id= obtained_medal;
+        elseif votes = 6 AND NEW.positive=1 THEN 
+            UPDATE user_medal set id_medal= 10, date = CURRENT_TIMESTAMP() where id= obtained_medal;
+        END IF;
+    END IF;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -117,24 +192,21 @@ CREATE TABLE IF NOT EXISTS `question` (
   `body` varchar(1000) NOT NULL,
   `views` int(11) NOT NULL DEFAULT '0',
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `likes` int(11) NOT NULL DEFAULT '0',
-  `dislikes` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `question_userfk` (`id_user`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `question`
 --
 
-INSERT INTO `question` (`id`, `id_user`, `active`, `title`, `body`, `views`, `date`, `likes`, `dislikes`) VALUES
-(1, 1, 1, '¿Cual es la diferencia entre position: relative, position: absolute y position: fixed?', 'Sé que estas propiedades de CSS sirven para posicionar un elemento dentro de la página. Soy bobo y voy a repetir lo mismo otra vez: Sé que estas propiedades de CSS sirven para posicionar un elemento dentro de la página.', 0, '2021-11-08 23:00:00', 0, 0),
-(2, 2, 1, '¿Cómo funciona exactamente nth-child?', 'No acabo de comprender muy bien que hace exactamente y qué usos prácticos puede tener.', 0, '2021-11-08 23:00:00', 0, 0),
-(3, 3, 1, 'Diferencias entre == y === (comparaciones en JavaScript)', 'Siempre he visto que en JavaScript hay:\r\nasignaciones =\r\ncomparaciones == y ===\r\nCreo entender que == hace algo parecido a comparar el valor de la variable y el === también\r\ncompara el tipo (como un equals de java).', 0, '2021-11-08 23:00:00', 0, 0),
-(4, 4, 1, 'Problema con asincronismo en Node\r\n', 'Soy nueva en Node... Tengo una modulo que conecta a una BD de postgres por medio de pgnode. En eso no tengo problemas. Mi problema es que al llamar a ese modulo, desde otro\r\nmodulo, y despues querer usar los datos que salieron de la BD me dice undefined... Estoy casi\r\nseguro que es porque la conexion a la BD devuelve una promesa, y los datos no estan\r\ndisponibles al momento de usarlos', 0, '2021-11-08 23:00:00', 0, 0),
-(5, 5, 1, '¿Qué es la inyección SQL y cómo puedo evitarla?', 'He encontrado bastantes preguntas en StackOverflow sobre programas o formularios web que\r\nguardan información en una base de datos (especialmente en PHP y MySQL) y que contienen\r\ngraves problemas de seguridad relacionados principalmente con la inyección SQL.\r\nNormalmente dejo un comentario y/o un enlace a una referencia externa, pero un comentario\r\nno da mucho espacio para mucho y sería positivo que hubiera una referencia interna en SOes\r\nsobre el tema así que decidí escribir esta pregunta.', 0, '2021-11-08 23:00:00', 0, 0),
-(9, 1, 1, 'Estoy probando', 'No se\r\n\r\n\r\n\r\n\r\n\r\nertetewrtwertwert', 0, '2021-11-23 23:00:00', 0, 0),
-(18, 1, 1, 'GHJK', 'SD', 4, '2021-12-11 21:40:09', 0, 0);
+INSERT INTO `question` (`id`, `id_user`, `active`, `title`, `body`, `views`, `date`) VALUES
+(1, 1, 1, '¿Cual es la diferencia entre position: relative, position: absolute y position: fixed?', 'Sé que estas propiedades de CSS sirven para posicionar un elemento dentro de la página. Soy bobo y voy a repetir lo mismo otra vez: Sé que estas propiedades de CSS sirven para posicionar un elemento dentro de la página.', 1, '2021-11-08 23:00:00'),
+(2, 2, 1, '¿Cómo funciona exactamente nth-child?', 'No acabo de comprender muy bien que hace exactamente y qué usos prácticos puede tener.', 0, '2021-11-08 23:00:00'),
+(3, 3, 1, 'Diferencias entre == y === (comparaciones en JavaScript)', 'Siempre he visto que en JavaScript hay:\r\nasignaciones =\r\ncomparaciones == y ===\r\nCreo entender que == hace algo parecido a comparar el valor de la variable y el === también\r\ncompara el tipo (como un equals de java).', 0, '2021-11-08 23:00:00'),
+(4, 4, 1, 'Problema con asincronismo en Node\r\n', 'Soy nueva en Node... Tengo una modulo que conecta a una BD de postgres por medio de pgnode. En eso no tengo problemas. Mi problema es que al llamar a ese modulo, desde otro\r\nmodulo, y despues querer usar los datos que salieron de la BD me dice undefined... Estoy casi\r\nseguro que es porque la conexion a la BD devuelve una promesa, y los datos no estan\r\ndisponibles al momento de usarlos', 0, '2021-11-08 23:00:00'),
+(5, 5, 1, '¿Qué es la inyección SQL y cómo puedo evitarla?', 'He encontrado bastantes preguntas en StackOverflow sobre programas o formularios web que\r\nguardan información en una base de datos (especialmente en PHP y MySQL) y que contienen\r\ngraves problemas de seguridad relacionados principalmente con la inyección SQL.\r\nNormalmente dejo un comentario y/o un enlace a una referencia externa, pero un comentario\r\nno da mucho espacio para mucho y sería positivo que hubiera una referencia interna en SOes\r\nsobre el tema así que decidí escribir esta pregunta.', 0, '2021-11-08 23:00:00'),
+(9, 1, 1, 'Estoy probando', 'No se\r\n\r\n\r\n\r\n\r\n\r\nertetewrtwertwert', 3, '2021-11-23 23:00:00');
 
 --
 -- Disparadores `question`
@@ -148,7 +220,7 @@ if NEW.views < 7 AND NEW.views = OLD.views +1 THEN
         if NEW.views = 2 THEN
             INSERT INTO user_medal (id_user,id_medal,id_question) values (NEW.id_user,5,NEW.id);
            else 
-           set obtained_medal = (SELECT um.id from user_medal um join medal m on um.id_medal = m.id where id_user= NEW.id_user and id_question = NEW.id and type = 'question_visited');
+           set obtained_medal = (SELECT um.id from user_medal um join medal m on um.id_medal = m.id where id_question = NEW.id and type = 'question_visited');
            END IF;
         if NEW.views= 4 THEN
             UPDATE user_medal set id_medal= 6, date = CURRENT_TIMESTAMP() where id=obtained_medal;
@@ -204,14 +276,6 @@ CREATE TABLE IF NOT EXISTS `question_vote` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Volcado de datos para la tabla `question_vote`
---
-
-INSERT INTO `question_vote` (`id_question`, `id_user`, `positive`) VALUES
-(18, 1, 1),
-(18, 4, 1);
-
---
 -- Disparadores `question_vote`
 --
 DROP TRIGGER IF EXISTS `on_question_vote_insert`;
@@ -223,22 +287,65 @@ DECLARE likes INT;
     DECLARE had_medal int;
     DECLARE obtained_medal int;
 
+    DECLARE medal_winner int;
+
     set likes = (SELECT COUNT(*) FROM question_vote WHERE id_question=NEW.id_question AND positive=1);
     set dislikes = (SELECT COUNT(*) FROM question_vote WHERE id_question=NEW.id_question AND positive=0);
     set votes = likes - dislikes;
-    set had_medal = (select EXISTS(SELECT um.id FROM user_medal um join medal m on um.id_medal = m.id WHERE id_user= NEW.id_user and id_question=NEW.id_question and type = 'question_vote'));
+    set had_medal = (select EXISTS(SELECT um.id FROM user_medal um join medal m on um.id_medal = m.id WHERE id_question=NEW.id_question and type = 'question_vote'));
+    set medal_winner = (select q.id_user from question q where NEW.id_question=q.id);
 
-    if had_medal = 0 AND votes = 1 THEN 
-        INSERT INTO user_medal (id_user,id_medal,id_question) values (NEW.id_user,1,NEW.id_question);
-
+    if had_medal = 0 THEN 
+        if votes = 1 then
+            INSERT INTO user_medal (id_user,id_medal,id_question) values (medal_winner,1,NEW.id_question);
+        end if;
     ELSE 
-        set obtained_medal = (SELECT um.id from user_medal um join medal m on um.id_medal = m.id where id_user= NEW.id_user and id_question = NEW.id_question and type = 'question_vote');
+        set obtained_medal = (SELECT um.id from user_medal um join medal m on um.id_medal = m.id where id_question = NEW.id_question and type = 'question_vote');
         if votes < 1 THEN 
             DELETE from user_medal where id= obtained_medal;
         elseif votes = 1 THEN 
             UPDATE user_medal set id_medal= 1, date = CURRENT_TIMESTAMP() where id= obtained_medal;
         elseif votes >= 2 AND votes <=3 THEN 
-            UPDATE user_medal set id_medal= 2, date = CURRENT_TIMESTAMP() where  id= obtained_medal;
+            UPDATE user_medal set id_medal= 2, date = CURRENT_TIMESTAMP() where id= obtained_medal;
+        elseif votes >= 4 AND votes<=5 THEN 
+            UPDATE user_medal set id_medal= 3, date = CURRENT_TIMESTAMP() where id= obtained_medal;
+        elseif votes = 6 AND NEW.positive=1 THEN 
+            UPDATE user_medal set id_medal= 4, date = CURRENT_TIMESTAMP() where id= obtained_medal;
+        END IF;
+    END IF;
+END
+$$
+DELIMITER ;
+DROP TRIGGER IF EXISTS `on_question_vote_update`;
+DELIMITER $$
+CREATE TRIGGER `on_question_vote_update` AFTER UPDATE ON `question_vote` FOR EACH ROW BEGIN
+DECLARE likes INT;
+    DECLARE dislikes INT;
+    DECLARE votes INT;
+    DECLARE had_medal int;
+    DECLARE obtained_medal int;
+        DECLARE medal_winner int;
+
+
+    set likes = (SELECT COUNT(*) FROM question_vote WHERE id_question=NEW.id_question AND positive=1);
+    set dislikes = (SELECT COUNT(*) FROM question_vote WHERE id_question=NEW.id_question AND positive=0);
+    set votes = likes - dislikes;
+    set had_medal = (select EXISTS(SELECT um.id FROM user_medal um join medal m on um.id_medal = m.id WHERE id_question=NEW.id_question and type = 'question_vote'));
+set medal_winner = (select q.id_user from question q where NEW.id_question=q.id);
+    if had_medal = 0 THEN 
+        if votes = 1 then
+            INSERT INTO user_medal (id_user,id_medal,id_question) values (medal_winner,1,NEW.id_question);
+        elseif votes >= 2 AND votes <=3 THEN 
+            INSERT INTO user_medal (id_user,id_medal,id_question) values (medal_winner,2,NEW.id_question);
+        end if;
+    ELSE 
+        set obtained_medal = (SELECT um.id from user_medal um join medal m on um.id_medal = m.id where id_question = NEW.id_question and type = 'question_vote');
+        if votes < 1 THEN 
+            DELETE from user_medal where id= obtained_medal;
+        elseif votes = 1 THEN 
+            UPDATE user_medal set id_medal= 1, date = CURRENT_TIMESTAMP() where id= obtained_medal;
+        elseif votes >= 2 AND votes <=3 THEN 
+            UPDATE user_medal set id_medal= 2, date = CURRENT_TIMESTAMP() where id= obtained_medal;
         elseif votes >= 4 AND votes<=5 THEN 
             UPDATE user_medal set id_medal= 3, date = CURRENT_TIMESTAMP() where id= obtained_medal;
         elseif votes = 6 AND NEW.positive=1 THEN 
@@ -268,6 +375,7 @@ CREATE TABLE IF NOT EXISTS `sessions` (
 --
 
 INSERT INTO `sessions` (`session_id`, `expires`, `data`) VALUES
+('Wevke_x-VwtEXre88P7SywH38tpFJhza', 1639391839, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"idU\":3,\"name\":\"SFG\",\"currentUser\":\"SFG@404.es\"}'),
 ('iuUBQWK_f24_Fr09F3ZfM32P7lyQw015', 1639345230, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"idU\":4,\"name\":\"Marta\",\"currentUser\":\"marta@404.es\"}'),
 ('lrFeAEfgLsJhaNK6bXhJEaU3X4sv9W2L', 1639323261, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"idU\":4,\"name\":\"Marta\",\"currentUser\":\"marta@404.es\"}');
 
@@ -367,15 +475,14 @@ CREATE TABLE IF NOT EXISTS `user_medal` (
   KEY `usermedal_userlfk` (`id_user`),
   KEY `medal_answerfk` (`id_answer`),
   KEY `medal_questionfk` (`id_question`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `user_medal`
 --
 
 INSERT INTO `user_medal` (`id_user`, `id_medal`, `date`, `id_question`, `id_answer`, `id`) VALUES
-(1, 1, '2021-12-11 21:40:11', 18, NULL, 13),
-(1, 6, '2021-12-11 21:40:30', 18, NULL, 14);
+(1, 5, '2021-12-12 10:36:53', 9, NULL, 20);
 
 --
 -- Restricciones para tablas volcadas
@@ -421,7 +528,8 @@ ALTER TABLE `question_vote`
 ALTER TABLE `user_medal`
   ADD CONSTRAINT `medal_answerfk` FOREIGN KEY (`id_answer`) REFERENCES `answer` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `medal_medalidfk` FOREIGN KEY (`id_medal`) REFERENCES `medal` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `medal_questionfk` FOREIGN KEY (`id_question`) REFERENCES `question` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `medal_questionfk` FOREIGN KEY (`id_question`) REFERENCES `question` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `medal_userfk` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
