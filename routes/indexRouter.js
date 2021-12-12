@@ -1,8 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const mysql = require("mysql");
-const config = require('../config');
-const DAOUsers = require("../persistence/DAOUsers")
+const factoryDAO = require("../persistence/factoryDAO")
 const multer = require('multer')
 const fs = require('fs')
 const maxSize = 126400000; // 15.9 MB
@@ -14,17 +12,7 @@ const multerFactory = multer({
     limits: { filieSize: maxSize }
 });
 
-
-
-const pool = mysql.createPool({
-    host: config.mysqlConfig.host,
-    user: config.mysqlConfig.user,
-    password: config.mysqlConfig.password,
-    database: config.mysqlConfig.database,
-});
-
-
-let daoUser = new DAOUsers(pool);
+let daoUser = factoryDAO.getDAOUsers();
 
 function logged(request) {
     if (request.session.currentUser !== undefined) return true;
@@ -63,52 +51,24 @@ router.get("/login", (request, response, next) => {
 
 
 router.post("/login",
-    body("email").isEmail(),
-    body("password").isLength({ min: 4 }),
+    body("email").isEmail().withMessage("El email no es válido"),
+    body("password").isLength({ min: 4 }).withMessage("La contraseña no cumple el formato - Debe ser de 4 a 50 carácteres alfanuméricos con o sin símbolos")
+    .isAscii().withMessage("La contraseña no cumple el formato - Debe ser de 4 a 50 carácteres alfanuméricos con o sin símbolos)"),
     (request, response, next) => {
-        //todo meter esto en un controller
+        response.status(200)
+        let rs = [];
+        let errors = validationResult(request).errors;
+        if (errors.length > 0) {
+            response.render("login", { errors: errors }).end();
+        }
         daoUser.isUserCorrect(request.body.email, request.body.password,
             (err, result) => {
                 if (err) {
                     response.status(500);
                     next(err);
                 } else {
-                    response.status(200)
-                    let rs = [];
-                    let errors = validationResult(request).errors;
-                    // Result {
-                    //     formatter: [Function: formatter],
-                    //     errors: [
-                    //       {
-                    //         value: 'nico@404es',
-                    //         msg: 'Invalid value',
-                    //         param: 'email',
-                    //         location: 'body'
-                    //       },
-                    //       {
-                    //         value: '1',
-                    //         msg: 'Invalid value',
-                    //         param: 'password',
-                    //         location: 'body'
-                    //       }
-                    //     ]
-                    //   }
-                    if (errors.length > 0) {
-                        console.log(errors);
-                        errors.forEach(x => {
-                            if (x.param === 'email') {
-                                rs.push("El email " + x.value + " es invalido");
-                            } else {
-                                rs.push("La password no cumple el formato");
-                            }
-                        });
-
-                    }
                     if (!result) {
-                        rs.push("Las credenciales son incorrectas")
-                    }
-                    if (rs.length > 0) {
-                        response.render("login", { errors: rs });
+                        response.render("login", { errors: [{ msg: "Las credenciales son incorrectas" }] });
                     } else {
                         request.session.idU = result.user.id;
                         request.session.name = result.user.name;
@@ -130,33 +90,20 @@ router.get("/signup", (request, response, next) => {
 
 router.post("/signup",
     multerFactory.single('pp'),
-    body('username').isAlphanumeric(),
-    body("email").isEmail(),
-    body("password1").isLength({ min: 4 }).isAscii(),
+    body('username').isAlphanumeric().withMessage("El nombre de usuario debe contener caracteres solo alfanuméricos"),
+    body("email").isEmail().withMessage("El email no es válido"),
+    body("password1").isLength({ min: 4 }).withMessage("La contraseña no cumple el formato - Debe ser de 4 a 50 carácteres alfanuméricos con o sin símbolos")
+    .isAscii().withMessage("La contraseña no cumple el formato - Debe ser de 4 a 50 carácteres alfanuméricos con o sin símbolos)"),
     body('password2').custom((value, { req }) => {
         if (value !== req.body.password1) {
-            throw new Error('Password confirmation does not match password');
+            throw new Error('Las contraseñas no coinciden');
         }
         return true;
     }),
-
     (request, response, next) => {
-        let rs = [];
         let errors = validationResult(request).errors;
         if (errors.length > 0) {
-            console.log(errors);
-            errors.forEach(x => {
-                if (x.param === 'email') {
-                    rs.push("El email " + x.value + " es invalido");
-                } else if (x.param === 'username') {
-                    rs.push("El nombre de usuario debe contener caracteres solo alfanuméricos")
-                } else if (x.param === 'password1') {
-                    rs.push("La contraseña no cumple el formato - Debe ser de 4 a 50 carácteres alfanuméricos con o sin símbolos)");
-                } else {
-                    rs.push("Las passwords no coinciden")
-                }
-            });
-            response.render("signup", { errors: rs }).end();
+            response.render("signup", { errors: errors }).end();
         }
         let pp = null;
         if (request.file) {
@@ -170,7 +117,7 @@ router.post("/signup",
         function processRequest(err, pp) {
             if (err) {
                 response.status(500);
-                next(err);
+                next(new Error("Fallo interno del servidor al escoger una imagen aleatoria para ti"));
             }
             const email = request.body.email;
             const username = request.body.username;
@@ -182,21 +129,19 @@ router.post("/signup",
                     next(err);
                 } else {
                     if (exists) {
-                        rs.push("Este correo es inválido o ya está siendo utilizado")
-                        response.render("signup", { errors: rs })
+                        response.render("signup", {
+                            errors: [{ msg: "Este correo ya está siendo utilizado" }]
+                        })
                     } else {
                         daoUser.create(email, username, pp, pass1,
                             (err, rows) => {
                                 if (err) {
                                     response.status(500);
-                                    next(err);
                                 } else {
-                                    response.status(200)
                                     if (rows === null) {
-                                        rs.push("No se ha creado tu cuenta")
-                                        response.render("signup", { errors: rs })
+                                        next(new Error("No se ha podido crear tu cuenta"));
                                     } else {
-                                        console.log(rows)
+                                        response.status(200)
                                         response.redirect("/");
                                     }
                                 }

@@ -20,7 +20,7 @@
 
 <body>
     <div class="container login-container">
-        <div class="row">
+        <div class="row align-items-center">
             <div class="login-left col">
                 <h3>De nuevo en...</h3>
                 <div class="login-logo">
@@ -66,7 +66,7 @@
                         <ul>
                             <% errors.forEach(err => { %>
                                 <li>
-                                    <%= err %>
+                                    <%= err.msg %>
                                 </li>
                                 <% }) %>
                         </ul>
