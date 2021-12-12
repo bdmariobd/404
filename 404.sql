@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 12-12-2021 a las 16:07:29
+-- Tiempo de generación: 12-12-2021 a las 22:49:51
 -- Versión del servidor: 5.7.36
 -- Versión de PHP: 7.4.26
 
@@ -48,11 +48,7 @@ CREATE TABLE IF NOT EXISTS `answer` (
 
 INSERT INTO `answer` (`id`, `question_id`, `active`, `date`, `likes`, `disikes`, `user_id`, `body`) VALUES
 (1, 1, 1, '2021-11-08 23:00:00', 0, 0, 5, 'La propiedad position sirve para posicionar un elemento dentro de la página. Sin embargo,\r\ndependiendo de cual sea la propiedad que usemos, el elemento tomará una referencia u otra\r\npara posicionarse respecto a ella.\r\nLos posibles valores que puede adoptar la propiedad position son: static | relative | absolute |\r\nfixed | inherit | initial.'),
-(2, 2, 1, '2021-11-08 23:00:00', 0, 0, 6, 'La pseudoclase :nth-child() selecciona los hermanos que cumplan cierta condición definida en\r\nla fórmula an + b. a y b deben ser números enteros, n es un contador. El grupo an representa\r\nun ciclo, cada cuantos elementos se repite; b indica desde donde empezamos a contar'),
-(3, 1, 1, '2021-11-26 19:46:38', 0, 0, 1, 'Efectivamente eres bobo\r\n\r\n\r\nxdd'),
-(4, 1, 1, '2021-11-26 19:47:07', 0, 0, 1, 'Efectivamente eres bobo\r\n\r\n\r\nxdd'),
-(5, 1, 1, '2021-11-26 19:47:47', 0, 0, 1, 'Espera lol, si es mi pregunta\r\n\r\n\r\nDEBERIA PODER RESPONDERME A MI MISMO? NI PUTA IDEA'),
-(7, 1, 1, '2021-11-26 19:57:10', 0, 0, 1, 'ahora si funciona');
+(2, 2, 1, '2021-11-08 23:00:00', 0, 0, 6, 'La pseudoclase :nth-child() selecciona los hermanos que cumplan cierta condición definida en\r\nla fórmula an + b. a y b deben ser números enteros, n es un contador. El grupo an representa\r\nun ciclo, cada cuantos elementos se repite; b indica desde donde empezamos a contar');
 
 -- --------------------------------------------------------
 
@@ -217,7 +213,7 @@ CREATE TABLE IF NOT EXISTS `question` (
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `question_userfk` (`id_user`)
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `question`
@@ -228,8 +224,7 @@ INSERT INTO `question` (`id`, `id_user`, `active`, `title`, `body`, `views`, `da
 (2, 2, 1, '¿Cómo funciona exactamente nth-child?', 'No acabo de comprender muy bien que hace exactamente y qué usos prácticos puede tener.', 0, '2021-11-08 23:00:00'),
 (3, 3, 1, 'Diferencias entre == y === (comparaciones en JavaScript)', 'Siempre he visto que en JavaScript hay:\r\nasignaciones =\r\ncomparaciones == y ===\r\nCreo entender que == hace algo parecido a comparar el valor de la variable y el === también\r\ncompara el tipo (como un equals de java).', 0, '2021-11-08 23:00:00'),
 (4, 4, 1, 'Problema con asincronismo en Node\r\n', 'Soy nueva en Node... Tengo una modulo que conecta a una BD de postgres por medio de pgnode. En eso no tengo problemas. Mi problema es que al llamar a ese modulo, desde otro\r\nmodulo, y despues querer usar los datos que salieron de la BD me dice undefined... Estoy casi\r\nseguro que es porque la conexion a la BD devuelve una promesa, y los datos no estan\r\ndisponibles al momento de usarlos', 0, '2021-11-08 23:00:00'),
-(5, 5, 1, '¿Qué es la inyección SQL y cómo puedo evitarla?', 'He encontrado bastantes preguntas en StackOverflow sobre programas o formularios web que\r\nguardan información en una base de datos (especialmente en PHP y MySQL) y que contienen\r\ngraves problemas de seguridad relacionados principalmente con la inyección SQL.\r\nNormalmente dejo un comentario y/o un enlace a una referencia externa, pero un comentario\r\nno da mucho espacio para mucho y sería positivo que hubiera una referencia interna en SOes\r\nsobre el tema así que decidí escribir esta pregunta.', 0, '2021-11-08 23:00:00'),
-(9, 1, 1, 'Estoy probando', 'No se\r\n\r\n\r\n\r\n\r\n\r\nertetewrtwertwert', 6, '2021-11-23 23:00:00');
+(5, 5, 1, '¿Qué es la inyección SQL y cómo puedo evitarla?', 'He encontrado bastantes preguntas en StackOverflow sobre programas o formularios web que\r\nguardan información en una base de datos (especialmente en PHP y MySQL) y que contienen\r\ngraves problemas de seguridad relacionados principalmente con la inyección SQL.\r\nNormalmente dejo un comentario y/o un enlace a una referencia externa, pero un comentario\r\nno da mucho espacio para mucho y sería positivo que hubiera una referencia interna en SOes\r\nsobre el tema así que decidí escribir esta pregunta.', 0, '2021-11-08 23:00:00');
 
 --
 -- Disparadores `question`
@@ -297,13 +292,6 @@ CREATE TABLE IF NOT EXISTS `question_vote` (
   KEY `questionvote_answerfk` (`id_question`),
   KEY `questionvote_userfk` (`id_user`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `question_vote`
---
-
-INSERT INTO `question_vote` (`id_question`, `id_user`, `positive`) VALUES
-(9, 1, 0);
 
 --
 -- Disparadores `question_vote`
@@ -431,7 +419,8 @@ CREATE TABLE IF NOT EXISTS `sessions` (
 --
 
 INSERT INTO `sessions` (`session_id`, `expires`, `data`) VALUES
-('TZONy6ig9J_92qvtNUeHNn2DgwBwpPxd', 1639411531, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"idU\":4,\"name\":\"Marta\",\"currentUser\":\"marta@404.es\"}'),
+('7lhVaj5zfXQg952zr5kF8xJG2RJgdmq-', 1639426148, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"idU\":4,\"name\":\"Marta\",\"currentUser\":\"marta@404.es\"}'),
+('VzN8139lsLgo4heYzIrDvrps6FszFwHA', 1639435492, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"idU\":4,\"name\":\"Marta\",\"currentUser\":\"marta@404.es\"}'),
 ('Wevke_x-VwtEXre88P7SywH38tpFJhza', 1639392830, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"idU\":3,\"name\":\"SFG\",\"currentUser\":\"SFG@404.es\"}'),
 ('iuUBQWK_f24_Fr09F3ZfM32P7lyQw015', 1639345230, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"idU\":4,\"name\":\"Marta\",\"currentUser\":\"marta@404.es\"}');
 
@@ -447,31 +436,21 @@ CREATE TABLE IF NOT EXISTS `tag` (
   `name` varchar(20) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `tag`
 --
 
 INSERT INTO `tag` (`id`, `name`) VALUES
-(23, ''),
-(22, 'ccs'),
 (1, 'css'),
 (2, 'css3'),
-(8, 'hola'),
 (7, 'html'),
 (9, 'java'),
 (3, 'javascript'),
 (5, 'mysql'),
-(18, 'node'),
 (4, 'nodejs'),
-(19, 'nueva'),
-(21, 'nuevisima'),
-(24, 'sdfg,sdfghdfghjsdfg,'),
-(6, 'sql'),
-(25, 'sql,css'),
-(26, 'sql,html'),
-(20, 'tag');
+(6, 'sql');
 
 -- --------------------------------------------------------
 
@@ -491,7 +470,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `reputation` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `user`
@@ -529,14 +508,7 @@ CREATE TABLE IF NOT EXISTS `user_medal` (
   KEY `usermedal_userlfk` (`id_user`),
   KEY `medal_answerfk` (`id_answer`),
   KEY `medal_questionfk` (`id_question`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `user_medal`
---
-
-INSERT INTO `user_medal` (`id_user`, `id_medal`, `date`, `id_question`, `id_answer`, `id`) VALUES
-(1, 7, '2021-12-12 15:14:31', 9, NULL, 20);
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Restricciones para tablas volcadas
