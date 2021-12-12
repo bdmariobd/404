@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="stylesheets/index.css">
     <link rel="stylesheet" href="stylesheets/monky.css">
@@ -21,7 +22,11 @@
             <div class="login-left col">
                 <h3>Bienvenido a la comunidad de</h3>
                 <div class="login-logo">
-                    <svg class="normal-kind" width="1000" height="900" viewBox="0 0 1000 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="<% if (!locals.errors) { %>
+                        normal-kind
+                        <% } else { %>
+                            angry
+                            <% } %>" width="1000" height="900" viewBox="0 0 1000 900" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g id="monky">
                         <g id="nose">
                         <path id="left" d="M444.074 575.241C415.066 575.241 391.465 600.111 391.465 630.683C391.465 661.255 415.064 686.125 444.074 686.125C473.072 686.125 496.662 661.255 496.662 630.683C496.662 600.111 473.072 575.241 444.074 575.241ZM444.074 642.417C437.934 642.417 432.939 637.152 432.939 630.683C432.939 624.214 437.935 618.949 444.074 618.949C450.203 618.949 455.189 624.214 455.189 630.683C455.189 637.152 450.201 642.417 444.074 642.417Z" fill="white"/>
@@ -39,10 +44,31 @@
                         <path id="left_7" d="M393.486 535.395C420.673 535.395 442.712 513.15 442.712 485.71C442.712 458.27 420.673 436.025 393.486 436.025C366.299 436.025 344.259 458.27 344.259 485.71C344.259 513.15 366.299 535.395 393.486 535.395Z" fill="white"/>
                         <path id="right_7" d="M623.798 535.395C650.985 535.395 673.025 513.15 673.025 485.71C673.025 458.27 650.985 436.025 623.798 436.025C596.611 436.025 574.572 458.27 574.572 485.71C574.572 513.15 596.611 535.395 623.798 535.395Z" fill="white"/>
                         </g>
+                        <g id="eyesangry">
+                            <path id="left eyebrow" d="M428.006 426.823L342.149 403.603C330.555 400.468 318.658 407.336 315.576 418.945C312.494 430.554 319.395 442.507 330.989 445.643L416.845 468.862C428.44 471.998 440.337 465.129 443.419 453.52C446.501 441.911 439.6 429.958 428.006 426.823Z" fill="white"/>
+                            <path id="right eyebrow" d="M670.917 403.604L585.06 426.823C573.466 429.959 566.565 441.911 569.647 453.52C572.729 465.129 584.626 471.998 596.221 468.862L682.077 445.643C693.671 442.507 700.572 430.554 697.49 418.946C694.408 407.337 682.511 400.468 670.917 403.604Z" fill="white"/>
+                            <path id="left_5" d="M396.401 475.37C412.823 475.37 426.136 488.807 426.136 505.383C426.136 521.958 412.823 535.395 396.401 535.395C379.978 535.395 366.665 521.958 366.665 505.383C366.665 488.807 379.978 475.37 396.401 475.37Z" fill="white"/>
+                            <path id="right_5" d="M616.664 474.54C633.086 474.54 646.399 487.977 646.399 504.553C646.399 521.128 633.086 534.565 616.664 534.565C600.241 534.565 586.928 521.128 586.928 504.553C586.928 487.977 600.241 474.54 616.664 474.54Z" fill="white"/>
+                        </g>
                         </g>
                         </svg>
                     <h3>ask 404</h3>
                 </div>
+                <% if (locals.errors) { %>
+                    <div class="alert alert-dismissible login-error fade show" role="alert">
+                        <h3>Cuidado, chimp </h3>
+                        <h3> *sonidos de angry monky🦧*</h3>
+                        <ul>
+                            <% errors.forEach(err => { %>
+                                <li>
+                                    <%= err %>
+                                </li>
+                                <% }) %>
+                        </ul>
+                        <button type="button" id="close-alert" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </button>
+                    </div>
+                    <% } %>
             </div>
             <div class="login-right col">
                 <div class="login-info">
@@ -67,7 +93,7 @@
                         <input name=password2 id="floatingInput" class="form-control" type="password" placeholder="Confirmar contraseña">
                         <label for="floatingInput">Confirmar contraseña</label>
                         <p id="passwordHelpBlock" class="form-text form-element">
-                            Tu contraseña debe tener entre 6 y 50 carácteres, y no debe contener ni emojis ni espacios.
+                            Tu contraseña debe tener entre 4 y 50 carácteres, y no debe contener ni emojis ni espacios.
                         </p>
                     </div>
                     <!--TODO: Un script que muestra la img que has subido-->
@@ -80,6 +106,14 @@
         </div>
 
     </div>
+    <script>
+        $(function() {
+            $('#close-alert').click(function(event) {
+                $('.login-logo svg').attr("class", "normal-kind");
+            });
+
+        });
+    </script>
 </body>
 
 </html>

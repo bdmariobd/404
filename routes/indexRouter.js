@@ -4,10 +4,15 @@ const mysql = require("mysql");
 const config = require('../config');
 const DAOUsers = require("../persistence/DAOUsers")
 const multer = require('multer')
+const fs = require('fs')
+const maxSize = 126400000; // 15.9 MB
 const { body, validationResult } = require("express-validator");
 
 
-const multerFactory = multer({ storage: multer.memoryStorage() });
+const multerFactory = multer({
+    storage: multer.memoryStorage(),
+    limits: { filieSize: maxSize }
+});
 
 
 
@@ -17,9 +22,6 @@ const pool = mysql.createPool({
     password: config.mysqlConfig.password,
     database: config.mysqlConfig.database,
 });
-
-
-
 
 
 let daoUser = new DAOUsers(pool);
@@ -62,7 +64,7 @@ router.get("/login", (request, response, next) => {
 
 router.post("/login",
     body("email").isEmail(),
-    body("password").isLength({ min: 2 }),
+    body("password").isLength({ min: 4 }),
     (request, response, next) => {
         //todo meter esto en un controller
         daoUser.isUserCorrect(request.body.email, request.body.password,
@@ -126,54 +128,84 @@ router.get("/signup", (request, response, next) => {
     response.render("signup");
 });
 
-router.post("/signup", multerFactory.single('pp'), (request, response, next) => {
-    //todo meter esto en un controller
-    const email = request.body.email;
-    const username = request.body.username;
-    let foto = null;
-    if (request.file) {
-        foto = request.file.buffer;
-    }
-    const pass1 = request.body.password1;
-    const pass2 = request.body.password2;
-    const pp = foto;
-    if (pass1 !== pass2) {
-        response.render("signup", { error: "Las contraseñas no coinciden" });
-    } else {
-        daoUser.userExists(email, (err, exists) => {
+router.post("/signup",
+    multerFactory.single('pp'),
+    body('username').isAlphanumeric(),
+    body("email").isEmail(),
+    body("password1").isLength({ min: 4 }).isAscii(),
+    body('password2').custom((value, { req }) => {
+        if (value !== req.body.password1) {
+            throw new Error('Password confirmation does not match password');
+        }
+        return true;
+    }),
+
+    (request, response, next) => {
+        let rs = [];
+        let errors = validationResult(request).errors;
+        if (errors.length > 0) {
+            console.log(errors);
+            errors.forEach(x => {
+                if (x.param === 'email') {
+                    rs.push("El email " + x.value + " es invalido");
+                } else if (x.param === 'username') {
+                    rs.push("El nombre de usuario debe contener caracteres solo alfanuméricos")
+                } else if (x.param === 'password1') {
+                    rs.push("La contraseña no cumple el formato - Debe ser de 4 a 50 carácteres alfanuméricos con o sin símbolos)");
+                } else {
+                    rs.push("Las passwords no coinciden")
+                }
+            });
+            response.render("signup", { errors: rs }).end();
+
+        }
+        let pp = null;
+        if (request.file) {
+            pp = request.file.buffer;
+            processRequest(null, pp);
+        } else {
+            const random_num = Math.floor(Math.random() * 3) + 1;
+            fs.readFile("public/images/defecto" + random_num + ".png", processRequest);
+        }
+
+        function processRequest(err, pp) {
             if (err) {
-                console.log("ya existe");
                 response.status(500);
                 next(err);
-            } else {
-                if (exists) {
-                    response.render("signup", { error: "Este correo es inválido o ya está siendo utilizado" });
-                } else {
-                    daoUser.create(email, username, pp, pass1,
-                        (err, rows) => {
-                            if (err) {
-                                response.status(500);
-                                console.log("Error creating user: " + err.message);
-                                response.render("signup", null);
-                            } else {
-                                response.status(200)
-                                if (rows === null) {
-                                    console.log("error");
-                                    response.render("singup", null);
-                                } else {
-                                    console.log(rows)
-                                    response.redirect("/");
-                                }
-                            }
-                        });
-                }
             }
-        });
-
-    }
-
-
-
-});
+            const email = request.body.email;
+            const username = request.body.username;
+            const pass1 = request.body.password1;
+            const pass2 = request.body.password2;
+            daoUser.userExists(email, (err, exists) => {
+                if (err) {
+                    response.status(500);
+                    next(err);
+                } else {
+                    if (exists) {
+                        rs.push("Este correo es inválido o ya está siendo utilizado")
+                        response.render("signup", { errors: rs })
+                    } else {
+                        daoUser.create(email, username, pp, pass1,
+                            (err, rows) => {
+                                if (err) {
+                                    response.status(500);
+                                    next(err);
+                                } else {
+                                    response.status(200)
+                                    if (rows === null) {
+                                        rs.push("No se ha creado tu cuenta")
+                                        response.render("signup", { errors: rs })
+                                    } else {
+                                        console.log(rows)
+                                        response.redirect("/");
+                                    }
+                                }
+                            });
+                    }
+                }
+            });
+        }
+    });
 
 module.exports = router;
