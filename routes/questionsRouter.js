@@ -5,6 +5,8 @@ const mysql = require("mysql");
 const config = require('../config');
 const DAOUsers = require("../persistence/DAOUsers");
 const factoryDAO = require("../persistence/factoryDAO")
+const { body, validationResult } = require("express-validator");
+
 
 let daoQuestions = factoryDAO.getDAOQuestions();
 
@@ -67,10 +69,7 @@ router.post('/formular', (req, res, next) => {
             }
         })
     }
-
 })
-
-
 
 router.get("/search", (req, res, next) => {
     const text = req.query.search;
