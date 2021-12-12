@@ -33,6 +33,16 @@ DECLARE likes INT;
     set had_medal = (select EXISTS(SELECT um.id FROM user_medal um join medal m on um.id_medal = m.id WHERE id_question=NEW.id_question and type = 'question_vote'));
     set medal_winner = (select q.id_user from question q where NEW.id_question=q.id);
 
+    IF NEW.positive=1 THEN 
+        UPDATE `user` set reputation=reputation +10 where id=medal_winner;
+    ELSE
+        IF (SELECT reputation from `user` where id=medal_winner) - 2 < 1 THEN
+                    UPDATE `user` set reputation=1 where id=medal_winner;
+        else
+        UPDATE `user` set reputation=reputation -2 where id=medal_winner;
+        end if;
+    END if;
+
     if had_medal = 0 THEN 
         if votes = 1 then
             INSERT INTO user_medal (id_user,id_medal,id_question) values (medal_winner,1,NEW.id_question);
@@ -69,8 +79,20 @@ DECLARE likes INT;
     set votes = likes - dislikes;
     set had_medal = (select EXISTS(SELECT um.id FROM user_medal um join medal m on um.id_medal = m.id WHERE id_question=NEW.id_question and type = 'question_vote'));
 set medal_winner = (select q.id_user from question q where NEW.id_question=q.id);
-    if had_medal = 0 THEN 
-        if votes = 2 then
+
+
+IF NEW.positive=1 THEN 
+        UPDATE `user` set reputation=reputation +12 where id=medal_winner;
+    ELSE
+        IF (SELECT reputation from `user` where id=medal_winner) - 12 < 1 THEN
+                    UPDATE `user` set reputation=1 where id=medal_winner;
+        else
+        UPDATE `user` set reputation=reputation -12 where id=medal_winner;
+        end if;
+    END if;
+    
+        if had_medal = 0 THEN 
+        if votes = 1 then
             INSERT INTO user_medal (id_user,id_medal,id_question) values (medal_winner,1,NEW.id_question);
         elseif votes >= 2 AND votes <=3 THEN 
             INSERT INTO user_medal (id_user,id_medal,id_question) values (medal_winner,2,NEW.id_question);
@@ -108,6 +130,15 @@ DECLARE likes INT;
     set had_medal = (select EXISTS(SELECT um.id FROM user_medal um join medal m on um.id_medal = m.id WHERE id_answer=NEW.id_answer and type = 'answer_vote'));
     set medal_winner = (select q.user_id from answer q where NEW.id_answer=q.id);
 
+IF NEW.positive=1 THEN 
+        UPDATE `user` set reputation=reputation +10 where id=medal_winner;
+    ELSE
+        IF (SELECT reputation from `user` where id=medal_winner) - 2 < 1 THEN
+                    UPDATE `user` set reputation=1 where id=medal_winner;
+        else
+        UPDATE `user` set reputation=reputation -2 where id=medal_winner;
+        end if;
+    END if;
     if had_medal = 0 THEN 
         if votes = 2 then
             INSERT INTO user_medal (id_user,id_medal,id_answer) values (medal_winner,8,NEW.id_answer);
@@ -142,6 +173,16 @@ DECLARE likes INT;
     set votes = likes - dislikes;
     set had_medal = (select EXISTS(SELECT um.id FROM user_medal um join medal m on um.id_medal = m.id WHERE id_answer=NEW.id_answer and type = 'answer_vote'));
 set medal_winner = (select q.user_id from answer q where NEW.id_answer=q.id);
+
+IF NEW.positive=1 THEN 
+        UPDATE `user` set reputation=reputation +12 where id=medal_winner;
+    ELSE
+        IF (SELECT reputation from `user` where id=medal_winner) - 12 < 1 THEN
+                    UPDATE `user` set reputation=1 where id=medal_winner;
+        else
+        UPDATE `user` set reputation=reputation -12 where id=medal_winner;
+        end if;
+    END if;
     if had_medal = 0 THEN 
         if votes >= 2 AND votes <=3 THEN 
             INSERT INTO user_medal (id_user,id_medal,id_answer) values (medal_winner,8,NEW.id_answer);
