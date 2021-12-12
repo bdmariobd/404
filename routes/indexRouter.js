@@ -157,7 +157,6 @@ router.post("/signup",
                 }
             });
             response.render("signup", { errors: rs }).end();
-
         }
         let pp = null;
         if (request.file) {
