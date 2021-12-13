@@ -60,13 +60,18 @@
                                                 <h6 class="card-subtitle text-center">
                                                     <%= _user.reputation %>
                                                 </h6>
-                                                <!-- TODO -->
-                                                <div class="tag-element">
-                                                    <a href="/preguntas/tag/<%=_user.tag_name%>">
-                                                        <%=_user.tag_name%>
-                                                    </a>
-                                                </div>
-                                                <strong>x<%= _user.times %> </strong>
+                                                <% if (_user.tag_name!==null) { %>
+                                                    <div class="d-flex justify-content-center">
+                                                        <div class="tag-element ">
+                                                            <a href="/preguntas/tag/<%=_user.tag_name%>">
+                                                                <%=_user.tag_name%> <strong> x<%= _user.times %> </strong>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+
+                                                    <% } %>
+
+
                                             </div>
                                         </div>
                                     </div>

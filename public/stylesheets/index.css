@@ -298,6 +298,7 @@ a:hover {
     color: var(--on-bg-color);
     background-color: var(--bg-color-3);
     border: none;
+    height: 20rem;
 }
 
 .img {
