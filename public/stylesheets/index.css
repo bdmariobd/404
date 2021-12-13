@@ -21,12 +21,6 @@ body {
     font-family: 'Nunito', sans-serif;
 }
 
-main {
-    margin-left: 16rem;
-    padding: 1rem;
-    margin-right: 16rem;
-}
-
 h1,
 h2,
 h3,
@@ -199,6 +193,7 @@ a:hover {
         width: 100vw;
         height: 5rem;
         justify-content: center;
+        overflow-x: auto;
     }
     .navbar-nav {
         flex-direction: row;
@@ -206,11 +201,10 @@ a:hover {
     .nav-item {
         justify-content: center;
     }
-    .nav-item:nth-last-child(2) {
-        margin-top: unset;
-    }
     main {
         margin: 0;
+        padding: 1rem;
+        margin-bottom: 5rem;
     }
 }
 
@@ -218,11 +212,18 @@ a:hover {
 /* Bigger screens*/
 
 @media only screen and (min-width: 600px) {
+    main {
+        margin-left: 16rem;
+        padding: 1rem;
+        margin-right: 16rem;
+    }
     .navbar {
         top: 0;
         width: 5rem;
+        max-width: 16rem;
         height: 100vh;
         transition: width 600ms ease;
+        overflow-y: auto;
     }
     .navbar:hover {
         width: 16rem;
