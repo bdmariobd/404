@@ -24,7 +24,7 @@ router.use(["/users", "/preguntas"], (request, response, next) => {
         response.locals.user = { idU: request.session.idU, name: request.session.name, currentUser: request.session.currentUser };
         next();
     } else {
-        response.redirect("login");
+        response.redirect("/login");
     }
 });
 
@@ -32,7 +32,7 @@ router.use(["/users", "/preguntas"], (request, response, next) => {
 router.get('/logout', (req, res, next) => {
     req.session.destroy()
     res.status(200)
-    res.redirect('login')
+    res.redirect('/login')
 })
 
 router.get("/", (request, response, next) => {
@@ -73,8 +73,6 @@ router.post("/login",
                         request.session.idU = result.user.id;
                         request.session.name = result.user.name;
                         request.session.currentUser = request.body.email;
-                        console.log(request.session.idU)
-                        console.log(request.session.name)
                         response.redirect("preguntas");
                     }
                 }

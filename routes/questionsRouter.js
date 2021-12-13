@@ -74,20 +74,22 @@ router.post('/formular',
     (req, res, next) => {
         let errors = validationResult(req).errors;
         if (errors.length > 0) {
-            res.status(200)
-            res.render("formular", { errors: errors }).end();
+            res.render("formular", { errors: errors });
+        } else {
+            console.log("yo no me voy a ejecutar >:c")
+            const title = req.body.title.trim(),
+                body = req.body.body.trim(),
+                tags = req.body.tags === '' ? [] : req.body.tags.split(',').map(t => t.toLowerCase());
+            daoQuestions.createQuestion(req.session.idU, title, body, tags, (err, rows) => {
+                if (err) {
+                    res.status(500);
+                    next(err);
+                } else {
+                    res.redirect("/preguntas");
+                }
+            })
         }
-        const title = req.body.title.trim(),
-            body = req.body.body.trim(),
-            tags = req.body.tags === '' ? [] : req.body.tags.split(',').map(t => t.toLowerCase());
-        daoQuestions.createQuestion(req.session.idU, title, body, tags, (err, rows) => {
-            if (err) {
-                res.status(500);
-                next(err);
-            } else {
-                res.redirect("/preguntas");
-            }
-        })
+
 
     })
 
@@ -147,21 +149,23 @@ router.post("/:id",
         let errors = validationResult(req).errors;
         if (errors.length > 0) {
             res.status(200)
-            res.render("unapregunta", { errors: errors }).end();
-        }
-        const user = req.session.idU,
-            body = req.body.body,
-            question = req.params.id;
-        daoQuestions.createAnswer(user, question, body, (err, result) => {
-            if (err) {
-                res.status(500);
-                next(err);
-            } else {
-                res.status(200);
-                res.redirect("/preguntas/" + req.params.id);
-            }
+            res.render("unapregunta", { errors: errors });
+        } else {
+            const user = req.session.idU,
+                body = req.body.body,
+                question = req.params.id;
+            daoQuestions.createAnswer(user, question, body, (err, result) => {
+                if (err) {
+                    res.status(500);
+                    next(err);
+                } else {
+                    res.status(200);
+                    res.redirect("/preguntas/" + req.params.id);
+                }
 
-        })
+            })
+        }
+
     })
 
 
