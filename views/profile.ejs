@@ -22,139 +22,142 @@
 
 <body>
     <%- include ("fragments/navbar") %>
-        <%- include ("fragments/search_bar_question") %>
-            <div class="container d-flex justify-content-center">
-                <div class="card flex-row flex-wrap">
-                    <div class="card-img-top d-inline-flex align-items-center " alt="Foto de perfil ">
-                        <div class=profile_basic>
-                            <% if (_user.image){ %>
-                                <img class="img-fluid " src="/users/imagen/<%= _user.id %>" alt="Foto de perfil ">
-                                <% }  %>
+        <main>
+            <%- include ("fragments/search_bar_question") %>
+                <div class="container d-flex justify-content-center">
+                    <div class="card flex-row flex-wrap">
+                        <div class="card-img-top d-inline-flex align-items-center " alt="Foto de perfil ">
+                            <div class=profile_basic>
+                                <% if (_user.image){ %>
+                                    <img class="img-fluid " src="/users/imagen/<%= _user.id %>" alt="Foto de perfil ">
+                                    <% }  %>
+                            </div>
+                            <h3 class="col p-1 m-0 ">
+                                ¡Hola
+                                <%= _user.name %>!
+                            </h3>
+                            <span creation-date>Miembro desde <%= _user.date %></span>
                         </div>
-                        <h3 class="col p-1 m-0 ">
-                            ¡Hola
-                            <%= _user.name %>!
-                        </h3>
-                        <span creation-date>Miembro desde <%= _user.date %></span>
+                        <div class=card-body d-flex justify-content-center>
+                            <h3 class="text-center">Stats</h3>
+                            <div class="row justify-content-center">
+                                <div class="col-sm-3">
+                                    <p class="text-center">Preguntas</p>
+                                    <p class="text-center">
+                                        <%= _user.questions %>
+                                    </p>
+                                </div>
+                                <div class="col-sm-3">
+                                    <p class="text-center">Reputación</p>
+                                    <p class="text-center">
+                                        <%= _user.reputation %>
+                                    </p>
+                                </div>
+                                <div class="col-sm-3">
+                                    <p class="text-center">Respuestas</p>
+                                    <p class="text-center">
+                                        <%= _user.answers %>
+                                    </p>
+                                </div>
+                            </div>
+                            <h3 class="text-center">Medallas</h3>
+                            <div class="row justify-content-center">
+                                <div class="col-sm-3">
+                                    <p class="text-center" id="oro">Oro</p>
+                                    <p class="text-center">
+                                        <% if ( golds) { %>
+                                            <p class="text-center">
+                                                <% let total=0 %>
+                                                    <% for( let index = 0; index < golds.length; index++ ) { %>
+                                                        <% total = total + golds[index].quantity %>
+                                                            <% } %>
+                                                                <%= total %>
+                                            </p>
+                                            <% }else{ %>
+                                                <p class="text-center">0</p>
+                                                <%   } %>
+
+                                    </p>
+                                    <% if (golds && golds.length) { %>
+                                        <ul>
+                                            <% golds.forEach((item) => { %>
+                                                <li> 🥇
+                                                    <%= item.name %> x
+                                                        <%=item.quantity %>
+
+                                                </li>
+                                                <% }) %>
+                                        </ul>
+                                        <% } %>
+                                </div>
+                                <div class="col-sm-3">
+                                    <p class="text-center" id="plata">Plata</p>
+                                    <p class="text-center">
+                                        <% if ( silvers) { %>
+                                            <p class="text-center">
+                                                <% let total=0 %>
+                                                    <% for( let index = 0; index < silvers.length; index++ ) { %>
+                                                        <% total = total + silvers[index].quantity %>
+                                                            <% } %>
+                                                                <%= total %>
+                                            </p>
+                                            <p class="text-center"></p>
+
+                                            <%}else{ %>
+                                                <p class="text-center">0</p>
+                                                <%   } %>
+
+                                    </p>
+
+
+                                    <% if (silvers && silvers.length) { %>
+                                        <ul>
+                                            <% silvers.forEach((item) => { %>
+                                                <li> 🥈
+                                                    <%= item.name %> x
+                                                        <%=item.quantity %>
+                                                </li>
+                                                <% }) %>
+                                        </ul>
+                                        <% } %>
+
+                                </div>
+                                <div class="col-sm-3">
+                                    <p class="text-center" id="bronce">Bronce</p>
+                                    <p class="text-center">
+                                        <% if ( bronces) { %>
+                                            <p class="text-center">
+                                                <% let total=0 %>
+                                                    <% for( let index = 0; index < bronces.length; index++ ) { %>
+                                                        <% total = total + bronces[index].quantity %>
+                                                            <% } %>
+                                                                <%= total %>
+                                            </p>
+                                            <p class="text-center"></p>
+
+                                            <%}else{ %>
+                                                <p class="text-center">0</p>
+                                                <%   } %>
+                                    </p>
+                                    <% if (bronces && bronces.length) { %>
+                                        <ul>
+                                            <% bronces.forEach((item) => { %>
+                                                <li> 🥉
+                                                    <%= item.name %> x
+                                                        <%=item.quantity %>
+                                                </li>
+                                                <% }) %>
+                                        </ul>
+                                        <% } %>
+
+                                </div>
+                            </div>
+                            <div class="row user-info">
+                                <div class="col">Posible desc del usuario</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class=card-body d-flex justify-content-center>
-                        <h3 class="text-center">Stats</h3>
-                        <div class="row justify-content-center">
-                            <div class="col-sm-3">
-                                <p class="text-center">Preguntas</p>
-                                <p class="text-center">
-                                    <%= _user.questions %>
-                                </p>
-                            </div>
-                            <div class="col-sm-3">
-                                <p class="text-center">Reputación</p>
-                                <p class="text-center">
-                                    <%= _user.reputation %>
-                                </p>
-                            </div>
-                            <div class="col-sm-3">
-                                <p class="text-center">Respuestas</p>
-                                <p class="text-center">
-                                    <%= _user.answers %>
-                                </p>
-                            </div>
-                        </div>
-                        <h3 class="text-center">Medallas</h3>
-                        <div class="row justify-content-center">
-                            <div class="col-sm-3">
-                                <p class="text-center" id="oro">Oro</p>
-                                <p class="text-center">
-                                    <% if ( golds) { %>
-                                        <p class="text-center">
-                                            <% let total=0 %>
-                                                <% for( let index = 0; index < golds.length; index++ ) { %>
-                                                    <% total = total + golds[index].quantity %>
-                                                        <% } %>
-                                                            <%= total %>
-                                        </p>
-                                        <% }else{ %>
-                                            <p class="text-center">0</p>
-                                            <%   } %>
+        </main>
 
-                                </p>
-                                <% if (golds && golds.length) { %>
-                                    <ul>
-                                        <% golds.forEach((item) => { %>
-                                            <li> 🥇
-                                                <%= item.name %> x
-                                                    <%=item.quantity %>
-
-                                            </li>
-                                            <% }) %>
-                                    </ul>
-                                    <% } %>
-                            </div>
-                            <div class="col-sm-3">
-                                <p class="text-center" id="plata">Plata</p>
-                                <p class="text-center">
-                                    <% if ( silvers) { %>
-                                        <p class="text-center">
-                                            <% let total=0 %>
-                                                <% for( let index = 0; index < silvers.length; index++ ) { %>
-                                                    <% total = total + silvers[index].quantity %>
-                                                        <% } %>
-                                                            <%= total %>
-                                        </p>
-                                        <p class="text-center"></p>
-
-                                        <%}else{ %>
-                                            <p class="text-center">0</p>
-                                            <%   } %>
-
-                                </p>
-
-
-                                <% if (silvers && silvers.length) { %>
-                                    <ul>
-                                        <% silvers.forEach((item) => { %>
-                                            <li> 🥈
-                                                <%= item.name %> x
-                                                    <%=item.quantity %>
-                                            </li>
-                                            <% }) %>
-                                    </ul>
-                                    <% } %>
-
-                            </div>
-                            <div class="col-sm-3">
-                                <p class="text-center" id="bronce">Bronce</p>
-                                <p class="text-center">
-                                    <% if ( bronces) { %>
-                                        <p class="text-center">
-                                            <% let total=0 %>
-                                                <% for( let index = 0; index < bronces.length; index++ ) { %>
-                                                    <% total = total + bronces[index].quantity %>
-                                                        <% } %>
-                                                            <%= total %>
-                                        </p>
-                                        <p class="text-center"></p>
-
-                                        <%}else{ %>
-                                            <p class="text-center">0</p>
-                                            <%   } %>
-                                </p>
-                                <% if (bronces && bronces.length) { %>
-                                    <ul>
-                                        <% bronces.forEach((item) => { %>
-                                            <li> 🥉
-                                                <%= item.name %> x
-                                                    <%=item.quantity %>
-                                            </li>
-                                            <% }) %>
-                                    </ul>
-                                    <% } %>
-
-                            </div>
-                        </div>
-                        <div class="row user-info">
-                            <div class="col">Posible desc del usuario</div>
-                        </div>
-                    </div>
-                </div>
 
 </html>
