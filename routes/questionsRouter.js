@@ -1,9 +1,6 @@
+"use strict"
 var express = require('express');
 var router = express.Router();
-const DAOQuestions = require('../persistence/DAOQuestions')
-const mysql = require("mysql");
-const config = require('../config');
-const DAOUsers = require("../persistence/DAOUsers");
 const factoryDAO = require("../persistence/factoryDAO")
 const { body, validationResult } = require("express-validator");
 

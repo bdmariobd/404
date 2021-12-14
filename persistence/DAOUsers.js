@@ -1,12 +1,7 @@
 "use strict";
 
 const mysql = require("mysql");
-// var bcrypt = require('bcryptjs');
-const helpers = require('../public/javascripts/helpers');
-
 const timeUtils = require("../public/javascripts/timeUtils")
-const multer = require('multer')
-const upload = multer({ dest: '../public/images' })
 class DAOUsers {
     constructor(pool) {
         this.pool = pool;

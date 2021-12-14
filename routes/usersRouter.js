@@ -1,15 +1,10 @@
+"use strict"
 var express = require('express');
 var router = express.Router();
 const factoryDAO = require("../persistence/factoryDAO")
-const mysql = require("mysql");
-const config = require('../config');
-const session = require('express-session');
 const daoUser = factoryDAO.getDAOUsers();
+
 /* router para /usuarios/... */
-
-
-
-
 
 router.get('/', (req, res, next) => {
     daoUser.getAllUsers((err, users) => {
