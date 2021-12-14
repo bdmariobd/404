@@ -29,8 +29,8 @@ router.get('/', (req, res, next) => {
         }
     })
 })
-router.post('/', (req, res, next) => {
-    daoUser.searchUserByString(req.body.searchQuery, (err, users) => {
+router.get('/search', (req, res, next) => {
+    daoUser.searchUserByString(req.query.search, (err, users) => {
         console.log(users)
         if (err) {
             res.status(500);
