@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 12-12-2021 a las 22:49:51
+-- Tiempo de generación: 15-12-2021 a las 10:34:25
 -- Versión del servidor: 5.7.36
 -- Versión de PHP: 7.4.26
 
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `answer` (
   PRIMARY KEY (`id`),
   KEY `answer_questionfk` (`question_id`),
   KEY `answer_userfk` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `answer`
@@ -213,7 +213,7 @@ CREATE TABLE IF NOT EXISTS `question` (
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `question_userfk` (`id_user`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `question`
@@ -419,10 +419,9 @@ CREATE TABLE IF NOT EXISTS `sessions` (
 --
 
 INSERT INTO `sessions` (`session_id`, `expires`, `data`) VALUES
-('7lhVaj5zfXQg952zr5kF8xJG2RJgdmq-', 1639426148, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"idU\":4,\"name\":\"Marta\",\"currentUser\":\"marta@404.es\"}'),
-('VzN8139lsLgo4heYzIrDvrps6FszFwHA', 1639435492, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"idU\":4,\"name\":\"Marta\",\"currentUser\":\"marta@404.es\"}'),
-('Wevke_x-VwtEXre88P7SywH38tpFJhza', 1639392830, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"idU\":3,\"name\":\"SFG\",\"currentUser\":\"SFG@404.es\"}'),
-('iuUBQWK_f24_Fr09F3ZfM32P7lyQw015', 1639345230, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"idU\":4,\"name\":\"Marta\",\"currentUser\":\"marta@404.es\"}');
+('PjEngsRIf_mIjV7r29dp-AA4sJDnIgqE', 1639558880, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"idU\":1,\"name\":\"Nico\",\"currentUser\":\"nico@404.es\"}'),
+('RmddPPckhalt0y4wWvNSUSu5nN2IB78u', 1639524290, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"idU\":1,\"name\":\"Nico\",\"currentUser\":\"nico@404.es\"}'),
+('i0zVbyJZlI041zkKQbotUNitanyIuhmU', 1639558870, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"idU\":4,\"name\":\"Marta\",\"currentUser\":\"marta@404.es\"}');
 
 -- --------------------------------------------------------
 
@@ -436,7 +435,7 @@ CREATE TABLE IF NOT EXISTS `tag` (
   `name` varchar(20) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `tag`
@@ -470,7 +469,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `reputation` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `user`
@@ -508,7 +507,7 @@ CREATE TABLE IF NOT EXISTS `user_medal` (
   KEY `usermedal_userlfk` (`id_user`),
   KEY `medal_answerfk` (`id_answer`),
   KEY `medal_questionfk` (`id_question`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Restricciones para tablas volcadas
