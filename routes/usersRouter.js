@@ -49,33 +49,29 @@ router.get('/miPerfil', (req, res, next) => {
             res.status(500);
             next(err);
         } else {
-            res.status(200)
-            if (!result) {
-                res.status(404);
 
-            } else {
-                const user = result[0];
-                console.log(result[0].name)
+            const user = result[0];
+            console.log(result[0].name)
 
-                daoUser.getMedals(req.session.currentUser, (err, result) => {
-                    if (err) {
-                        res.status(500);
-                        next(err);
+            daoUser.getMedals(req.session.currentUser, (err, result) => {
+                if (err) {
+                    res.status(500);
+                    next(err);
+                } else {
+                    res.status(200)
+                    if (!result) {
+                        console.log("No tiene medallas");
+
                     } else {
-                        res.status(200)
-                        if (!result) {
-                            console.log("No tiene medallas");
+                        res.render('profile', { _user: user, golds: result.gold, silvers: result.silver, bronces: result.bronce });
+                        res.status(200);
 
-                        } else {
-                            res.render('profile', { _user: user, golds: result.gold, silvers: result.silver, bronces: result.bronce });
-                            res.status(200);
-
-                        }
                     }
-                });
+                }
+            });
 
 
-            }
+
         }
     });
 
