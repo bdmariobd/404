@@ -189,7 +189,7 @@ class DAOUsers {
                             callback(new Error("Error de acceso a la base de datos"));
                         } else {
                             if (rows.length === 0) {
-                                callback(null, false); //no está el usuario en la base de datos
+                                callback(new Error("Error, no existe el usuario")); //no está el usuario en la base de datos
                             } else {
                                 let result = [];
                                 rows.map(function(row) {

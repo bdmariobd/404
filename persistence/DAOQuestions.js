@@ -169,7 +169,7 @@ class DAOQuestions {
                         callback(new Error("Error de acceso a la base de datos"));
                     } else {
                         if (rows.length === 0) {
-                            callback(null, null); //no hay preguntas
+                            callback(new Error("Error, no existe la pregunta")); //no hay preguntas
                         } else {
                             const visitQuery = "update question q set q.views= q.views + 1 where q.id=?";
                             rows.forEach(element => {

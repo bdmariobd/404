@@ -51,7 +51,7 @@ router.get('/miPerfil', (req, res, next) => {
         } else {
             res.status(200)
             if (!result) {
-                console.log("Email/pass not valid");
+                res.status(404);
 
             } else {
                 const user = result[0];
@@ -109,35 +109,29 @@ router.get('/:id', (req, res, next) => {
     let user = daoUser.getUserbyId(req.params.id, (err, result) => {
         if (err) {
             res.status(500);
-            next(err);
+            next(err)
         } else {
-            res.status(200)
-            if (!result) {
-                console.log("Email/pass not valid");
-                res.status(500);
+            const user = result[0];
+            console.log(result[0].name)
 
-            } else {
-                const user = result[0];
-                console.log(result[0].name)
+            daoUser.getMedals(user.email, (err, result) => {
+                if (err) {
+                    res.status(500);
+                } else {
+                    res.status(200)
+                    if (!result) {
+                        console.log("No tiene medallas");
 
-                daoUser.getMedals(user.email, (err, result) => {
-                    if (err) {
-                        res.status(500);
                     } else {
-                        res.status(200)
-                        if (!result) {
-                            console.log("No tiene medallas");
+                        res.render('profile', { _user: user, golds: result.gold, silvers: result.silver, bronces: result.bronce });
+                        res.status(200);
 
-                        } else {
-                            res.render('profile', { _user: user, golds: result.gold, silvers: result.silver, bronces: result.bronce });
-                            res.status(200);
-
-                        }
                     }
-                });
+                }
+            });
 
 
-            }
+
         }
     });
 

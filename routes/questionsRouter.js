@@ -109,7 +109,6 @@ router.get("/tag/:id", (req, res, next) => {
     daoQuestions.searchByTag(tag, (err, questions) => {
         if (err) {
             res.status(500);
-            next(err);
         } else {
             res.status(200);
             res.render("preguntas", { titulo: 'Preguntas con la etiqueta "' + tag + '"', questions: questions });
@@ -169,7 +168,7 @@ router.post("/:id",
 router.post("/:id/like", (req, res, next) => {
     const user = req.session.idU,
         question = req.params.id;
-    positive = req.body.action === "👍🏼 Like" ? 1 : 0;
+    let positive = req.body.action === "👍🏼 Like" ? 1 : 0;
     daoQuestions.addVoteQuestion(user, question, positive, (err, result) => {
         if (err) {
             res.status(500);
@@ -185,7 +184,7 @@ router.post("/:id/like", (req, res, next) => {
 router.post("/:id/answer/:idAnswer/like", (req, res, next) => {
     const user = req.session.idU,
         answer = req.params.idAnswer;
-    positive = req.body.action === "👍🏼 Like" ? 1 : 0;
+    let positive = req.body.action === "👍🏼 Like" ? 1 : 0;
     daoQuestions.addVoteAnswer(user, answer, positive, (err, result) => {
         if (err) {
             res.status(500);
