@@ -119,6 +119,17 @@ a:hover {
     color: var(--on-primary-color)
 }
 
+.vote-container {
+    justify-content: flex-end;
+    display: flex;
+}
+
+.btn.form-element {
+    background-color: var(--primary-color);
+    color: var(--on-primary-color);
+    margin: .5rem
+}
+
 .login-left {
     display: flex;
     flex-direction: column;
